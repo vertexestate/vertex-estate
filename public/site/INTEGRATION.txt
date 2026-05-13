@@ -1,0 +1,22 @@
+Vertex Estate — real content without rebuilding the app
+========================================================
+
+1) Copy this folder to your host as static files (Vite copies /public to site root).
+   URLs: /site/testimonials.json  /site/stats.json  /site/contact.json
+
+2) testimonials.json — set "testimonials" to an array of objects:
+   id, name, role, photo (URL), quote, rating (1-5)
+   If the array is empty, the app uses built-in demo quotes until you fill it.
+
+3) stats.json — set "stats" to up to four items: label, value (number), suffix (e.g. "+")
+   Icons are fixed in order (homes, map, users, award). Empty = demo numbers.
+
+4) contact.json — offices[], quickActions[] (label, value, href), social { facebook, ... }
+   Empty arrays = demo US office copy until you replace.
+
+5) Logo: add /public/brand/logo.png (or .svg) and set VITE_LOGO_URL=/brand/logo.png in .env
+
+6) Domain & API: see .env.example in project root — VITE_SITE_PUBLIC_URL, VITE_API_BASE_URL, etc.
+
+7) Full property database: host a JSON array at a URL and set VITE_PROPERTIES_JSON_URL,
+   or implement the POST lead endpoints on your API and connect auth (Supabase, Clerk, custom).
