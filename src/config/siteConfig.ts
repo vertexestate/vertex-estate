@@ -7,6 +7,29 @@ function trimSlash(url: string) {
   return url.replace(/\/+$/, '');
 }
 
+/**
+ * Precise Google Maps pin for Vertex @ Chaudhry Plaza, F-7 Markaz (text search often lands in the wrong sector).
+ * Override with `VITE_VERTEX_OFFICE_LAT` / `VITE_VERTEX_OFFICE_LNG` if you need to nudge the pin.
+ */
+const VERTEX_OFFICE_LAT_DEFAULT = '33.718722';
+const VERTEX_OFFICE_LNG_DEFAULT = '73.054125';
+
+function vertexOfficeLatLng(): { lat: string; lng: string } {
+  const lat = (import.meta.env.VITE_VERTEX_OFFICE_LAT || '').trim() || VERTEX_OFFICE_LAT_DEFAULT;
+  const lng = (import.meta.env.VITE_VERTEX_OFFICE_LNG || '').trim() || VERTEX_OFFICE_LNG_DEFAULT;
+  return { lat, lng };
+}
+
+function defaultVertexMapsEmbedUrl() {
+  const { lat, lng } = vertexOfficeLatLng();
+  return `https://www.google.com/maps?q=${lat},${lng}&z=18&hl=en&output=embed`;
+}
+
+function defaultVertexMapsOpenUrl() {
+  const { lat, lng } = vertexOfficeLatLng();
+  return `https://www.google.com/maps?q=${lat},${lng}&z=18&hl=en`;
+}
+
 export const siteConfig = {
   /** Public site URL for canonical links (add your domain in `.env`). */
   publicUrl: (import.meta.env.VITE_SITE_PUBLIC_URL || '').replace(/\/+$/, ''),
@@ -35,8 +58,7 @@ export const siteConfig = {
     '/leads/launch-interest',
 
   mapEmbedUrl:
-    (import.meta.env.VITE_MAP_EMBED_URL as string | undefined) ||
-    'https://maps.google.com/maps?q=Chaudhry%20Plaza%20F-7%20Markaz%20Islamabad%20Pakistan&z=17&output=embed',
+    (import.meta.env.VITE_MAP_EMBED_URL as string | undefined) || defaultVertexMapsEmbedUrl(),
 
   propertiesJsonUrl: (import.meta.env.VITE_PROPERTIES_JSON_URL || '').trim(),
 
@@ -73,20 +95,29 @@ export const siteConfig = {
   })(),
 
   /**
-   * Google Maps (opens in app / browser). Shown on the coming-soon screen as “Open live map”.
-   * Override with `VITE_COMING_SOON_MAP_URL` if the pin moves.
+   * Google Maps (opens in app / browser). Coming-soon “Open live map”. Override with
+   * `VITE_COMING_SOON_MAP_URL` or `VITE_VERTEX_OFFICE_MAP_URL`.
    */
   comingSoonGoogleMapsUrl:
-    (import.meta.env.VITE_COMING_SOON_MAP_URL || '').trim() ||
-    'https://maps.app.goo.gl/N8L24wRco8VQQHg86?g_st=aw',
+    (import.meta.env.VITE_COMING_SOON_MAP_URL || import.meta.env.VITE_VERTEX_OFFICE_MAP_URL || '')
+      .trim() || defaultVertexMapsOpenUrl(),
+
+  /** Same office pin as `comingSoonGoogleMapsUrl` — contact page “Visit us” default. */
+  vertexOfficeMapsOpenUrl:
+    (import.meta.env.VITE_VERTEX_OFFICE_MAP_URL || import.meta.env.VITE_COMING_SOON_MAP_URL || '')
+      .trim() || defaultVertexMapsOpenUrl(),
 
   /**
    * Live Google Maps iframe `src` on the coming-soon screen (embed URL from Maps → Share → Embed a map,
    * or a `.../maps?q=...&output=embed` style URL). Override with `VITE_COMING_SOON_MAP_EMBED_URL`.
    */
   comingSoonMapEmbedUrl:
-    (import.meta.env.VITE_COMING_SOON_MAP_EMBED_URL || '').trim() ||
-    'https://www.google.com/maps?q=Bhittai+Road+F-7+Markaz+Islamabad+Pakistan&z=17&output=embed',
+    (import.meta.env.VITE_COMING_SOON_MAP_EMBED_URL || import.meta.env.VITE_MAP_EMBED_URL || '')
+      .trim() || defaultVertexMapsEmbedUrl(),
+
+  /** Short location line next to the map on coming soon (full address is in the map pin only). */
+  comingSoonLocationLine:
+    (import.meta.env.VITE_COMING_SOON_LOCATION_LINE || '').trim() || 'F7 Markaz, Islamabad',
 
   /** Social profiles linked from the coming-soon overlay (override with VITE_SOCIAL_* if URLs change). */
   comingSoonSocial: {

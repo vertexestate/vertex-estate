@@ -23,8 +23,7 @@ type QuickActionRow = {
   color: string;
 };
 
-const defaultMapEmbed =
-  'https://maps.google.com/maps?q=Chaudhry%20Plaza%20F-7%20Markaz%20Islamabad%20Pakistan&z=17&output=embed';
+const defaultMapEmbed = siteConfig.mapEmbedUrl;
 
 const defaultOffices: SiteContactOffice[] = [
   {
@@ -62,7 +61,7 @@ const defaultQuickActions: QuickActionRow[] = [
     icon: CalendarIcon,
     label: 'Visit us',
     value: 'F-7 Markaz, Islamabad',
-    href: 'https://maps.google.com/?q=Chaudhry+Plaza+F-7+Markaz+Islamabad',
+    href: siteConfig.vertexOfficeMapsOpenUrl,
     color: 'from-gold-500 to-gold-600',
   },
 ];

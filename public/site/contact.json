@@ -1,5 +1,5 @@
 {
-  "mapEmbedUrl": "https://maps.google.com/maps?q=Chaudhry%20Plaza%20F-7%20Markaz%20Islamabad%20Pakistan&z=17&output=embed",
+  "mapEmbedUrl": "https://www.google.com/maps?q=33.718722,73.054125&z=18&hl=en&output=embed",
   "offices": [
     {
       "city": "Islamabad — F-7 Markaz",
@@ -32,14 +32,10 @@
     },
     {
       "label": "Visit us",
-      "value": "F-7 Markaz, Islamabad",
-      "href": "https://maps.google.com/?q=Chaudhry+Plaza+F-7+Markaz+Islamabad",
+      "value": "Vertex Estate, F-7 Markaz",
+      "href": "https://www.google.com/maps?q=33.718722,73.054125&z=18&hl=en",
       "icon": "calendar",
       "color": "from-gold-500 to-gold-600"
     }
-  ],
-  "social": {
-    "instagram": "https://www.instagram.com/vertexestate0/",
-    "tiktok": "https://www.tiktok.com/@vertexestate0?is_from_webapp=1&sender_device=pc"
-  }
+  ]
 }

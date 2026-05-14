@@ -8,6 +8,7 @@ import { Button } from '../ui/Button';
 import { isValidLaunchInterestEmail, submitLaunchInterest } from '../../lib/submissions';
 import { playWaitlistCelebration } from '../../lib/waitlistConfetti';
 import { ComingSoonSocialLinks } from './ComingSoonSocialLinks';
+import { EstateSkylineDecoration } from './EstateSkylineDecoration';
 
 const LAUNCH_REGISTERED_LS = 'vertex-coming-soon-launch-registered';
 
@@ -63,15 +64,23 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
   useEffect(() => {
     if (cd.isExpired) {
       document.body.style.overflow = '';
+      document.body.style.overflowX = '';
+      document.documentElement.style.overflowX = '';
       document.title = siteConfig.documentTitle;
       return;
     }
     const prevOverflow = document.body.style.overflow;
+    const prevOverflowX = document.body.style.overflowX;
+    const prevHtmlOverflowX = document.documentElement.style.overflowX;
     document.body.style.overflow = 'hidden';
+    document.body.style.overflowX = 'hidden';
+    document.documentElement.style.overflowX = 'hidden';
     const base = siteConfig.documentTitle.split('—')[0]?.trim() || siteConfig.siteName;
     document.title = `${base} — Opening soon`;
     return () => {
       document.body.style.overflow = prevOverflow;
+      document.body.style.overflowX = prevOverflowX;
+      document.documentElement.style.overflowX = prevHtmlOverflowX;
       document.title = siteConfig.documentTitle;
     };
   }, [cd.isExpired]);
@@ -85,7 +94,7 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.45 }}
-      className="fixed inset-0 z-[200] flex min-h-[100dvh] flex-col overflow-y-auto overscroll-y-contain bg-[#030a0c]"
+      className="fixed inset-0 z-[200] flex min-h-[100dvh] min-w-0 max-w-[100vw] flex-col overflow-x-hidden overflow-y-auto overscroll-x-none overscroll-y-contain bg-[#030a0c]"
     >
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.35]"
@@ -97,6 +106,8 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
       />
       <div className="pointer-events-none absolute -left-1/4 top-0 h-[min(80vh,560px)] w-[min(80vh,560px)] rounded-full bg-gold-500/10 blur-[120px]" />
       <div className="pointer-events-none absolute -right-1/4 bottom-0 h-[min(70vh,480px)] w-[min(70vh,480px)] rounded-full bg-navy-400/25 blur-[100px] dark:bg-gold-600/8" />
+
+      <EstateSkylineDecoration />
 
       <div className="relative z-10 mx-auto flex w-full min-w-0 max-w-4xl flex-1 flex-col items-center justify-start px-4 pb-[max(1.75rem,env(safe-area-inset-bottom,0px))] pt-[max(1rem,env(safe-area-inset-top,0px))] text-center sm:justify-center sm:px-8 sm:pb-12 sm:pt-8 md:py-20">
         <motion.div
@@ -160,11 +171,9 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
           transition={{ delay: 0.28 }}
           className="mt-3 flex w-full min-w-0 max-w-lg flex-col items-center justify-center gap-2.5 text-xs sm:text-sm"
         >
-          <p className="flex max-w-[min(100%,18rem)] flex-wrap items-center justify-center gap-x-2 gap-y-1 text-gold-400/85 text-pretty sm:max-w-none">
-            <MapPinIcon className="h-4 w-4 shrink-0 self-start sm:self-center" aria-hidden />
-            <span className="text-left sm:text-center">
-              F-7 Markaz · Pakistan-wide inventory
-            </span>
+          <p className="flex flex-wrap items-center justify-center gap-2 text-sm text-gold-400/90 sm:text-base">
+            <MapPinIcon className="h-4 w-4 shrink-0" aria-hidden />
+            <span className="font-medium text-cream/95">{siteConfig.comingSoonLocationLine}</span>
           </p>
           {siteConfig.comingSoonGoogleMapsUrl ? (
             <a
@@ -185,7 +194,7 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
               className="mt-1 w-full min-w-0 max-w-lg overflow-hidden rounded-xl border border-white/12 bg-black/30 shadow-xl ring-1 ring-white/5"
             >
               <iframe
-                title="Vertex Estate on Google Maps — F-7, Islamabad"
+                title="Vertex Estate — Chaudhry Plaza, F-7 Markaz, Islamabad"
                 src={siteConfig.comingSoonMapEmbedUrl}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"

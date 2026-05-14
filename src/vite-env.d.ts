@@ -38,12 +38,20 @@ interface ImportMetaEnv {
   readonly VITE_SHOW_COMING_SOON?: string;
   /** ISO 8601 instant when the coming-soon gate lifts (same for all visitors). Overrides built-in default. */
   readonly VITE_COMING_SOON_UNTIL?: string;
+  /** Short line next to the coming-soon map (default F7 Markaz; full address is in the map). */
+  readonly VITE_COMING_SOON_LOCATION_LINE?: string;
   /** Full URL — coming-soon social row (optional; defaults in siteConfig). */
   readonly VITE_SOCIAL_FACEBOOK_URL?: string;
   readonly VITE_SOCIAL_INSTAGRAM_URL?: string;
   readonly VITE_SOCIAL_TIKTOK_URL?: string;
-  /** Google Maps link for the coming-soon “Open live map” button (optional; default in siteConfig). */
+  /** Google Maps link for the coming-soon “Open live map” (optional; defaults to lat/lng pin in siteConfig). */
   readonly VITE_COMING_SOON_MAP_URL?: string;
+  /** Override default office map pin (optional; defaults to Chaudhry Plaza, F-7 Markaz coordinates). */
+  readonly VITE_VERTEX_OFFICE_MAP_URL?: string;
+  /** Decimal latitude for default map embed + “Open in Maps” when env URLs are unset. */
+  readonly VITE_VERTEX_OFFICE_LAT?: string;
+  /** Decimal longitude — pair with `VITE_VERTEX_OFFICE_LAT`. */
+  readonly VITE_VERTEX_OFFICE_LNG?: string;
   /** Google Maps iframe embed `src` for the coming-soon live map (optional; default in siteConfig). */
   readonly VITE_COMING_SOON_MAP_EMBED_URL?: string;
 }
