@@ -12,7 +12,7 @@ import { ComingSoonSocialLinks } from './ComingSoonSocialLinks';
 const LAUNCH_REGISTERED_LS = 'vertex-coming-soon-launch-registered';
 
 const launchFieldClass =
-  'border-white/15 bg-white/[0.06] text-cream placeholder:text-navy-400/80 focus:border-gold-500/60';
+  'border-white/15 bg-white/[0.06] text-base text-cream placeholder:text-navy-400/80 focus:border-gold-500/60 sm:text-sm';
 
 type ComingSoonOverlayProps = {
   targetMs: number;
@@ -33,13 +33,13 @@ function TimeUnit({
       initial={{ opacity: 0, y: 24, scale: 0.92 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ delay, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-      className="relative flex min-w-[4.5rem] flex-col items-center rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-5 shadow-2xl shadow-black/40 backdrop-blur-md sm:min-w-[5.5rem] sm:px-6 sm:py-7"
+      className="relative flex w-full min-w-0 flex-col items-center rounded-2xl border border-white/10 bg-white/[0.06] px-3 py-4 shadow-2xl shadow-black/40 backdrop-blur-md sm:w-auto sm:min-w-[5.5rem] sm:px-6 sm:py-7"
     >
       <div className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(circle_at_50%_0%,rgba(212,255,63,0.12),transparent_55%)]" />
-      <span className="relative font-display text-3xl font-bold tabular-nums text-cream sm:text-4xl md:text-5xl">
+      <span className="relative font-display text-2xl font-bold tabular-nums text-cream sm:text-4xl md:text-5xl">
         {display}
       </span>
-      <span className="relative mt-2 text-[10px] font-bold uppercase tracking-[0.2em] text-gold-400/90 sm:text-xs">
+      <span className="relative mt-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-gold-400/90 sm:mt-2 sm:text-xs sm:tracking-[0.2em]">
         {label}
       </span>
     </motion.div>
@@ -85,7 +85,7 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.45 }}
-      className="fixed inset-0 z-[200] flex flex-col overflow-y-auto bg-[#030a0c]"
+      className="fixed inset-0 z-[200] flex min-h-[100dvh] flex-col overflow-y-auto overscroll-y-contain bg-[#030a0c]"
     >
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.35]"
@@ -98,22 +98,22 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
       <div className="pointer-events-none absolute -left-1/4 top-0 h-[min(80vh,560px)] w-[min(80vh,560px)] rounded-full bg-gold-500/10 blur-[120px]" />
       <div className="pointer-events-none absolute -right-1/4 bottom-0 h-[min(70vh,480px)] w-[min(70vh,480px)] rounded-full bg-navy-400/25 blur-[100px] dark:bg-gold-600/8" />
 
-      <div className="relative z-10 mx-auto flex w-full max-w-4xl flex-1 flex-col items-center justify-center px-5 py-16 text-center sm:px-8 sm:py-20">
+      <div className="relative z-10 mx-auto flex w-full min-w-0 max-w-4xl flex-1 flex-col items-center justify-start px-4 pb-[max(1.75rem,env(safe-area-inset-bottom,0px))] pt-[max(1rem,env(safe-area-inset-top,0px))] text-center sm:justify-center sm:px-8 sm:pb-12 sm:pt-8 md:py-20">
         <motion.div
           initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.08, duration: 0.5 }}
-          className="mb-8 flex flex-col items-center gap-3 sm:flex-row sm:gap-4"
+          className="mb-6 flex max-w-[min(100%,22rem)] flex-col items-center gap-3 sm:mb-8 sm:max-w-none sm:flex-row sm:gap-4"
         >
           <img
             src={siteConfig.logoUrl}
             alt=""
             width={112}
             height={112}
-            className="h-24 w-24 object-contain sm:h-28 sm:w-28"
+            className="h-20 w-20 shrink-0 object-contain sm:h-28 sm:w-28"
             decoding="async"
           />
-          <span className="font-display text-2xl font-bold text-cream sm:text-3xl">
+          <span className="font-display text-xl font-bold leading-tight text-cream sm:text-3xl">
             {siteConfig.siteName}
           </span>
         </motion.div>
@@ -122,7 +122,7 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: 'spring', stiffness: 260, damping: 18, delay: 0.12 }}
-          className="mb-6 inline-flex items-center gap-2 rounded-full border border-gold-500/35 bg-gold-500/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.25em] text-gold-300 shadow-lg shadow-gold-500/10"
+          className="mb-5 inline-flex max-w-[calc(100vw-2rem)] flex-wrap items-center justify-center gap-2 rounded-full border border-gold-500/35 bg-gold-500/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-gold-300 shadow-lg shadow-gold-500/10 sm:mb-6 sm:px-4 sm:py-2 sm:text-xs sm:tracking-[0.25em]"
         >
           <SparklesIcon className="h-4 w-4 text-gold-400" aria-hidden />
           Launching Soon
@@ -133,7 +133,7 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-          className="font-display text-4xl font-bold leading-[1.08] tracking-tight text-cream sm:text-5xl md:text-6xl"
+          className="max-w-[min(100%,20rem)] font-display text-[clamp(1.6rem,5.2vw+0.6rem,2.25rem)] font-bold leading-[1.12] tracking-tight text-cream text-balance sm:max-w-none sm:text-5xl md:text-6xl"
         >
           Something{' '}
           <span className="bg-gradient-to-r from-gold-200 via-gold-400 to-gold-500 bg-clip-text text-transparent">
@@ -147,7 +147,7 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.22, duration: 0.5 }}
-          className="mt-6 max-w-xl text-base leading-relaxed text-navy-200/95 sm:text-lg"
+          className="mt-4 max-w-xl px-0.5 text-sm leading-relaxed text-navy-200/95 text-pretty sm:mt-6 sm:text-base md:text-lg"
         >
           We are polishing a new Vertex Estate experience — curated listings, sharper tools, and
           the same trust you expect from Islamabad to Karachi. The countdown is the same for every
@@ -158,18 +158,20 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.28 }}
-          className="mt-3 flex flex-col items-center justify-center gap-2.5 text-sm"
+          className="mt-3 flex w-full min-w-0 max-w-lg flex-col items-center justify-center gap-2.5 text-xs sm:text-sm"
         >
-          <p className="flex flex-wrap items-center justify-center gap-2 text-gold-400/85">
-            <MapPinIcon className="h-4 w-4 shrink-0" aria-hidden />
-            <span>F-7 Markaz · Pakistan-wide inventory</span>
+          <p className="flex max-w-[min(100%,18rem)] flex-wrap items-center justify-center gap-x-2 gap-y-1 text-gold-400/85 text-pretty sm:max-w-none">
+            <MapPinIcon className="h-4 w-4 shrink-0 self-start sm:self-center" aria-hidden />
+            <span className="text-left sm:text-center">
+              F-7 Markaz · Pakistan-wide inventory
+            </span>
           </p>
           {siteConfig.comingSoonGoogleMapsUrl ? (
             <a
               href={siteConfig.comingSoonGoogleMapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-gold-300 shadow-md shadow-black/20 transition hover:border-gold-500/40 hover:bg-white/[0.1] hover:text-gold-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500"
+              className="inline-flex min-h-[44px] max-w-full items-center justify-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-4 py-2.5 text-[10px] font-bold uppercase leading-snug tracking-[0.12em] text-gold-300 shadow-md shadow-black/20 transition hover:border-gold-500/40 hover:bg-white/[0.1] hover:text-gold-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500 sm:text-xs sm:tracking-[0.18em]"
             >
               <MapIcon className="h-4 w-4 shrink-0 text-gold-400" aria-hidden />
               Open live map
@@ -180,7 +182,7 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.32, duration: 0.45 }}
-              className="mt-1 w-full max-w-lg overflow-hidden rounded-xl border border-white/12 bg-black/30 shadow-xl ring-1 ring-white/5"
+              className="mt-1 w-full min-w-0 max-w-lg overflow-hidden rounded-xl border border-white/12 bg-black/30 shadow-xl ring-1 ring-white/5"
             >
               <iframe
                 title="Vertex Estate on Google Maps — F-7, Islamabad"
@@ -188,13 +190,13 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
                 allowFullScreen
-                className="aspect-video min-h-[200px] w-full border-0 sm:min-h-[240px]"
+                className="h-[min(42vh,260px)] w-full border-0 sm:h-auto sm:min-h-[240px] sm:aspect-video"
               />
             </motion.div>
           ) : null}
         </motion.div>
 
-        <div className="mt-12 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+        <div className="mt-8 grid w-full max-w-[20rem] grid-cols-2 gap-2 sm:mt-12 sm:flex sm:max-w-none sm:flex-wrap sm:justify-center sm:gap-3 md:gap-4">
           <TimeUnit value={cd.days} label="Days" delay={0.32} />
           <TimeUnit value={cd.hours} label="Hours" delay={0.38} />
           <TimeUnit value={cd.minutes} label="Minutes" delay={0.44} />
@@ -205,14 +207,16 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.58, duration: 0.5 }}
-          className="relative mt-14 w-full max-w-md rounded-2xl border border-gold-500/25 bg-white/[0.05] px-6 py-7 text-left shadow-2xl shadow-black/30 backdrop-blur-md"
+          className="relative mt-8 w-full max-w-md rounded-2xl border border-gold-500/25 bg-white/[0.05] px-4 py-6 text-left shadow-2xl shadow-black/30 backdrop-blur-md sm:mt-14 sm:px-6 sm:py-7"
         >
-          <div className="mb-5 flex items-center gap-2 text-gold-300">
-            <UserPlusIcon className="h-5 w-5 shrink-0" aria-hidden />
-            <p className="font-display text-lg font-bold text-cream">Register for early access</p>
+          <div className="mb-4 flex items-start gap-2 text-gold-300 sm:mb-5">
+            <UserPlusIcon className="mt-0.5 h-5 w-5 shrink-0" aria-hidden />
+            <p className="font-display text-base font-bold leading-snug text-cream sm:text-lg">
+              Register for early access
+            </p>
           </div>
           {done ? (
-            <div className="space-y-3 text-sm leading-relaxed text-navy-200/95">
+            <div className="space-y-3 text-xs leading-relaxed text-navy-200/95 [overflow-wrap:anywhere] sm:text-sm">
               {savedMode === 'api' ? (
                 <p>
                  Welcome aboard 🚀 You're officially on the waitlist. We'll keep you updated before launch.
@@ -331,13 +335,15 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
                 className={launchFieldClass}
               />
               <div>
-                <label className="mb-2 block text-sm font-medium text-cream">Message (optional)</label>
+                <label className="mb-2 block text-sm font-medium text-cream sm:text-base">
+                  Message (optional)
+                </label>
                 <textarea
                   name="description"
                   rows={2}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className={`w-full resize-none rounded-lg border-2 px-4 py-3 text-sm outline-none transition focus:ring-2 focus:ring-gold-500/20 ${launchFieldClass}`}
+                  className={`w-full resize-none rounded-lg border-2 px-4 py-3 text-base outline-none transition focus:ring-2 focus:ring-gold-500/20 sm:text-sm ${launchFieldClass}`}
                   placeholder="City, budget range, or how we should contact you"
                 />
               </div>
@@ -345,7 +351,7 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
               <Button type="submit" variant="primary" className="w-full" disabled={busy}>
                 {busy ? 'Sending…' : 'Join the waitlist'}
               </Button>
-              <p className="text-center text-[11px] leading-relaxed text-navy-400/90">
+              <p className="text-center text-[10px] leading-relaxed text-navy-400/90 sm:text-[11px]">
                 By registering you agree we may email you about this launch. Unsubscribe any time.
               </p>
             </form>
@@ -358,7 +364,7 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.7, duration: 0.5 }}
-          className="mt-10 max-w-md rounded-2xl border border-white/[0.08] bg-white/[0.04] px-6 py-5 text-sm leading-relaxed text-navy-200/90 backdrop-blur-sm"
+          className="mt-8 max-w-md rounded-2xl border border-white/[0.08] bg-white/[0.04] px-4 py-4 text-xs leading-relaxed text-navy-200/90 backdrop-blur-sm sm:mt-10 sm:px-6 sm:py-5 sm:text-sm"
         >
           <p className="font-semibold text-cream">Why the wait?</p>
           <p className="mt-2 text-navy-300/95">

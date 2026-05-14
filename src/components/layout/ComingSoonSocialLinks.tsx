@@ -11,7 +11,7 @@ type ComingSoonSocialLinksProps = {
 };
 
 const linkClass =
-  'inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-gold-400 transition hover:border-gold-500/45 hover:bg-white/[0.1] hover:text-gold-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500';
+  'inline-flex h-12 w-12 min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-gold-400 transition active:scale-[0.98] hover:border-gold-500/45 hover:bg-white/[0.1] hover:text-gold-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500 sm:h-11 sm:w-11 sm:min-h-0 sm:min-w-0';
 
 function IconFacebook() {
   return (
@@ -63,10 +63,12 @@ export function ComingSoonSocialLinks({ urls }: ComingSoonSocialLinksProps) {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.66, duration: 0.45 }}
-      className="mt-10 flex flex-col items-center gap-3"
+      className="mt-8 flex w-full min-w-0 max-w-md flex-col items-center gap-2.5 px-1 sm:mt-10 sm:gap-3"
     >
-      <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-navy-400/95">Follow us</p>
-      <div className="flex items-center justify-center gap-3 sm:gap-4">
+      <p className="text-center text-[10px] font-bold uppercase tracking-[0.18em] text-navy-400/95 sm:text-[11px] sm:tracking-[0.22em]">
+        Follow us
+      </p>
+      <div className="flex w-full max-w-[280px] items-center justify-center gap-2 sm:max-w-none sm:gap-4">
         <a
           href={urls.facebook}
           target="_blank"
