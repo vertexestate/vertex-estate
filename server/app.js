@@ -35,17 +35,33 @@ function buildAllowedCorsOrigins() {
 
 const allowedCorsOrigins = buildAllowedCorsOrigins();
 
-/** Dev-only escape hatch for TLS errors (e.g. corporate SSL inspection). Never enable in production. */
+/** True if env asks to skip strict TLS (dev / locked-down debugging only — not for production). */
+function mongoTlsRelaxRequested() {
+  const t = (v) => String(v ?? '').trim().toLowerCase();
+  const on = (v) => {
+    const s = t(v);
+    return s === 'true' || s === '1' || s === 'yes';
+  };
+  return on(process.env.MONGODB_TLS_INSECURE) || on(process.env.MONGODB_TLS_RELAX);
+}
+
+/** Escape hatch for "certificate validation failed" (VPN, HTTPS scanning, CRLF in .env values). */
 function getMongoClientOptions() {
-  const insecure = String(process.env.MONGODB_TLS_INSECURE || '').toLowerCase() === 'true';
-  if (insecure) {
+  const relax = mongoTlsRelaxRequested();
+  if (relax) {
     console.warn(
-      '[mongo] MONGODB_TLS_INSECURE=true — certificate checks are disabled for this process (local dev only).'
+      '[mongo] TLS verification relaxed — unset MONGODB_TLS_INSECURE / MONGODB_TLS_RELAX for production.'
     );
   }
   return {
-    serverSelectionTimeoutMS: 15_000,
-    ...(insecure ? { tlsAllowInvalidCertificates: true } : {}),
+    serverSelectionTimeoutMS: 25_000,
+    connectTimeoutMS: 20_000,
+    ...(relax
+      ? {
+          tlsAllowInvalidCertificates: true,
+          tlsAllowInvalidHostnames: true,
+        }
+      : {}),
   };
 }
 

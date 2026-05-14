@@ -18,16 +18,29 @@ if (!uri.trim()) {
   process.exit(1);
 }
 
-const tlsInsecure = String(process.env.MONGODB_TLS_INSECURE || '').toLowerCase() === 'true';
-if (tlsInsecure) {
-  console.warn(
-    '[mongo] MONGODB_TLS_INSECURE=true — certificate checks disabled for this script (dev only).'
-  );
+function mongoTlsRelaxRequested() {
+  const norm = (v) => String(v ?? '').trim().toLowerCase();
+  const on = (v) => {
+    const s = norm(v);
+    return s === 'true' || s === '1' || s === 'yes';
+  };
+  return on(process.env.MONGODB_TLS_INSECURE) || on(process.env.MONGODB_TLS_RELAX);
+}
+
+const tlsRelax = mongoTlsRelaxRequested();
+if (tlsRelax) {
+  console.warn('[mongo] TLS verification relaxed for this script (dev / diagnostics only).');
 }
 
 const client = new MongoClient(uri, {
-  serverSelectionTimeoutMS: 12_000,
-  ...(tlsInsecure ? { tlsAllowInvalidCertificates: true } : {}),
+  serverSelectionTimeoutMS: 25_000,
+  connectTimeoutMS: 20_000,
+  ...(tlsRelax
+    ? {
+        tlsAllowInvalidCertificates: true,
+        tlsAllowInvalidHostnames: true,
+      }
+    : {}),
 });
 
 try {
