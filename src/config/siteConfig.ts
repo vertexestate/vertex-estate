@@ -54,23 +54,22 @@ export const siteConfig = {
 
   /**
    * Full-screen coming soon gate. Default on; set `VITE_SHOW_COMING_SOON=false` to disable.
-   * With no `VITE_COMING_SOON_UNTIL`, each browser gets a sliding window from first visit
-   * (`VITE_COMING_SOON_DAYS`, default 6) stored in localStorage — refresh does not reset it.
+   * One wall-clock launch instant for **every** visitor (`VITE_COMING_SOON_UNTIL` ISO, or the
+   * built-in default below — same countdown in all browsers and profiles).
    */
   showComingSoon:
     (import.meta.env.VITE_SHOW_COMING_SOON ?? 'true').toLowerCase() !== 'false',
-  /** Parsed `VITE_COMING_SOON_UNTIL` (ISO 8601). When set, overrides sliding storage. */
-  comingSoonFixedUntilMs: (() => {
+  /**
+   * Parsed `VITE_COMING_SOON_UNTIL` (ISO 8601). If unset or invalid, uses the same default for everyone.
+   * Change the default string here or set env per deploy.
+   */
+  comingSoonUntilMs: (() => {
     const raw = (import.meta.env.VITE_COMING_SOON_UNTIL || '').trim();
-    if (!raw) return 0;
-    const t = Date.parse(raw);
-    return Number.isFinite(t) ? t : 0;
-  })(),
-  /** Length of the per-browser sliding window when no fixed ISO is set. */
-  comingSoonSlidingDays: (() => {
-    const raw = (import.meta.env.VITE_COMING_SOON_DAYS || '').trim();
-    const n = parseFloat(raw);
-    return Number.isFinite(n) && n > 0 ? n : 6;
+    if (raw) {
+      const t = Date.parse(raw);
+      if (Number.isFinite(t)) return t;
+    }
+    return Date.parse('2026-08-01T00:00:00+05:00');
   })(),
 } as const;
 

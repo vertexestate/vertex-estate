@@ -148,8 +148,8 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
           className="mt-6 max-w-xl text-base leading-relaxed text-navy-200/95 sm:text-lg"
         >
           We are polishing a new Vertex Estate experience — curated listings, sharper tools, and
-          the same trust you expect from Islamabad to Karachi. Your personal launch window started
-          on your first visit; refreshing the page does not restart the clock.
+          the same trust you expect from Islamabad to Karachi. The countdown is the same for every
+          visitor and stays in sync when you share the link or switch profiles or devices.
         </motion.p>
 
         <motion.p
@@ -188,10 +188,23 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
                 </p>
               ) : savedMode === 'offline' ? (
                 <p>
-                  You are on the list for this browser. The API was not reached, so your details
-                  were queued in local storage only. Add <span className="font-mono">MONGODB_URI</span>{' '}
-                  to <span className="font-mono">.env</span> and run <span className="font-mono">npm run dev</span>{' '}
-                  so submissions go to MongoDB (key <span className="font-mono">vertex-lead-queue</span>).
+                  {import.meta.env.DEV ? (
+                    <>
+                      You are on the list in this browser only — the API was not reached. For local
+                      dev, run <span className="font-mono">npm run dev</span> (starts Vite + Node) and
+                      set <span className="font-mono">MONGODB_URI</span> in <span className="font-mono">.env</span>.
+                      Queued data: <span className="font-mono">vertex-lead-queue</span> in localStorage.
+                    </>
+                  ) : (
+                    <>
+                      You are on the list in this browser only — the live site did not reach the API.
+                      Configure your host to forward <span className="font-mono">/api</span> to your Node
+                      server (same origin), or rebuild with{' '}
+                      <span className="font-mono">VITE_API_BASE_URL=https://your-api-host</span> pointing at
+                      where <span className="font-mono">server/index.js</span> runs with{' '}
+                      <span className="font-mono">MONGODB_URI</span> set there.
+                    </>
+                  )}
                 </p>
               ) : (
                 <p>
@@ -301,8 +314,8 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
         >
           <p className="font-semibold text-cream">Why the wait?</p>
           <p className="mt-2 text-navy-300/95">
-            A major platform upgrade is landing soon. Until your window ends, this timer stays
-            tied to this browser — clear site data only if you intentionally want to reset it.
+            A major platform upgrade is landing soon. The timer is tied to one official launch
+            moment for everyone — not per browser.
           </p>
         </motion.div>
       </div>

@@ -21,7 +21,6 @@ import { Contact } from './pages/Contact';
 import { Dashboard } from './pages/Dashboard';
 import { EstateOwnerView } from './pages/EstateOwnerView';
 import { siteConfig } from './config/siteConfig';
-import { resolveComingSoonDeadlineMs } from './lib/comingSoonDeadline';
 import { ComingSoonOverlay } from './components/layout/ComingSoonOverlay';
 
 function computeComingSoonBoot(): { deadlineMs: number; showSplash: boolean } {
@@ -31,10 +30,7 @@ function computeComingSoonBoot(): { deadlineMs: number; showSplash: boolean } {
   if (!siteConfig.showComingSoon) {
     return { deadlineMs: 0, showSplash: true };
   }
-  const deadlineMs = resolveComingSoonDeadlineMs({
-    fixedUntilMs: siteConfig.comingSoonFixedUntilMs,
-    slidingDays: siteConfig.comingSoonSlidingDays,
-  });
+  const deadlineMs = siteConfig.comingSoonUntilMs;
   const gateOn = deadlineMs > 0 && Date.now() < deadlineMs;
   return { deadlineMs, showSplash: !gateOn };
 }
@@ -127,14 +123,14 @@ export function App() {
     if (
       import.meta.env.DEV &&
       siteConfig.showComingSoon &&
-      siteConfig.comingSoonFixedUntilMs <= 0 &&
-      deadlineMs <= 0
+      siteConfig.comingSoonUntilMs > 0 &&
+      Date.now() >= siteConfig.comingSoonUntilMs
     ) {
       console.warn(
-        '[Vertex] Coming soon is on but no deadline is active (sliding window already ended, or storage issue).'
+        '[Vertex] Coming soon is on but the launch time is already in the past — gate stays off. Set VITE_COMING_SOON_UNTIL to a future ISO or turn the gate off.'
       );
     }
-  }, [deadlineMs]);
+  }, []);
 
   return (
     <ThemeProvider>

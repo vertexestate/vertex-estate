@@ -32,10 +32,8 @@ interface ImportMetaEnv {
   readonly VITE_ESTATE_OWNER_PASSWORD?: string;
   /** Show global coming soon overlay (default true; set false to disable). */
   readonly VITE_SHOW_COMING_SOON?: string;
-  /** ISO 8601 instant when the gate lifts (overrides per-browser sliding window). */
+  /** ISO 8601 instant when the coming-soon gate lifts (same for all visitors). Overrides built-in default. */
   readonly VITE_COMING_SOON_UNTIL?: string;
-  /** Sliding window length in days when no ISO is set (default 6). */
-  readonly VITE_COMING_SOON_DAYS?: string;
 }
 
 interface ImportMeta {

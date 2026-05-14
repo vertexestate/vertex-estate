@@ -22,10 +22,13 @@ function normalizeConfiguredApiBase(raw: string): string {
   return base;
 }
 
-/** Same-origin `/api` in dev (Vite proxy → Express). Production: set `VITE_API_BASE_URL`. */
+/** 
+ * API base for browser `fetch`:
+ * - If `VITE_API_BASE_URL` is set → use it (e.g. `https://api.yourdomain.com`).
+ * - Otherwise `/api` (dev: Vite proxy; **production**: your host must reverse-proxy `/api` to Node).
+ */
 export function getClientApiBase(): string {
   const fromEnv = normalizeConfiguredApiBase(siteConfig.apiBaseUrl || '');
   if (fromEnv) return fromEnv;
-  if (import.meta.env.DEV) return '/api';
-  return '';
+  return '/api';
 }
