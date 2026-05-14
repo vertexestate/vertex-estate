@@ -7,6 +7,7 @@ import { Input } from '../ui/Input';
 import { Button } from '../ui/Button';
 import { isValidLaunchInterestEmail, submitLaunchInterest } from '../../lib/submissions';
 import { playWaitlistCelebration } from '../../lib/waitlistConfetti';
+import { ComingSoonSocialLinks } from './ComingSoonSocialLinks';
 
 const LAUNCH_REGISTERED_LS = 'vertex-coming-soon-launch-registered';
 
@@ -321,6 +322,8 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
           )}
         </motion.div>
 
+        <ComingSoonSocialLinks urls={siteConfig.comingSoonSocial} />
+
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -330,7 +333,7 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
           <p className="font-semibold text-cream">Why the wait?</p>
           <p className="mt-2 text-navy-300/95">
             A major platform upgrade is landing soon. The timer is tied to one official launch
-            moment for everyone — not per browser.
+            moment for everyone.
           </p>
         </motion.div>
       </div>

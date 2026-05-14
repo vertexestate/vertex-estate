@@ -38,6 +38,10 @@ interface ImportMetaEnv {
   readonly VITE_SHOW_COMING_SOON?: string;
   /** ISO 8601 instant when the coming-soon gate lifts (same for all visitors). Overrides built-in default. */
   readonly VITE_COMING_SOON_UNTIL?: string;
+  /** Full URL — coming-soon social row (optional; defaults in siteConfig). */
+  readonly VITE_SOCIAL_FACEBOOK_URL?: string;
+  readonly VITE_SOCIAL_INSTAGRAM_URL?: string;
+  readonly VITE_SOCIAL_TIKTOK_URL?: string;
 }
 
 interface ImportMeta {

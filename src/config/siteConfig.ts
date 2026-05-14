@@ -71,6 +71,19 @@ export const siteConfig = {
     }
     return Date.parse('2026-08-01T00:00:00+05:00');
   })(),
+
+  /** Social profiles linked from the coming-soon overlay (override with VITE_SOCIAL_* if URLs change). */
+  comingSoonSocial: {
+    facebook:
+      (import.meta.env.VITE_SOCIAL_FACEBOOK_URL || '').trim() ||
+      'https://www.facebook.com/profile.php?id=61589176933977',
+    instagram:
+      (import.meta.env.VITE_SOCIAL_INSTAGRAM_URL || '').trim() ||
+      'https://www.instagram.com/vertexestate0/',
+    tiktok:
+      (import.meta.env.VITE_SOCIAL_TIKTOK_URL || '').trim() ||
+      'https://www.tiktok.com/@vertexestate0?is_from_webapp=1&sender_device=pc',
+  },
 } as const;
 
 export function absoluteUrl(path: string) {
