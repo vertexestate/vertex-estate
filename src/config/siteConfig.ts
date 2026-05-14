@@ -72,6 +72,22 @@ export const siteConfig = {
     return Date.parse('2026-08-01T00:00:00+05:00');
   })(),
 
+  /**
+   * Google Maps (opens in app / browser). Shown on the coming-soon screen as “Open live map”.
+   * Override with `VITE_COMING_SOON_MAP_URL` if the pin moves.
+   */
+  comingSoonGoogleMapsUrl:
+    (import.meta.env.VITE_COMING_SOON_MAP_URL || '').trim() ||
+    'https://maps.app.goo.gl/N8L24wRco8VQQHg86?g_st=aw',
+
+  /**
+   * Live Google Maps iframe `src` on the coming-soon screen (embed URL from Maps → Share → Embed a map,
+   * or a `.../maps?q=...&output=embed` style URL). Override with `VITE_COMING_SOON_MAP_EMBED_URL`.
+   */
+  comingSoonMapEmbedUrl:
+    (import.meta.env.VITE_COMING_SOON_MAP_EMBED_URL || '').trim() ||
+    'https://www.google.com/maps?q=Bhittai+Road+F-7+Markaz+Islamabad+Pakistan&z=17&output=embed',
+
   /** Social profiles linked from the coming-soon overlay (override with VITE_SOCIAL_* if URLs change). */
   comingSoonSocial: {
     facebook:

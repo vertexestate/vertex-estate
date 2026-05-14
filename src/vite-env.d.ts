@@ -42,6 +42,10 @@ interface ImportMetaEnv {
   readonly VITE_SOCIAL_FACEBOOK_URL?: string;
   readonly VITE_SOCIAL_INSTAGRAM_URL?: string;
   readonly VITE_SOCIAL_TIKTOK_URL?: string;
+  /** Google Maps link for the coming-soon “Open live map” button (optional; default in siteConfig). */
+  readonly VITE_COMING_SOON_MAP_URL?: string;
+  /** Google Maps iframe embed `src` for the coming-soon live map (optional; default in siteConfig). */
+  readonly VITE_COMING_SOON_MAP_EMBED_URL?: string;
 }
 
 interface ImportMeta {

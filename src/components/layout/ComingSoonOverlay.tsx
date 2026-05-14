@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { SparklesIcon, MapPinIcon, UserPlusIcon } from 'lucide-react';
+import { SparklesIcon, MapPinIcon, MapIcon, UserPlusIcon } from 'lucide-react';
 import { siteConfig } from '../../config/siteConfig';
 import { useCountdown } from '../../hooks/useCountdown';
 import { Input } from '../ui/Input';
@@ -154,15 +154,45 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
           visitor and stays in sync when you share the link or switch profiles or devices.
         </motion.p>
 
-        <motion.p
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.28 }}
-          className="mt-3 flex flex-wrap items-center justify-center gap-2 text-sm text-gold-400/85"
+          className="mt-3 flex flex-col items-center justify-center gap-2.5 text-sm"
         >
-          <MapPinIcon className="h-4 w-4 shrink-0" aria-hidden />
-          <span>F-7 Markaz · Pakistan-wide inventory</span>
-        </motion.p>
+          <p className="flex flex-wrap items-center justify-center gap-2 text-gold-400/85">
+            <MapPinIcon className="h-4 w-4 shrink-0" aria-hidden />
+            <span>F-7 Markaz · Pakistan-wide inventory</span>
+          </p>
+          {siteConfig.comingSoonGoogleMapsUrl ? (
+            <a
+              href={siteConfig.comingSoonGoogleMapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-gold-300 shadow-md shadow-black/20 transition hover:border-gold-500/40 hover:bg-white/[0.1] hover:text-gold-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500"
+            >
+              <MapIcon className="h-4 w-4 shrink-0 text-gold-400" aria-hidden />
+              Open live map
+            </a>
+          ) : null}
+          {siteConfig.comingSoonMapEmbedUrl ? (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.32, duration: 0.45 }}
+              className="mt-1 w-full max-w-lg overflow-hidden rounded-xl border border-white/12 bg-black/30 shadow-xl ring-1 ring-white/5"
+            >
+              <iframe
+                title="Vertex Estate on Google Maps — F-7, Islamabad"
+                src={siteConfig.comingSoonMapEmbedUrl}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+                className="aspect-video min-h-[200px] w-full border-0 sm:min-h-[240px]"
+              />
+            </motion.div>
+          ) : null}
+        </motion.div>
 
         <div className="mt-12 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
           <TimeUnit value={cd.days} label="Days" delay={0.32} />
