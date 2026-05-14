@@ -23,24 +23,16 @@ type QuickActionRow = {
   color: string;
 };
 
+const defaultMapEmbed =
+  'https://maps.google.com/maps?q=Chaudhry%20Plaza%20F-7%20Markaz%20Islamabad%20Pakistan&z=17&output=embed';
+
 const defaultOffices: SiteContactOffice[] = [
   {
-    city: 'New York',
-    address: '432 Park Avenue, Suite 1500',
-    phone: '+1 (555) 123-4567',
-    email: 'ny@vertexestate.com',
-  },
-  {
-    city: 'Los Angeles',
-    address: '9876 Wilshire Blvd, Suite 200',
-    phone: '+1 (555) 234-5678',
-    email: 'la@vertexestate.com',
-  },
-  {
-    city: 'Miami',
-    address: '1500 Biscayne Blvd, Floor 10',
-    phone: '+1 (555) 345-6789',
-    email: 'miami@vertexestate.com',
+    city: 'Islamabad — F-7 Markaz',
+    address:
+      '2nd Floor, Chaudhry Plaza, up to Subway near Mr Chips, F-7 Markaz, Islamabad',
+    phone: '+92 310 9882888',
+    email: 'contact@vertexestate.com',
   },
 ];
 
@@ -48,8 +40,8 @@ const defaultQuickActions: QuickActionRow[] = [
   {
     icon: MessageSquareIcon,
     label: 'WhatsApp',
-    value: '+1 (555) 999-0000',
-    href: 'https://wa.me/15559990000',
+    value: '+92 310-9882888',
+    href: 'https://wa.me/923109882888',
     color: 'from-green-500 to-green-600',
   },
   {
@@ -61,16 +53,16 @@ const defaultQuickActions: QuickActionRow[] = [
   },
   {
     icon: PhoneIcon,
-    label: 'Call Us',
-    value: '+1 (555) 123-4567',
-    href: 'tel:+15551234567',
+    label: 'Call us',
+    value: '+92 310-9882888',
+    href: 'tel:+923109882888',
     color: 'from-purple-500 to-purple-600',
   },
   {
     icon: CalendarIcon,
-    label: 'Schedule',
-    value: 'Book a Call',
-    href: '#',
+    label: 'Visit us',
+    value: 'F-7 Markaz, Islamabad',
+    href: 'https://maps.google.com/?q=Chaudhry+Plaza+F-7+Markaz+Islamabad',
     color: 'from-gold-500 to-gold-600',
   },
 ];
@@ -110,7 +102,7 @@ export function Contact() {
   const [resolved, setResolved] = useState({
     offices: defaultOffices,
     quickActions: defaultQuickActions,
-    mapSrc: siteConfig.mapEmbedUrl,
+    mapSrc: siteConfig.mapEmbedUrl || defaultMapEmbed,
   });
 
   useEffect(() => {
@@ -121,7 +113,10 @@ export function Contact() {
         quickActions: c.quickActions?.length
           ? quickActionsFromFile(c.quickActions)
           : defaultQuickActions,
-        mapSrc: (c.mapEmbedUrl && c.mapEmbedUrl.trim()) || siteConfig.mapEmbedUrl,
+        mapSrc:
+          (c.mapEmbedUrl && c.mapEmbedUrl.trim()) ||
+          siteConfig.mapEmbedUrl ||
+          defaultMapEmbed,
       });
     });
   }, []);
@@ -260,7 +255,7 @@ export function Contact() {
                 <p className="text-navy-600 dark:text-navy-400">
                   We'll get back to you as soon as possible.
                 </p>
-                {!siteConfig.apiBaseUrl && (
+                {import.meta.env.PROD && !siteConfig.apiBaseUrl && (
                   <p className="mt-4 text-sm text-navy-500 dark:text-navy-400">
                     API URL is not configured yet — your message was queued in this
                     browser (see localStorage key <code className="text-gold-500">vertex-lead-queue</code>

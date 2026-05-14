@@ -26,6 +26,7 @@ export interface SiteContactFile {
     facebook?: string;
     twitter?: string;
     instagram?: string;
+    tiktok?: string;
     linkedin?: string;
   };
 }

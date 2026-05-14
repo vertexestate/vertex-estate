@@ -17,6 +17,8 @@ interface ImportMetaEnv {
   readonly VITE_API_CONCIERGE_PATH?: string;
   /** POST path for footer newsletter. Default /leads/newsletter */
   readonly VITE_API_NEWSLETTER_PATH?: string;
+  /** POST path for coming-soon waitlist. Default /leads/launch-interest */
+  readonly VITE_API_LAUNCH_INTEREST_PATH?: string;
   /** Google Maps embed URL for contact page iframe */
   readonly VITE_MAP_EMBED_URL?: string;
   /** Full URL returning a JSON array of Property objects (optional CDN or API). */
@@ -28,6 +30,12 @@ interface ImportMetaEnv {
   readonly VITE_ESTATE_OWNER_PHONE?: string;
   readonly VITE_ESTATE_OWNER_NAME?: string;
   readonly VITE_ESTATE_OWNER_PASSWORD?: string;
+  /** Show global coming soon overlay (default true; set false to disable). */
+  readonly VITE_SHOW_COMING_SOON?: string;
+  /** ISO 8601 instant when the gate lifts (overrides per-browser sliding window). */
+  readonly VITE_COMING_SOON_UNTIL?: string;
+  /** Sliding window length in days when no ISO is set (default 6). */
+  readonly VITE_COMING_SOON_DAYS?: string;
 }
 
 interface ImportMeta {

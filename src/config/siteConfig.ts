@@ -15,7 +15,7 @@ export const siteConfig = {
 
   documentTitle: import.meta.env.VITE_SITE_TITLE || 'Vertex Estate — Premium real estate',
 
-  logoUrl: (import.meta.env.VITE_LOGO_URL || '').trim(),
+  logoUrl: (import.meta.env.VITE_LOGO_URL || '').trim() || '/brand/logo.png',
 
   apiBaseUrl: (import.meta.env.VITE_API_BASE_URL || '').trim()
     ? trimSlash(import.meta.env.VITE_API_BASE_URL as string)
@@ -30,9 +30,13 @@ export const siteConfig = {
   apiNewsletterPath:
     (import.meta.env.VITE_API_NEWSLETTER_PATH as string | undefined) || '/leads/newsletter',
 
+  apiLaunchInterestPath:
+    (import.meta.env.VITE_API_LAUNCH_INTEREST_PATH as string | undefined) ||
+    '/leads/launch-interest',
+
   mapEmbedUrl:
     (import.meta.env.VITE_MAP_EMBED_URL as string | undefined) ||
-    'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d193595.15830869428!2d-74.119763973046!3d40.69766374874431!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2s!4v1234567890123!5m2!1sen!2s',
+    'https://maps.google.com/maps?q=Chaudhry%20Plaza%20F-7%20Markaz%20Islamabad%20Pakistan&z=17&output=embed',
 
   propertiesJsonUrl: (import.meta.env.VITE_PROPERTIES_JSON_URL || '').trim(),
 
@@ -47,6 +51,27 @@ export const siteConfig = {
     import.meta.env.VITE_ESTATE_OWNER_NAME || 'Vertex Estate Owner',
   estateOwnerPassword:
     import.meta.env.VITE_ESTATE_OWNER_PASSWORD || 'owner123',
+
+  /**
+   * Full-screen coming soon gate. Default on; set `VITE_SHOW_COMING_SOON=false` to disable.
+   * With no `VITE_COMING_SOON_UNTIL`, each browser gets a sliding window from first visit
+   * (`VITE_COMING_SOON_DAYS`, default 6) stored in localStorage — refresh does not reset it.
+   */
+  showComingSoon:
+    (import.meta.env.VITE_SHOW_COMING_SOON ?? 'true').toLowerCase() !== 'false',
+  /** Parsed `VITE_COMING_SOON_UNTIL` (ISO 8601). When set, overrides sliding storage. */
+  comingSoonFixedUntilMs: (() => {
+    const raw = (import.meta.env.VITE_COMING_SOON_UNTIL || '').trim();
+    if (!raw) return 0;
+    const t = Date.parse(raw);
+    return Number.isFinite(t) ? t : 0;
+  })(),
+  /** Length of the per-browser sliding window when no fixed ISO is set. */
+  comingSoonSlidingDays: (() => {
+    const raw = (import.meta.env.VITE_COMING_SOON_DAYS || '').trim();
+    const n = parseFloat(raw);
+    return Number.isFinite(n) && n > 0 ? n : 6;
+  })(),
 } as const;
 
 export function absoluteUrl(path: string) {

@@ -1,0 +1,80 @@
+[
+  {
+    "id": "mongo-seed-1",
+    "title": "Bahria Town Karachi — Iconic corner villa",
+    "price": 85000000,
+    "priceCurrency": "PKR",
+    "location": {
+      "address": "Precinct 15, near theme park",
+      "city": "Karachi",
+      "state": "Sindh",
+      "country": "Pakistan",
+      "lat": 25.0077,
+      "lng": 67.3081
+    },
+    "type": "luxury",
+    "category": "Villa",
+    "bedrooms": 6,
+    "bathrooms": 7,
+    "sqft": 7200,
+    "yearBuilt": 2022,
+    "parking": 4,
+    "lotSize": 5400,
+    "images": [
+      "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1200&h=800&fit=crop&q=82"
+    ],
+    "description": "Statement Bahria Town Karachi villa — MongoDB seed catalog.",
+    "features": ["Swimming pool", "Smart home", "Security patrolled"],
+    "agent": {
+      "id": "3",
+      "name": "Sara Khan",
+      "photo": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop",
+      "phone": "+92 333 5550271",
+      "email": "sara.khan@vertexestate.com",
+      "rating": 5,
+      "specialization": "Luxury villas & farmhouses"
+    },
+    "featured": true,
+    "status": "available",
+    "approvalStatus": "approved"
+  },
+  {
+    "id": "mongo-seed-2",
+    "title": "Islamabad F-7 — Diplomatic enclave estate",
+    "price": 155000000,
+    "priceCurrency": "PKR",
+    "location": {
+      "address": "Near Margalla vistas",
+      "city": "Islamabad",
+      "state": "ICT",
+      "country": "Pakistan",
+      "lat": 33.7294,
+      "lng": 73.0931
+    },
+    "type": "luxury",
+    "category": "Estate",
+    "bedrooms": 8,
+    "bathrooms": 9,
+    "sqft": 11200,
+    "yearBuilt": 2021,
+    "parking": 6,
+    "lotSize": 22000,
+    "images": [
+      "https://images.unsplash.com/photo-1600607687644-c7171b42498f?w=1200&h=800&fit=crop&q=82"
+    ],
+    "description": "Margalla-facing estate — MongoDB seed catalog.",
+    "features": ["Guest house", "Margalla views"],
+    "agent": {
+      "id": "3",
+      "name": "Sara Khan",
+      "photo": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop",
+      "phone": "+92 333 5550271",
+      "email": "sara.khan@vertexestate.com",
+      "rating": 5,
+      "specialization": "Luxury villas & farmhouses"
+    },
+    "featured": true,
+    "status": "available",
+    "approvalStatus": "approved"
+  }
+]

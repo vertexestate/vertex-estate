@@ -1,8 +1,12 @@
 import { siteConfig } from '../config/siteConfig';
+import { getClientApiBase } from './apiBase';
 
 const OFFLINE_QUEUE_KEY = 'vertex-lead-queue';
 
-export type SubmitResult = { ok: true } | { ok: false; error: string };
+/** `api` = POST reached your Node server (writes to MongoDB when configured). `offline` = queued in localStorage. */
+export type SubmitResult =
+  | { ok: true; mode: 'api' | 'offline' }
+  | { ok: false; error: string };
 
 function queueOffline(path: string, body: unknown) {
   try {
@@ -21,10 +25,10 @@ function queueOffline(path: string, body: unknown) {
  * so you can export them until the API is live.
  */
 export async function postLead(path: string, body: unknown): Promise<SubmitResult> {
-  const base = siteConfig.apiBaseUrl;
+  const base = getClientApiBase();
   if (!base) {
     queueOffline(path, body);
-    return { ok: true };
+    return { ok: true, mode: 'offline' };
   }
   const url = `${base}${path.startsWith('/') ? path : `/${path}`}`;
   try {
@@ -34,13 +38,19 @@ export async function postLead(path: string, body: unknown): Promise<SubmitResul
       body: JSON.stringify(body),
     });
     if (!res.ok) {
-      const text = await res.text().catch(() => '');
+      let text = await res.text().catch(() => '');
+      try {
+        const j = JSON.parse(text) as { error?: string };
+        if (j?.error && typeof j.error === 'string') text = j.error;
+      } catch {
+        /* keep raw text */
+      }
       return {
         ok: false,
         error: text || `Server returned ${res.status}`,
       };
     }
-    return { ok: true };
+    return { ok: true, mode: 'api' };
   } catch (e) {
     const msg = e instanceof Error ? e.message : 'Network error';
     return { ok: false, error: msg };
@@ -73,6 +83,25 @@ export async function submitNewsletterEmail(email: string): Promise<SubmitResult
   return postLead(siteConfig.apiNewsletterPath, {
     source: 'footer_newsletter',
     email,
+    submittedAt: new Date().toISOString(),
+  });
+}
+
+export async function submitLaunchInterest(payload: {
+  name: string;
+  email: string;
+  phone?: string;
+  note?: string;
+  /** Honeypot — leave empty; bots may fill it (not named "website" to avoid autofill). */
+  bhp?: string;
+}): Promise<SubmitResult> {
+  return postLead(siteConfig.apiLaunchInterestPath, {
+    source: 'coming_soon_launch',
+    name: payload.name.trim(),
+    email: payload.email.trim().toLowerCase(),
+    phone: (payload.phone || '').trim(),
+    note: (payload.note || '').trim().slice(0, 2000),
+    bhp: (payload.bhp || '').trim(),
     submittedAt: new Date().toISOString(),
   });
 }

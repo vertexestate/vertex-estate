@@ -21,6 +21,23 @@ import { Contact } from './pages/Contact';
 import { Dashboard } from './pages/Dashboard';
 import { EstateOwnerView } from './pages/EstateOwnerView';
 import { siteConfig } from './config/siteConfig';
+import { resolveComingSoonDeadlineMs } from './lib/comingSoonDeadline';
+import { ComingSoonOverlay } from './components/layout/ComingSoonOverlay';
+
+function computeComingSoonBoot(): { deadlineMs: number; showSplash: boolean } {
+  if (typeof window === 'undefined') {
+    return { deadlineMs: 0, showSplash: true };
+  }
+  if (!siteConfig.showComingSoon) {
+    return { deadlineMs: 0, showSplash: true };
+  }
+  const deadlineMs = resolveComingSoonDeadlineMs({
+    fixedUntilMs: siteConfig.comingSoonFixedUntilMs,
+    slidingDays: siteConfig.comingSoonSlidingDays,
+  });
+  const gateOn = deadlineMs > 0 && Date.now() < deadlineMs;
+  return { deadlineMs, showSplash: !gateOn };
+}
 function AnimatedRoutes() {
   const location = useLocation();
   return (
@@ -87,11 +104,37 @@ function AnimatedRoutes() {
 
 }
 export function App() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [boot] = useState(() => computeComingSoonBoot());
+  const [deadlineMs] = useState(boot.deadlineMs);
+  const [isLoading, setIsLoading] = useState(boot.showSplash);
+  const [nowTick, setNowTick] = useState(() => Date.now());
+
+  useEffect(() => {
+    if (!siteConfig.showComingSoon || deadlineMs <= 0) return;
+    if (Date.now() >= deadlineMs) return;
+    const id = window.setInterval(() => setNowTick(Date.now()), 1000);
+    return () => window.clearInterval(id);
+  }, [siteConfig.showComingSoon, deadlineMs]);
+
+  const comingSoonActive =
+    siteConfig.showComingSoon && deadlineMs > 0 && nowTick < deadlineMs;
 
   useEffect(() => {
     document.title = siteConfig.documentTitle;
   }, []);
+
+  useEffect(() => {
+    if (
+      import.meta.env.DEV &&
+      siteConfig.showComingSoon &&
+      siteConfig.comingSoonFixedUntilMs <= 0 &&
+      deadlineMs <= 0
+    ) {
+      console.warn(
+        '[Vertex] Coming soon is on but no deadline is active (sliding window already ended, or storage issue).'
+      );
+    }
+  }, [deadlineMs]);
 
   return (
     <ThemeProvider>
@@ -100,9 +143,9 @@ export function App() {
         <PropertiesProvider>
           <AssistantProvider>
             <BrowserRouter>
-              {isLoading &&
-              <LoadingScreen onComplete={() => setIsLoading(false)} />
-              }
+              {isLoading && !comingSoonActive && (
+                <LoadingScreen onComplete={() => setIsLoading(false)} />
+              )}
               <div className="relative min-h-screen bg-cream dark:bg-navy-900 transition-colors duration-200">
                 <ParticlesBackground />
                 <div className="relative z-10">
@@ -112,6 +155,7 @@ export function App() {
                 </div>
                 {!isLoading && <VertexAssistant />}
                 <AuthModal />
+                {comingSoonActive && <ComingSoonOverlay targetMs={deadlineMs} />}
               </div>
             </BrowserRouter>
           </AssistantProvider>

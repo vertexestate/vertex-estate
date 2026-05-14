@@ -11,12 +11,16 @@ Vertex Estate — real content without rebuilding the app
 3) stats.json — set "stats" to up to four items: label, value (number), suffix (e.g. "+")
    Icons are fixed in order (homes, map, users, award). Empty = demo numbers.
 
-4) contact.json — offices[], quickActions[] (label, value, href), social { facebook, ... }
-   Empty arrays = demo US office copy until you replace.
+4) contact.json — offices[], quickActions[] (label, value, href, icon, color),
+   mapEmbedUrl, social { facebook, twitter, instagram, tiktok, linkedin }.
+   Empty offices/quickActions fall back to code defaults (Islamabad + WhatsApp when set in repo).
 
 5) Logo: add /public/brand/logo.png (or .svg) and set VITE_LOGO_URL=/brand/logo.png in .env
 
 6) Domain & API: see .env.example in project root — VITE_SITE_PUBLIC_URL, VITE_API_BASE_URL, etc.
 
-7) Full property database: host a JSON array at a URL and set VITE_PROPERTIES_JSON_URL,
-   or implement the POST lead endpoints on your API and connect auth (Supabase, Clerk, custom).
+7) Full property database: `GET /properties` on the Node API reads MongoDB collection
+   `properties` (see .env.example: MONGODB_URI, MONGODB_AUTO_SEED, server/seed-catalog.json).
+
+8) Run `npm run dev` (not `vite` alone) so both the website and API start — otherwise /api
+   cannot reach MongoDB and listings/leads will not connect.

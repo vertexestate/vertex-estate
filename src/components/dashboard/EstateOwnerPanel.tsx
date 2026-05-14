@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   CheckIcon,
@@ -12,6 +12,9 @@ import {
   FileTextIcon,
   BadgeCheckIcon,
   UserMinusIcon,
+  DatabaseIcon,
+  AlertCircleIcon,
+  CheckCircle2Icon,
 } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
@@ -20,6 +23,8 @@ import { useAuth } from '../../context/AuthContext';
 import { useSiteContent } from '../../context/SiteContentContext';
 import { useNavigate } from 'react-router-dom';
 import type { UserRole } from '../../types';
+import { fetchLaunchSignupCount } from '../../lib/leadStats';
+import { fetchApiHealth, type ApiHealthResponse } from '../../lib/apiHealth';
 
 type OwnerTab =
   | 'pending'
@@ -40,6 +45,80 @@ function roleLabel(role: UserRole) {
   if (role === 'estate_owner') return 'Estate Owner';
   if (role === 'agent') return 'Agent';
   return 'Member';
+}
+
+function MongoConnectionBanner() {
+  const [health, setHealth] = useState<ApiHealthResponse | undefined>(undefined);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchApiHealth().then((h) => {
+      if (!cancelled) setHealth(h);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (health === undefined) {
+    return (
+      <div className="mb-6 flex items-center gap-3 rounded-xl border border-navy-200 bg-navy-50 px-4 py-3 text-sm text-navy-600 dark:border-navy-600 dark:bg-navy-900/80 dark:text-navy-300">
+        <DatabaseIcon className="h-5 w-5 shrink-0 animate-pulse text-gold-500" aria-hidden />
+        Checking MongoDB connection…
+      </div>
+    );
+  }
+
+  const connected = health.ok === true && health.mongoConnected === true;
+
+  if (connected) {
+    return (
+      <div className="mb-6 flex flex-col gap-2 rounded-xl border border-emerald-500/35 bg-emerald-500/10 px-4 py-3 text-sm text-navy-800 dark:text-emerald-100/95 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-start gap-3">
+          <CheckCircle2Icon className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600 dark:text-emerald-400" aria-hidden />
+          <div>
+            <p className="font-semibold text-navy-900 dark:text-cream">MongoDB connected</p>
+            <p className="mt-0.5 text-xs leading-relaxed text-navy-600 dark:text-navy-300">
+              Database <span className="font-mono text-navy-800 dark:text-cream">{health.db}</span>
+              {' · '}
+              leads: <span className="font-mono">{health.leadsCollection}</span>
+              {typeof health.launchWaitlistCount === 'number' ? (
+                <>
+                  {' · '}
+                  coming-soon signups in MongoDB:{' '}
+                  <span className="font-semibold text-navy-900 dark:text-cream">
+                    {health.launchWaitlistCount}
+                  </span>
+                </>
+              ) : null}
+            </p>
+          </div>
+        </div>
+        {typeof health.leadDocumentEstimate === 'number' ? (
+          <p className="shrink-0 text-xs text-navy-500 dark:text-navy-400 sm:text-right">
+            ~{health.leadDocumentEstimate} lead doc
+            {health.leadDocumentEstimate === 1 ? '' : 's'} (estimate)
+          </p>
+        ) : null}
+      </div>
+    );
+  }
+
+  return (
+    <div className="mb-6 flex items-start gap-3 rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-950 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-100/90">
+      <AlertCircleIcon className="mt-0.5 h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" aria-hidden />
+      <div>
+        <p className="font-semibold text-navy-900 dark:text-cream">MongoDB not ready from this browser</p>
+        <p className="mt-1 text-xs leading-relaxed text-navy-700 dark:text-navy-300">
+          {health.error ||
+            'Set MONGODB_URI in the project `.env`, run `npm run dev` (starts Vite + API), and ensure the API port matches your proxy.'}{' '}
+          Waitlist and contact forms only reach MongoDB when the API returns HTTP 201 — otherwise they
+          are queued in <span className="font-mono">localStorage</span> key{' '}
+          <span className="font-mono">vertex-lead-queue</span>.
+        </p>
+      </div>
+    </div>
+  );
 }
 
 export function EstateOwnerPanel() {
@@ -67,11 +146,23 @@ export function EstateOwnerPanel() {
     resetHero,
   } = useSiteContent();
   const [tab, setTab] = useState<OwnerTab>('pending');
+  const [launchSignupCount, setLaunchSignupCount] = useState<number | null>(null);
   const users = allUsers();
   const rejectedCount = allProperties.filter(
     (p) => p.approvalStatus === 'rejected'
   ).length;
   const verifiedMembers = users.filter((u) => u.vertexVerified).length;
+
+  useEffect(() => {
+    if (tab !== 'analytics') return;
+    let cancelled = false;
+    fetchLaunchSignupCount().then((n) => {
+      if (!cancelled) setLaunchSignupCount(n);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [tab]);
 
   const tabs: Array<{
     id: OwnerTab;
@@ -125,6 +216,8 @@ export function EstateOwnerPanel() {
           </p>
         </div>
       </div>
+
+      <MongoConnectionBanner />
 
       <div className="flex gap-2 p-1 bg-navy-100 dark:bg-navy-900 rounded-xl mb-6 overflow-x-auto">
         {tabs.map((t) => (
@@ -358,14 +451,24 @@ export function EstateOwnerPanel() {
 
       {tab === 'analytics' && (
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {[
-            { label: 'Live listings', value: publicProperties.length },
-            { label: 'Pending review', value: pendingProperties.length },
-            { label: 'Rejected', value: rejectedCount },
-            { label: 'Total in system', value: allProperties.length },
-            { label: 'Registered people', value: users.length },
-            { label: 'Platform-verified', value: verifiedMembers },
-          ].map((row) => (
+          {(
+            [
+              { label: 'Live listings', value: publicProperties.length },
+              { label: 'Pending review', value: pendingProperties.length },
+              { label: 'Rejected', value: rejectedCount },
+              { label: 'Total in system', value: allProperties.length },
+              { label: 'Registered people', value: users.length },
+              { label: 'Platform-verified', value: verifiedMembers },
+              {
+                label: 'Coming soon signups',
+                value: launchSignupCount ?? '—',
+                hint:
+                  launchSignupCount === null
+                    ? 'Connect MongoDB and open the site with the API running to load this count.'
+                    : 'Waitlist registrations from the coming-soon page (MongoDB `leads`, source `coming_soon_launch`).',
+              },
+            ] as const satisfies readonly { label: string; value: number | string; hint?: string }[]
+          ).map((row) => (
             <div
               key={row.label}
               className="p-4 rounded-xl bg-cream dark:bg-navy-900 border border-navy-200/60 dark:border-navy-700"
@@ -376,6 +479,11 @@ export function EstateOwnerPanel() {
               <p className="text-xs text-navy-500 dark:text-navy-400 mt-1 uppercase tracking-wide font-semibold">
                 {row.label}
               </p>
+              {row.hint ? (
+                <p className="mt-2 text-[11px] leading-snug text-navy-500 dark:text-navy-400 normal-case font-normal">
+                  {row.hint}
+                </p>
+              ) : null}
             </div>
           ))}
           <div className="col-span-2 md:col-span-3 p-4 rounded-xl bg-gold-500/10 border border-gold-500/25 text-sm text-navy-700 dark:text-cream">

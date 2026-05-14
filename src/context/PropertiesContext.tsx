@@ -3,6 +3,7 @@ import { Property, ListingStatus } from '../types';
 import { properties as seedProperties } from '../data/properties';
 import { useAuth } from './AuthContext';
 import { siteConfig } from '../config/siteConfig';
+import { getClientApiBase } from '../lib/apiBase';
 interface PropertiesContextType {
   /** All approved properties (seed + user-approved) visible publicly */
   publicProperties: Property[];
@@ -73,6 +74,35 @@ export function PropertiesProvider({
   );
   const [remoteCatalog, setRemoteCatalog] = useState<Property[] | null>(null);
   const [remoteReady, setRemoteReady] = useState(() => !siteConfig.propertiesJsonUrl);
+  /** Loaded from Express `GET /properties` when API base is configured (e.g. /api in dev). */
+  const [mongoList, setMongoList] = useState<Property[] | undefined>(undefined);
+  const [mongoLoadDone, setMongoLoadDone] = useState(false);
+
+  useEffect(() => {
+    const base = getClientApiBase();
+    if (!base) {
+      setMongoLoadDone(true);
+      return;
+    }
+    let cancelled = false;
+    fetch(`${base}/properties`)
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+      .then((data: unknown) => {
+        if (cancelled) return;
+        if (Array.isArray(data)) setMongoList(data as Property[]);
+        else setMongoList([]);
+      })
+      .catch((err) => {
+        console.warn('[Vertex] Could not load /properties from API:', err);
+        if (!cancelled) setMongoList(undefined);
+      })
+      .finally(() => {
+        if (!cancelled) setMongoLoadDone(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     if (!siteConfig.propertiesJsonUrl) return;
@@ -126,16 +156,26 @@ export function PropertiesProvider({
   const seedPart = siteConfig.includeSeedProperties ? seedAsApproved : [];
   const remotePart =
     siteConfig.propertiesJsonUrl && remoteReady ? remoteCatalog ?? [] : [];
-  const catalogApproved =
-    siteConfig.propertiesJsonUrl && remoteReady
-      ? [...seedPart, ...remotePart]
-      : siteConfig.includeSeedProperties
-        ? seedAsApproved
-        : [];
+
+  const apiBase = getClientApiBase();
+  const mongoLayerReady = Boolean(apiBase) && mongoLoadDone && mongoList !== undefined;
+  const mongoPart = mongoLayerReady ? mongoList! : [];
+
+  let catalogApproved: Property[];
+  if (siteConfig.propertiesJsonUrl && remoteReady) {
+    catalogApproved = [...seedPart, ...remotePart];
+  } else if (mongoLayerReady) {
+    catalogApproved =
+      mongoPart.length > 0 ? [...seedPart, ...mongoPart] : [...seedPart];
+  } else {
+    catalogApproved = siteConfig.includeSeedProperties ? seedAsApproved : [];
+  }
   const allProperties = [...catalogApproved, ...userListings];
-  const publicProperties = allProperties.filter(
-    (p) => p.approvalStatus === 'approved'
-  );
+  const publicProperties = allProperties.filter((p) => {
+    const st =
+      p.approvalStatus ?? (p.ownerId ? ('pending' as ListingStatus) : 'approved');
+    return st === 'approved';
+  });
   const pendingProperties = allProperties.filter((p) => {
     const st =
       p.approvalStatus ?? (p.ownerId ? ('pending' as ListingStatus) : 'approved');

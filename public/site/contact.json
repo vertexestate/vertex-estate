@@ -1,5 +1,45 @@
 {
-  "offices": [],
-  "quickActions": [],
-  "social": {}
+  "mapEmbedUrl": "https://maps.google.com/maps?q=Chaudhry%20Plaza%20F-7%20Markaz%20Islamabad%20Pakistan&z=17&output=embed",
+  "offices": [
+    {
+      "city": "Islamabad — F-7 Markaz",
+      "address": "2nd Floor, Chaudhry Plaza, up to Subway near Mr Chips, F-7 Markaz, Islamabad",
+      "phone": "+92 310 9882888",
+      "email": "contact@vertexestate.com"
+    }
+  ],
+  "quickActions": [
+    {
+      "label": "WhatsApp",
+      "value": "+92 310-9882888",
+      "href": "https://wa.me/923109882888",
+      "icon": "message",
+      "color": "from-green-500 to-green-600"
+    },
+    {
+      "label": "Email",
+      "value": "contact@vertexestate.com",
+      "href": "mailto:contact@vertexestate.com",
+      "icon": "mail",
+      "color": "from-blue-500 to-blue-600"
+    },
+    {
+      "label": "Call us",
+      "value": "+92 310-9882888",
+      "href": "tel:+923109882888",
+      "icon": "phone",
+      "color": "from-purple-500 to-purple-600"
+    },
+    {
+      "label": "Visit us",
+      "value": "F-7 Markaz, Islamabad",
+      "href": "https://maps.google.com/?q=Chaudhry+Plaza+F-7+Markaz+Islamabad",
+      "icon": "calendar",
+      "color": "from-gold-500 to-gold-600"
+    }
+  ],
+  "social": {
+    "instagram": "https://www.instagram.com/vertexestate0/",
+    "tiktok": "https://www.tiktok.com/@vertexestate0?is_from_webapp=1&sender_device=pc"
+  }
 }
