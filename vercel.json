@@ -1,8 +1,17 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/api(.*)",
+      "destination": "/api"
+    },
+    {
+      "source": "/((?!api/)(?!assets/)(?!brand/)(?!site/).*)",
       "destination": "/index.html"
     }
-  ]
+  ],
+  "functions": {
+    "api/index.js": {
+      "maxDuration": 30
+    }
+  }
 }
