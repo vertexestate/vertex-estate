@@ -3,7 +3,7 @@ import { Property, ListingStatus } from '../types';
 import { properties as seedProperties } from '../data/properties';
 import { useAuth } from './AuthContext';
 import { siteConfig } from '../config/siteConfig';
-import { getClientApiBase } from '../lib/apiBase';
+import { getClientApiBase, joinApiUrl } from '../lib/apiBase';
 interface PropertiesContextType {
   /** All approved properties (seed + user-approved) visible publicly */
   publicProperties: Property[];
@@ -85,15 +85,14 @@ export function PropertiesProvider({
       return;
     }
     let cancelled = false;
-    fetch(`${base}/properties`)
+    fetch(joinApiUrl(base, '/properties'))
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
       .then((data: unknown) => {
         if (cancelled) return;
         if (Array.isArray(data)) setMongoList(data as Property[]);
         else setMongoList([]);
       })
-      .catch((err) => {
-        console.warn('[Vertex] Could not load /properties from API:', err);
+      .catch(() => {
         if (!cancelled) setMongoList(undefined);
       })
       .finally(() => {

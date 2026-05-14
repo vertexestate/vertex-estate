@@ -1,4 +1,4 @@
-import { getClientApiBase } from './apiBase';
+import { getClientApiBase, joinApiUrl } from './apiBase';
 
 /** Response shape from `GET /health` (Express + MongoDB). */
 export type ApiHealthResponse = {
@@ -16,8 +16,7 @@ export type ApiHealthResponse = {
 };
 
 /**
- * Calls the Vertex API `/health` (same `/api` proxy in dev).
- * Use this to confirm MongoDB is reachable and to read aggregate lead stats.
+ * Calls the Vertex API `/health` (same `/api` proxy in dev when base is relative).
  */
 export async function fetchApiHealth(): Promise<ApiHealthResponse> {
   const base = getClientApiBase();
@@ -29,7 +28,7 @@ export async function fetchApiHealth(): Promise<ApiHealthResponse> {
     };
   }
   try {
-    const res = await fetch(`${base}/health`);
+    const res = await fetch(joinApiUrl(base, '/health'));
     const data = (await res.json()) as ApiHealthResponse;
     return data;
   } catch (e) {

@@ -18,10 +18,22 @@ const MONGODB_DB = process.env.MONGODB_DB || 'vertex';
 const LEADS_COLLECTION = process.env.MONGODB_LEADS_COLLECTION || 'leads';
 const PROPERTIES_COLLECTION = process.env.MONGODB_PROPERTIES_COLLECTION || 'properties';
 
-const corsOrigins = (process.env.CORS_ORIGIN || 'http://localhost:5173,http://127.0.0.1:5173')
-  .split(',')
-  .map((s) => s.trim())
-  .filter(Boolean);
+const DEFAULT_CORS_ORIGINS = [
+  'https://vertexestatepvt.com',
+  'https://www.vertexestatepvt.com',
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+];
+
+function buildAllowedCorsOrigins() {
+  const fromEnv = (process.env.CORS_ORIGIN || '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+  return new Set([...DEFAULT_CORS_ORIGINS, ...fromEnv]);
+}
+
+const allowedCorsOrigins = buildAllowedCorsOrigins();
 
 /** Dev-only escape hatch for TLS errors (e.g. corporate SSL inspection). Never enable in production. */
 function getMongoClientOptions() {
@@ -50,7 +62,6 @@ async function getMongoClient() {
     mongoConnectPromise = (async () => {
       mongoClient = new MongoClient(MONGODB_URI, getMongoClientOptions());
       await mongoClient.connect();
-      console.log(`[mongo] Connected → db "${MONGODB_DB}"`);
       await maybeSeedProperties();
       return mongoClient;
     })();
@@ -131,7 +142,13 @@ app.use((req, _res, next) => {
 
 app.use(
   cors({
-    origin: corsOrigins.length ? corsOrigins : true,
+    origin(origin, callback) {
+      if (!origin) {
+        callback(null, true);
+        return;
+      }
+      callback(null, allowedCorsOrigins.has(origin));
+    },
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type'],
   })
@@ -267,32 +284,52 @@ app.post('/leads/newsletter', async (req, res) => {
   }
 });
 
-/** Coming-soon waitlist / early access — name + email stored in `leads` with source `coming_soon_launch`. */
+/**
+ * Coming-soon waitlist — inserts **only** into db `vertex` / collection `leads` (via env defaults):
+ * name, email, phone, description, source, submittedAt (Date).
+ */
 app.post('/leads/launch-interest', async (req, res) => {
   try {
-    const b = req.body || {};
+    if (!MONGODB_URI) {
+      console.error('[leads/launch-interest] MONGODB_URI is not set');
+      return res.status(500).json({ error: 'Service unavailable' });
+    }
+
+    const b = req.body;
+    if (!b || typeof b !== 'object' || Array.isArray(b)) {
+      return res.status(400).json({ error: 'Expected a JSON object body' });
+    }
+
     if (b.bhp && String(b.bhp).trim()) {
       return res.status(400).json({ error: 'Invalid request' });
     }
+
     const name = String(b.name || '').trim();
     const email = String(b.email || '').trim().toLowerCase();
-    if (!name || !email || !/\S+@\S+\.\S+/.test(email)) {
-      return res.status(400).json({ error: 'Name and a valid email are required' });
+    const phone = String(b.phone ?? '').trim();
+    const description = String(b.description ?? '').trim().slice(0, 4000);
+
+    if (!name || !email) {
+      return res.status(400).json({ error: 'Name and email are required' });
     }
-    await insertLead({
-      source: 'coming_soon_launch',
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      return res.status(400).json({ error: 'Invalid email' });
+    }
+
+    const col = await getLeadsCollection();
+    const doc = {
       name,
       email,
-      phone: String(b.phone || '').trim(),
-      note: String(b.note || '').slice(0, 2000),
-      submittedAt: b.submittedAt || new Date().toISOString(),
-    });
+      phone,
+      description,
+      source: 'coming_soon_launch',
+      submittedAt: new Date(),
+    };
+    await col.insertOne(doc);
     return res.status(201).json({ ok: true });
   } catch (e) {
-    console.error('[leads/launch-interest]', e);
-    return res.status(500).json({
-      error: e instanceof Error ? e.message : 'Failed to save',
-    });
+    console.error('[leads/launch-interest] insert failed:', e instanceof Error ? e.stack || e.message : e);
+    return res.status(500).json({ error: 'Failed to save lead' });
   }
 });
 
@@ -314,7 +351,6 @@ app.get('/stats/launch-interest-count', async (_req, res) => {
 });
 
 app.use((_req, res) => {
-  console.warn('[Vertex API 404]', _req.method, _req.originalUrl);
   res.status(404).json({ error: 'Not found' });
 });
 

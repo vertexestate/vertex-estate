@@ -5,7 +5,7 @@ import { siteConfig } from '../../config/siteConfig';
 import { useCountdown } from '../../hooks/useCountdown';
 import { Input } from '../ui/Input';
 import { Button } from '../ui/Button';
-import { submitLaunchInterest } from '../../lib/submissions';
+import { isValidLaunchInterestEmail, submitLaunchInterest } from '../../lib/submissions';
 
 const LAUNCH_REGISTERED_LS = 'vertex-coming-soon-launch-registered';
 
@@ -49,7 +49,7 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [note, setNote] = useState('');
+  const [description, setDescription] = useState('');
   const [bhp, setBhp] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -219,17 +219,31 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
               onSubmit={async (e) => {
                 e.preventDefault();
                 setError('');
-                if (!name.trim() || !email.trim()) {
-                  setError('Please enter your name and email.');
+                const nameT = name.trim();
+                const emailT = email.trim();
+                if (!nameT) {
+                  setError('Please enter your name.');
+                  return;
+                }
+                if (!emailT) {
+                  setError('Please enter your email.');
+                  return;
+                }
+                if (!isValidLaunchInterestEmail(emailT)) {
+                  setError('Please enter a valid email address.');
+                  return;
+                }
+                if (bhp.trim()) {
+                  setError('Unable to submit.');
                   return;
                 }
                 setBusy(true);
                 try {
                   const result = await submitLaunchInterest({
-                    name: name.trim(),
-                    email: email.trim(),
+                    name: nameT,
+                    email: emailT,
                     phone: phone.trim(),
-                    note: note.trim(),
+                    description: description.trim(),
                     bhp,
                   });
                   if (!result.ok) {
@@ -285,12 +299,12 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
                 className={launchFieldClass}
               />
               <div>
-                <label className="mb-2 block text-sm font-medium text-cream">Note (optional)</label>
+                <label className="mb-2 block text-sm font-medium text-cream">Message (optional)</label>
                 <textarea
-                  name="note"
+                  name="description"
                   rows={2}
-                  value={note}
-                  onChange={(e) => setNote(e.target.value)}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
                   className={`w-full resize-none rounded-lg border-2 px-4 py-3 text-sm outline-none transition focus:ring-2 focus:ring-gold-500/20 ${launchFieldClass}`}
                   placeholder="City, budget range, or how we should contact you"
                 />

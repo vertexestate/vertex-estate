@@ -1,5 +1,5 @@
 import { siteConfig } from '../config/siteConfig';
-import { getClientApiBase } from './apiBase';
+import { getClientApiBase, joinApiUrl } from './apiBase';
 
 const OFFLINE_QUEUE_KEY = 'vertex-lead-queue';
 
@@ -20,9 +20,8 @@ function queueOffline(path: string, body: unknown) {
 }
 
 /**
- * POST JSON to your backend when `VITE_API_BASE_URL` is set.
- * If unset, payloads are appended to localStorage under `vertex-lead-queue`
- * so you can export them until the API is live.
+ * POST JSON to your backend. Uses `joinApiUrl` so `VITE_API_BASE_URL` resolves paths correctly
+ * (absolute host or relative `/api` proxy).
  */
 export async function postLead(path: string, body: unknown): Promise<SubmitResult> {
   const base = getClientApiBase();
@@ -30,15 +29,8 @@ export async function postLead(path: string, body: unknown): Promise<SubmitResul
     queueOffline(path, body);
     return { ok: true, mode: 'offline' };
   }
-  let p = path.startsWith('/') ? path : `/${path}`;
-  // Avoid /api + /api/leads/... when env paths wrongly include /api (Express serves /leads/* at root).
-  const baseTrim = base.replace(/\/+$/, '');
-  const baseIsApiProxy = baseTrim === '/api' || /\/api$/i.test(baseTrim);
-  if (baseIsApiProxy && /^\/api(\/|$)/i.test(p)) {
-    p = p.replace(/^\/api/i, '') || '/';
-    if (!p.startsWith('/')) p = `/${p}`;
-  }
-  const url = `${baseTrim}${p}`;
+  const p = path.startsWith('/') ? path : `/${path}`;
+  const url = joinApiUrl(base, p);
   try {
     const res = await fetch(url, {
       method: 'POST',
@@ -95,21 +87,28 @@ export async function submitNewsletterEmail(email: string): Promise<SubmitResult
   });
 }
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+export function isValidLaunchInterestEmail(email: string): boolean {
+  return EMAIL_RE.test(email.trim().toLowerCase());
+}
+
+/**
+ * Coming-soon waitlist. Server persists only: name, email, phone, description, source, submittedAt.
+ */
 export async function submitLaunchInterest(payload: {
   name: string;
   email: string;
-  phone?: string;
-  note?: string;
-  /** Honeypot — leave empty; bots may fill it (not named "website" to avoid autofill). */
+  phone: string;
+  description: string;
+  /** Honeypot — leave empty; bots may fill it. */
   bhp?: string;
 }): Promise<SubmitResult> {
   return postLead(siteConfig.apiLaunchInterestPath, {
-    source: 'coming_soon_launch',
     name: payload.name.trim(),
     email: payload.email.trim().toLowerCase(),
-    phone: (payload.phone || '').trim(),
-    note: (payload.note || '').trim().slice(0, 2000),
+    phone: payload.phone.trim(),
+    description: payload.description.trim().slice(0, 4000),
     bhp: (payload.bhp || '').trim(),
-    submittedAt: new Date().toISOString(),
   });
 }

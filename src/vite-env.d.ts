@@ -9,7 +9,11 @@ interface ImportMetaEnv {
   readonly VITE_SITE_TITLE?: string;
   /** Public path or absolute URL to logo image (e.g. /brand/logo.png). */
   readonly VITE_LOGO_URL?: string;
-  /** Backend base URL for leads + optional listings JSON (no trailing slash). */
+  /**
+   * API origin for leads + optional `GET /properties` (no trailing slash).
+   * Examples: `https://api.vertexestatepvt.com`, or same host as the site if routes are at `/leads/*`.
+   * Omit to use `/api` (Vite proxy in dev; Vercel rewrite when deployed there).
+   */
   readonly VITE_API_BASE_URL?: string;
   /** POST path for contact form (appended to VITE_API_BASE_URL). Default /leads/contact */
   readonly VITE_API_CONTACT_PATH?: string;
