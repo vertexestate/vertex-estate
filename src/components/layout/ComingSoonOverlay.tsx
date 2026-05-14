@@ -6,6 +6,7 @@ import { useCountdown } from '../../hooks/useCountdown';
 import { Input } from '../ui/Input';
 import { Button } from '../ui/Button';
 import { isValidLaunchInterestEmail, submitLaunchInterest } from '../../lib/submissions';
+import { playWaitlistCelebration } from '../../lib/waitlistConfetti';
 
 const LAUNCH_REGISTERED_LS = 'vertex-coming-soon-launch-registered';
 
@@ -183,8 +184,7 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
             <div className="space-y-3 text-sm leading-relaxed text-navy-200/95">
               {savedMode === 'api' ? (
                 <p>
-                  You are on the list — your details were saved to our database (MongoDB). We will
-                  reach out when the new experience opens.
+                 Welcome aboard 🚀 You're officially on the waitlist. We'll keep you updated before launch.
                 </p>
               ) : savedMode === 'offline' ? (
                 <p>
@@ -255,6 +255,7 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
                   } catch {
                     /* noop */
                   }
+                  playWaitlistCelebration();
                   setSavedMode(result.mode);
                   setDone(true);
                 } finally {
