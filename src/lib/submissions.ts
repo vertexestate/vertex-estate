@@ -30,7 +30,15 @@ export async function postLead(path: string, body: unknown): Promise<SubmitResul
     queueOffline(path, body);
     return { ok: true, mode: 'offline' };
   }
-  const url = `${base}${path.startsWith('/') ? path : `/${path}`}`;
+  let p = path.startsWith('/') ? path : `/${path}`;
+  // Avoid /api + /api/leads/... when env paths wrongly include /api (Express serves /leads/* at root).
+  const baseTrim = base.replace(/\/+$/, '');
+  const baseIsApiProxy = baseTrim === '/api' || /\/api$/i.test(baseTrim);
+  if (baseIsApiProxy && /^\/api(\/|$)/i.test(p)) {
+    p = p.replace(/^\/api/i, '') || '/';
+    if (!p.startsWith('/')) p = `/${p}`;
+  }
+  const url = `${baseTrim}${p}`;
   try {
     const res = await fetch(url, {
       method: 'POST',

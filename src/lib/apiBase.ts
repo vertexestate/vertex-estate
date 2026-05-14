@@ -2,8 +2,8 @@ import { siteConfig } from '../config/siteConfig';
 
 /**
  * Our Express server mounts `/leads`, `/health`, etc. at the **host root** — not under `/api`.
- * If `VITE_API_BASE_URL` is mistakenly `http://localhost:3001/api`, strip the trailing `/api`
- * for localhost / 127.0.0.1 only (so real hosted APIs at `https://x.com/api` stay unchanged).
+ * If `VITE_API_BASE_URL` is mistakenly `http://localhost:3001/api`, strip the trailing `/api`.
+ * We do **not** strip `http://localhost:5173/api` — that prefix is how the browser hits the Vite proxy.
  */
 function normalizeConfiguredApiBase(raw: string): string {
   const base = raw.trim().replace(/\/+$/, '');
@@ -11,7 +11,9 @@ function normalizeConfiguredApiBase(raw: string): string {
   try {
     const u = new URL(base);
     const local = u.hostname === 'localhost' || u.hostname === '127.0.0.1';
-    if (local && /\/api$/i.test(base)) {
+    const port = u.port || '';
+    const isNodeApiPort = port === '3001';
+    if (local && isNodeApiPort && /\/api$/i.test(base)) {
       return base.replace(/\/api$/i, '');
     }
   } catch {

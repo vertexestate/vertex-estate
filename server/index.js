@@ -24,6 +24,20 @@ const corsOrigins = (process.env.CORS_ORIGIN || 'http://localhost:5173,http://12
   .map((s) => s.trim())
   .filter(Boolean);
 
+/** Dev-only escape hatch for TLS errors (e.g. corporate SSL inspection). Never enable in production. */
+function getMongoClientOptions() {
+  const insecure = String(process.env.MONGODB_TLS_INSECURE || '').toLowerCase() === 'true';
+  if (insecure) {
+    console.warn(
+      '[mongo] MONGODB_TLS_INSECURE=true — certificate checks are disabled for this process (local dev only).'
+    );
+  }
+  return {
+    serverSelectionTimeoutMS: 15_000,
+    ...(insecure ? { tlsAllowInvalidCertificates: true } : {}),
+  };
+}
+
 let mongoClient;
 let mongoConnectPromise;
 
@@ -35,9 +49,7 @@ async function getMongoClient() {
   }
   if (!mongoConnectPromise) {
     mongoConnectPromise = (async () => {
-      mongoClient = new MongoClient(MONGODB_URI, {
-        serverSelectionTimeoutMS: 15_000,
-      });
+      mongoClient = new MongoClient(MONGODB_URI, getMongoClientOptions());
       await mongoClient.connect();
       console.log(`[mongo] Connected → db "${MONGODB_DB}"`);
       await maybeSeedProperties();
@@ -101,6 +113,21 @@ app.use(
   })
 );
 app.use(express.json({ limit: '512kb' }));
+
+/**
+ * Some setups POST to `/api/leads/...` directly against this server (e.g. wrong proxy or
+ * `VITE_API_*_PATH` including `/api`). Our routes live at `/leads/*`, `/health`, `/stats/*`.
+ */
+app.use((req, _res, next) => {
+  const pathOnly = req.url.split('?')[0] || '';
+  if (pathOnly === '/api' || pathOnly.startsWith('/api/')) {
+    const qs = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
+    let stripped = pathOnly.replace(/^\/api(?=\/|$)/, '') || '/';
+    if (!stripped.startsWith('/')) stripped = `/${stripped}`;
+    req.url = stripped + qs;
+  }
+  next();
+});
 
 app.get('/health', async (_req, res) => {
   try {
@@ -263,6 +290,7 @@ app.get('/stats/launch-interest-count', async (_req, res) => {
 });
 
 app.use((_req, res) => {
+  console.warn('[Vertex API 404]', _req.method, _req.originalUrl);
   res.status(404).json({ error: 'Not found' });
 });
 

@@ -18,7 +18,17 @@ if (!uri.trim()) {
   process.exit(1);
 }
 
-const client = new MongoClient(uri, { serverSelectionTimeoutMS: 12_000 });
+const tlsInsecure = String(process.env.MONGODB_TLS_INSECURE || '').toLowerCase() === 'true';
+if (tlsInsecure) {
+  console.warn(
+    '[mongo] MONGODB_TLS_INSECURE=true — certificate checks disabled for this script (dev only).'
+  );
+}
+
+const client = new MongoClient(uri, {
+  serverSelectionTimeoutMS: 12_000,
+  ...(tlsInsecure ? { tlsAllowInvalidCertificates: true } : {}),
+});
 
 try {
   await client.connect();
