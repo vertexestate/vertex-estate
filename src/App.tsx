@@ -22,6 +22,7 @@ import { Dashboard } from './pages/Dashboard';
 import { EstateOwnerView } from './pages/EstateOwnerView';
 import { siteConfig } from './config/siteConfig';
 import { ComingSoonOverlay } from './components/layout/ComingSoonOverlay';
+import { Analytics } from '@vercel/analytics/react';
 
 function computeComingSoonBoot(): { deadlineMs: number; showSplash: boolean } {
   if (typeof window === 'undefined') {
@@ -152,6 +153,7 @@ export function App() {
                 {!isLoading && <VertexAssistant />}
                 <AuthModal />
                 {comingSoonActive && <ComingSoonOverlay targetMs={deadlineMs} />}
+                <Analytics />
               </div>
             </BrowserRouter>
           </AssistantProvider>
