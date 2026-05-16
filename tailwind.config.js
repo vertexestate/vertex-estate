@@ -58,6 +58,8 @@ export default {
         'ambient-breathe-alt': 'ambientBreatheAlt 18s ease-in-out infinite',
         starfield: 'starfieldDrift 32s linear infinite',
         'hero-burns': 'heroKenBurns 28s ease-in-out infinite alternate',
+        'tagline-marquee': 'taglineMarquee 32s linear infinite',
+        'promo-marquee': 'promoMarquee 28s linear infinite',
       },
       keyframes: {
         ambientBreathe: {
@@ -89,6 +91,14 @@ export default {
           '15%': { opacity: '0.35' },
           '55%': { opacity: '0.35' },
           '100%': { transform: 'translateX(220%) skewX(-12deg)', opacity: '0' },
+        },
+        taglineMarquee: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+        promoMarquee: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
         },
       },
     },

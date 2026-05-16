@@ -42,6 +42,10 @@ interface ImportMetaEnv {
   readonly VITE_COMING_SOON_UNTIL?: string;
   /** Short line next to the coming-soon map (default F7 Markaz; full address is in the map). */
   readonly VITE_COMING_SOON_LOCATION_LINE?: string;
+  /** Top tagline on coming-soon (waitlist discount offer). */
+  readonly VITE_COMING_SOON_TAGLINE?: string;
+  /** Promo slider messages, pipe-separated (e.g. Offer A|Offer B|Offer C). */
+  readonly VITE_COMING_SOON_PROMO_SLIDES?: string;
   /** Full URL — coming-soon social row (optional; defaults in siteConfig). */
   readonly VITE_SOCIAL_FACEBOOK_URL?: string;
   readonly VITE_SOCIAL_INSTAGRAM_URL?: string;

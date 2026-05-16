@@ -9,7 +9,13 @@ import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import { MongoClient } from 'mongodb';
-import { isWaitlistEmailEnabled, sendWaitlistEmails } from './mail.js';
+import {
+  getMailStatus,
+  isWaitlistEmailEnabled,
+  logMailStartupStatus,
+  sendWaitlistEmails,
+  verifySmtpConnection,
+} from './mail.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.join(__dirname, '..', '.env') });
@@ -200,6 +206,11 @@ app.get('/health', async (_req, res) => {
     });
     const pcol = await getPropertiesCollection();
     const propCount = await pcol.estimatedDocumentCount();
+    const mail = getMailStatus();
+    let smtpVerify = null;
+    if (mail.configured && process.env.HEALTH_CHECK_SMTP === 'true') {
+      smtpVerify = await verifySmtpConnection();
+    }
     return res.json({
       ok: true,
       mongoConnected: true,
@@ -212,6 +223,8 @@ app.get('/health', async (_req, res) => {
       leadDocumentEstimate: leadEstimated,
       launchWaitlistCount,
       propertyCount: propCount,
+      mail,
+      ...(smtpVerify ? { smtpVerify } : {}),
     });
   } catch (e) {
     console.error('[health]', e);
@@ -348,12 +361,14 @@ app.post('/leads/launch-interest', async (req, res) => {
       void sendWaitlistEmails(doc).catch((mailErr) => {
         console.error(
           '[leads/launch-interest] waitlist email failed:',
-          mailErr instanceof Error ? mailErr.message : mailErr
+          mailErr instanceof Error ? mailErr.stack || mailErr.message : mailErr
         );
       });
+    } else {
+      console.warn('[leads/launch-interest] waitlist email skipped —', getMailStatus().hint);
     }
 
-    return res.status(201).json({ ok: true });
+    return res.status(201).json({ ok: true, mailSent: isWaitlistEmailEnabled() });
   } catch (e) {
     console.error('[leads/launch-interest] insert failed:', e instanceof Error ? e.stack || e.message : e);
     return res.status(500).json({ error: 'Failed to save lead' });

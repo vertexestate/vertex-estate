@@ -123,6 +123,22 @@ export const siteConfig = {
   comingSoonLocationLine:
     (import.meta.env.VITE_COMING_SOON_LOCATION_LINE || '').trim() || 'F7 Markaz, Islamabad',
 
+  /** Promo ticker slides at the top of coming soon (pipe-separated in env). */
+  comingSoonPromoSlides: (() => {
+    const fromEnv = (import.meta.env.VITE_COMING_SOON_PROMO_SLIDES || '').trim();
+    if (fromEnv) {
+      const parsed = fromEnv.split('|').map((s) => s.trim()).filter(Boolean);
+      if (parsed.length > 0) return parsed;
+    }
+    const single = (import.meta.env.VITE_COMING_SOON_TAGLINE || '').trim();
+    if (single) return [single];
+    return [
+      'Fill out the waitlist form — get a special launch discount',
+      'Early members get priority access before public launch',
+      'Exclusive offers on Joining The Waitlist',
+    ];
+  })(),
+
   /** Social profiles linked from the coming-soon overlay (override with VITE_SOCIAL_* if URLs change). */
   comingSoonSocial: {
     facebook:

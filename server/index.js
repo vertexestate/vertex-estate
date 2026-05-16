@@ -2,7 +2,9 @@
  * Vertex Estate API — local process entry (`npm run server` / `npm run dev`).
  * Vercel uses `api/index.js` (no listen).
  */
+import './bootstrap-env.js';
 import app, { closeMongo } from './app.js';
+import { logMailStartupStatus } from './mail.js';
 
 const PORT = Number(process.env.API_PORT || 3001);
 
@@ -20,4 +22,5 @@ app.listen(PORT, () => {
   if (!process.env.MONGODB_URI) {
     console.warn('Set MONGODB_URI in project root .env — leads & properties require it.');
   }
+  logMailStartupStatus();
 });

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { SparklesIcon, MapPinIcon, MapIcon, UserPlusIcon } from 'lucide-react';
+import { ComingSoonPromoSlider } from './ComingSoonPromoSlider';
 import { siteConfig } from '../../config/siteConfig';
 import { useCountdown } from '../../hooks/useCountdown';
 import { Input } from '../ui/Input';
@@ -96,6 +97,8 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
       transition={{ duration: 0.45 }}
       className="fixed inset-0 z-[200] flex min-h-[100dvh] min-w-0 max-w-[100vw] flex-col overflow-x-hidden overflow-y-auto overscroll-x-none overscroll-y-contain bg-[#030a0c]"
     >
+      <ComingSoonPromoSlider slides={siteConfig.comingSoonPromoSlides} />
+
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.35]"
         style={{
@@ -109,7 +112,9 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
 
       <EstateSkylineDecoration />
 
-      <div className="relative z-10 mx-auto flex w-full min-w-0 max-w-4xl flex-1 flex-col items-center justify-start px-4 pb-[max(1.75rem,env(safe-area-inset-bottom,0px))] pt-[max(1rem,env(safe-area-inset-top,0px))] text-center sm:justify-center sm:px-8 sm:pb-12 sm:pt-8 md:py-20">
+      <motion.div
+        className="relative z-10 mx-auto flex w-full min-w-0 max-w-4xl flex-1 flex-col items-center justify-start px-4 pb-[max(1.75rem,env(safe-area-inset-bottom,0px))] pt-[max(1rem,env(safe-area-inset-top,0px))] text-center sm:justify-center sm:px-8 sm:pb-12 sm:pt-8 md:py-20"
+      >
         <motion.div
           initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -381,7 +386,8 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
             moment for everyone.
           </p>
         </motion.div>
-      </div>
+      </motion.div>
     </motion.div>
   );
 }
+

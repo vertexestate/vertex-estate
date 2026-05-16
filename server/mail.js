@@ -1,20 +1,8 @@
 /**
- * Transactional email (GoDaddy / any SMTP). Used after waitlist signup.
+ * Transactional email (Microsoft 365 / GoDaddy SMTP). Used after waitlist signup.
+ * Reads process.env at call time so `.env` is loaded before use.
  */
 import nodemailer from 'nodemailer';
-
-const SMTP_HOST = (process.env.SMTP_HOST || 'smtpout.secureserver.net').trim();
-const SMTP_PORT = Number(process.env.SMTP_PORT || 465);
-const SMTP_USER = (process.env.SMTP_USER || '').trim();
-const SMTP_PASS = (process.env.SMTP_PASS || '').trim();
-const MAIL_FROM = (process.env.MAIL_FROM || SMTP_USER).trim();
-const MAIL_FROM_NAME = (process.env.MAIL_FROM_NAME || 'Vertex Estate').trim();
-const MAIL_SITE_URL = (
-  process.env.MAIL_SITE_URL ||
-  process.env.SITE_PUBLIC_URL ||
-  'https://www.vertexestatepvt.com'
-).replace(/\/+$/, '');
-const WAITLIST_NOTIFY_EMAIL = (process.env.WAITLIST_NOTIFY_EMAIL || '').trim();
 
 function envTruthy(name, defaultWhenUnset = true) {
   const raw = process.env[name];
@@ -23,14 +11,40 @@ function envTruthy(name, defaultWhenUnset = true) {
   return s === 'true' || s === '1' || s === 'yes';
 }
 
-function smtpSecure() {
-  if (process.env.SMTP_SECURE !== undefined && process.env.SMTP_SECURE !== '') {
-    return envTruthy('SMTP_SECURE', true);
-  }
-  return SMTP_PORT === 465;
+function readSmtpConfig() {
+  const SMTP_HOST = (process.env.SMTP_HOST || 'smtpout.secureserver.net').trim();
+  const SMTP_PORT = Number(process.env.SMTP_PORT || 465);
+  const SMTP_USER = (process.env.SMTP_USER || '').trim();
+  const SMTP_PASS = (process.env.SMTP_PASS || '').trim();
+  const MAIL_FROM = (process.env.MAIL_FROM || SMTP_USER).trim();
+  const MAIL_FROM_NAME = (process.env.MAIL_FROM_NAME || 'Vertex Estate').trim();
+  const MAIL_SITE_URL = (
+    process.env.MAIL_SITE_URL ||
+    process.env.SITE_PUBLIC_URL ||
+    'https://www.vertexestatepvt.com'
+  ).replace(/\/+$/, '');
+  const WAITLIST_NOTIFY_EMAIL = (process.env.WAITLIST_NOTIFY_EMAIL || '').trim();
+
+  const smtpSecure =
+    process.env.SMTP_SECURE !== undefined && process.env.SMTP_SECURE !== ''
+      ? envTruthy('SMTP_SECURE', true)
+      : SMTP_PORT === 465;
+
+  return {
+    SMTP_HOST,
+    SMTP_PORT,
+    SMTP_USER,
+    SMTP_PASS,
+    MAIL_FROM,
+    MAIL_FROM_NAME,
+    MAIL_SITE_URL,
+    WAITLIST_NOTIFY_EMAIL,
+    smtpSecure,
+  };
 }
 
 export function isMailConfigured() {
+  const { SMTP_USER, SMTP_PASS, MAIL_FROM } = readSmtpConfig();
   return Boolean(SMTP_USER && SMTP_PASS && MAIL_FROM);
 }
 
@@ -39,20 +53,71 @@ export function isWaitlistEmailEnabled() {
   return envTruthy('WAITLIST_EMAIL_ENABLED', true);
 }
 
-let transporter;
+/** Safe summary for /health and logs (no passwords). */
+export function getMailStatus() {
+  const c = readSmtpConfig();
+  const configured = isMailConfigured();
+  const enabled = isWaitlistEmailEnabled();
+  const user = c.SMTP_USER;
+  const maskedUser = user
+    ? user.replace(/^(.{1,2})(.*)(@.+)$/, (_, a, mid, domain) => `${a}${'*'.repeat(Math.min(mid.length, 6))}${domain}`)
+    : null;
+  return {
+    configured,
+    enabled,
+    host: c.SMTP_HOST,
+    port: c.SMTP_PORT,
+    secure: c.smtpSecure,
+    user: maskedUser,
+    from: c.MAIL_FROM || null,
+    notify: c.WAITLIST_NOTIFY_EMAIL || null,
+    hint: !configured
+      ? 'Set SMTP_USER and SMTP_PASS in .env (local) and Vercel env vars, then restart.'
+      : !enabled
+        ? 'WAITLIST_EMAIL_ENABLED is false.'
+        : null,
+  };
+}
 
-function getTransporter() {
-  if (!isMailConfigured()) return null;
-  if (!transporter) {
-    transporter = nodemailer.createTransport({
-      host: SMTP_HOST,
-      port: SMTP_PORT,
-      secure: smtpSecure(),
-      auth: { user: SMTP_USER, pass: SMTP_PASS },
-      ...(SMTP_PORT === 587 && !smtpSecure() ? { requireTLS: true } : {}),
-    });
+export function logMailStartupStatus() {
+  const s = getMailStatus();
+  if (s.enabled) {
+    console.log(`[mail] Waitlist email ON — ${s.host}:${s.port} as ${s.user}`);
+    return;
   }
-  return transporter;
+  console.warn(`[mail] Waitlist email OFF — ${s.hint || 'check SMTP_* in .env'}`);
+}
+
+function createTransporter() {
+  const c = readSmtpConfig();
+  if (!c.SMTP_USER || !c.SMTP_PASS) return null;
+  return nodemailer.createTransport({
+    host: c.SMTP_HOST,
+    port: c.SMTP_PORT,
+    secure: c.smtpSecure,
+    auth: { user: c.SMTP_USER, pass: c.SMTP_PASS },
+    ...(c.SMTP_PORT === 587 && !c.smtpSecure ? { requireTLS: true } : {}),
+  });
+}
+
+/** Verify SMTP login (for health / test script). */
+export async function verifySmtpConnection() {
+  if (!isMailConfigured()) {
+    return { ok: false, error: 'SMTP_USER and SMTP_PASS are not set' };
+  }
+  const transport = createTransporter();
+  if (!transport) {
+    return { ok: false, error: 'Could not create mail transport' };
+  }
+  try {
+    await transport.verify();
+    return { ok: true };
+  } catch (e) {
+    return {
+      ok: false,
+      error: e instanceof Error ? e.message : String(e),
+    };
+  }
 }
 
 function escapeHtml(s) {
@@ -69,10 +134,10 @@ function firstName(fullName) {
   return n.split(/\s+/)[0];
 }
 
-function buildWaitlistWelcomeHtml({ name }) {
+function buildWaitlistWelcomeHtml({ name }, c) {
   const greeting = escapeHtml(firstName(name));
-  const site = escapeHtml(MAIL_SITE_URL);
-  const brand = escapeHtml(MAIL_FROM_NAME);
+  const site = escapeHtml(c.MAIL_SITE_URL);
+  const brand = escapeHtml(c.MAIL_FROM_NAME);
   return `<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/></head>
@@ -100,15 +165,15 @@ function buildWaitlistWelcomeHtml({ name }) {
 </html>`;
 }
 
-function buildWaitlistWelcomeText({ name }) {
+function buildWaitlistWelcomeText({ name }, c) {
   const greeting = firstName(name);
   return `Hi ${greeting},
 
-Thank you for joining the ${MAIL_FROM_NAME} launch waitlist. We've saved your details and will email you with updates before we go live.
+Thank you for joining the ${c.MAIL_FROM_NAME} launch waitlist. We've saved your details and will email you with updates before we go live.
 
-Visit us: ${MAIL_SITE_URL}
+Visit us: ${c.MAIL_SITE_URL}
 
-— ${MAIL_FROM_NAME}`;
+— ${c.MAIL_FROM_NAME}`;
 }
 
 function buildAdminNotifyText({ name, email, phone, description }) {
@@ -126,31 +191,39 @@ Time: ${new Date().toISOString()}`;
  * @param {{ name: string; email: string; phone?: string; description?: string }} lead
  */
 export async function sendWaitlistEmails(lead) {
-  if (!isWaitlistEmailEnabled()) return { sent: false, reason: 'disabled_or_unconfigured' };
+  if (!isWaitlistEmailEnabled()) {
+    console.warn('[mail] Skipped waitlist email —', getMailStatus().hint);
+    return { sent: false, reason: 'disabled_or_unconfigured' };
+  }
 
-  const transport = getTransporter();
+  const c = readSmtpConfig();
+  const transport = createTransporter();
   if (!transport) return { sent: false, reason: 'no_transport' };
 
   const to = String(lead.email).trim().toLowerCase();
-  const from = `"${MAIL_FROM_NAME}" <${MAIL_FROM}>`;
+  const from = `"${c.MAIL_FROM_NAME}" <${c.MAIL_FROM}>`;
+
+  console.log(`[mail] Sending waitlist confirmation → ${to}`);
 
   await transport.sendMail({
     from,
     to,
-    replyTo: MAIL_FROM,
-    subject: `You're on the ${MAIL_FROM_NAME} waitlist`,
-    text: buildWaitlistWelcomeText(lead),
-    html: buildWaitlistWelcomeHtml(lead),
+    replyTo: c.MAIL_FROM,
+    subject: `You're on the ${c.MAIL_FROM_NAME} waitlist`,
+    text: buildWaitlistWelcomeText(lead, c),
+    html: buildWaitlistWelcomeHtml(lead, c),
   });
 
-  if (WAITLIST_NOTIFY_EMAIL) {
+  if (c.WAITLIST_NOTIFY_EMAIL) {
     await transport.sendMail({
       from,
-      to: WAITLIST_NOTIFY_EMAIL,
+      to: c.WAITLIST_NOTIFY_EMAIL,
       subject: `[Waitlist] ${lead.name} <${to}>`,
       text: buildAdminNotifyText(lead),
     });
+    console.log(`[mail] Admin notify → ${c.WAITLIST_NOTIFY_EMAIL}`);
   }
 
+  console.log(`[mail] Waitlist confirmation sent → ${to}`);
   return { sent: true };
 }
