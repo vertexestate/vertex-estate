@@ -23,6 +23,7 @@ import { EstateOwnerView } from './pages/EstateOwnerView';
 import { siteConfig } from './config/siteConfig';
 import { ComingSoonOverlay } from './components/layout/ComingSoonOverlay';
 import { Analytics } from '@vercel/analytics/react';
+import { GoogleAnalytics } from './components/analytics/GoogleAnalytics';
 
 function computeComingSoonBoot(): { deadlineMs: number; showSplash: boolean } {
   if (typeof window === 'undefined') {
@@ -140,6 +141,7 @@ export function App() {
         <PropertiesProvider>
           <AssistantProvider>
             <BrowserRouter>
+              <GoogleAnalytics />
               {isLoading && !comingSoonActive && (
                 <LoadingScreen onComplete={() => setIsLoading(false)} />
               )}

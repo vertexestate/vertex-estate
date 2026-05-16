@@ -9,6 +9,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import { MongoClient } from 'mongodb';
+import { isWaitlistEmailEnabled, sendWaitlistEmails } from './mail.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.join(__dirname, '..', '.env') });
@@ -342,6 +343,16 @@ app.post('/leads/launch-interest', async (req, res) => {
       submittedAt: new Date(),
     };
     await col.insertOne(doc);
+
+    if (isWaitlistEmailEnabled()) {
+      void sendWaitlistEmails(doc).catch((mailErr) => {
+        console.error(
+          '[leads/launch-interest] waitlist email failed:',
+          mailErr instanceof Error ? mailErr.message : mailErr
+        );
+      });
+    }
+
     return res.status(201).json({ ok: true });
   } catch (e) {
     console.error('[leads/launch-interest] insert failed:', e instanceof Error ? e.stack || e.message : e);

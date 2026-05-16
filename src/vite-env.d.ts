@@ -23,6 +23,8 @@ interface ImportMetaEnv {
   readonly VITE_API_NEWSLETTER_PATH?: string;
   /** POST path for coming-soon waitlist. Default /leads/launch-interest */
   readonly VITE_API_LAUNCH_INTEREST_PATH?: string;
+  /** Google Analytics 4 measurement ID (e.g. G-RS7J0522BQ). Must match index.html if changed. */
+  readonly VITE_GA_MEASUREMENT_ID?: string;
   /** Google Maps embed URL for contact page iframe */
   readonly VITE_MAP_EMBED_URL?: string;
   /** Full URL returning a JSON array of Property objects (optional CDN or API). */
@@ -58,4 +60,9 @@ interface ImportMetaEnv {
 
 interface ImportMeta {
   readonly env: ImportMetaEnv;
+}
+
+interface Window {
+  dataLayer?: unknown[];
+  gtag?: (...args: unknown[]) => void;
 }

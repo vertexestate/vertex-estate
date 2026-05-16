@@ -38,6 +38,10 @@ export const siteConfig = {
 
   documentTitle: import.meta.env.VITE_SITE_TITLE || 'Vertex Estate — Premium real estate',
 
+  /** Google Analytics 4 measurement ID (must match `index.html` gtag if you change it). */
+  googleAnalyticsId:
+    (import.meta.env.VITE_GA_MEASUREMENT_ID || '').trim() || 'G-RS7J0522BQ',
+
   logoUrl: (import.meta.env.VITE_LOGO_URL || '').trim() || '/brand/logo.png',
 
   apiBaseUrl: (import.meta.env.VITE_API_BASE_URL || '').trim()
