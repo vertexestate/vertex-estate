@@ -1,5 +1,5 @@
 {
-  "mapEmbedUrl": "https://www.google.com/maps?q=33.718722,73.054125&z=18&hl=en&output=embed",
+  "mapEmbedUrl": "https://www.google.com/maps?q=33.7192848,73.053537&z=18&hl=en&output=embed",
   "offices": [
     {
       "city": "Islamabad — F-7 Markaz",
@@ -33,7 +33,7 @@
     {
       "label": "Visit us",
       "value": "Vertex Estate, F-7 Markaz",
-      "href": "https://www.google.com/maps?q=33.718722,73.054125&z=18&hl=en",
+      "href": "https://maps.app.goo.gl/685BiiRHGvEZb7VC6",
       "icon": "calendar",
       "color": "from-gold-500 to-gold-600"
     }

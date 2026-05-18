@@ -41,8 +41,8 @@ export const seoConfig = {
     addressCountry: 'PK',
   },
   geo: {
-    latitude: 33.718722,
-    longitude: 73.054125,
+    latitude: 33.7192848,
+    longitude: 73.053537,
   },
 } as const;
 

@@ -62,6 +62,10 @@ interface ImportMetaEnv {
   readonly VITE_COMING_SOON_MAP_URL?: string;
   /** Override default office map pin (optional; defaults to Chaudhry Plaza, F-7 Markaz coordinates). */
   readonly VITE_VERTEX_OFFICE_MAP_URL?: string;
+  /** Label on map pin (default Vertex Estate). */
+  readonly VITE_VERTEX_OFFICE_MAP_LABEL?: string;
+  /** Full address under map label. */
+  readonly VITE_VERTEX_OFFICE_ADDRESS?: string;
   /** Decimal latitude for default map embed + “Open in Maps” when env URLs are unset. */
   readonly VITE_VERTEX_OFFICE_LAT?: string;
   /** Decimal longitude — pair with `VITE_VERTEX_OFFICE_LAT`. */

@@ -8,11 +8,29 @@ function trimSlash(url: string) {
 }
 
 /**
- * Precise Google Maps pin for Vertex @ Chaudhry Plaza, F-7 Markaz (text search often lands in the wrong sector).
- * Override with `VITE_VERTEX_OFFICE_LAT` / `VITE_VERTEX_OFFICE_LNG` if you need to nudge the pin.
+ * Pin from official short link https://maps.app.goo.gl/685BiiRHGvEZb7VC6 (Chaudhry Plaza, F-7 Markaz).
+ * Override lat/lng only if you move the pin.
  */
-const VERTEX_OFFICE_LAT_DEFAULT = '33.718722';
-const VERTEX_OFFICE_LNG_DEFAULT = '73.054125';
+const VERTEX_OFFICE_GOOGLE_SHORT_URL = 'https://maps.app.goo.gl/685BiiRHGvEZb7VC6';
+const VERTEX_OFFICE_LAT_DEFAULT = '33.7192848';
+const VERTEX_OFFICE_LNG_DEFAULT = '73.053537';
+const VERTEX_OFFICE_MAP_LABEL_DEFAULT = 'Vertex Estate';
+const VERTEX_OFFICE_ADDRESS_DEFAULT =
+  '2nd Floor, Chaudhry Plaza, F-7 Markaz, Islamabad';
+
+function vertexOfficeMapLabel() {
+  return (
+    (import.meta.env.VITE_VERTEX_OFFICE_MAP_LABEL || '').trim() ||
+    VERTEX_OFFICE_MAP_LABEL_DEFAULT
+  );
+}
+
+function vertexOfficeAddress() {
+  return (
+    (import.meta.env.VITE_VERTEX_OFFICE_ADDRESS || '').trim() ||
+    VERTEX_OFFICE_ADDRESS_DEFAULT
+  );
+}
 
 function vertexOfficeLatLng(): { lat: string; lng: string } {
   const lat = (import.meta.env.VITE_VERTEX_OFFICE_LAT || '').trim() || VERTEX_OFFICE_LAT_DEFAULT;
@@ -20,14 +38,21 @@ function vertexOfficeLatLng(): { lat: string; lng: string } {
   return { lat, lng };
 }
 
+/** Named pin at coordinates — label shows on embed when Google supports it. */
 function defaultVertexMapsEmbedUrl() {
   const { lat, lng } = vertexOfficeLatLng();
-  return `https://www.google.com/maps?q=${lat},${lng}&z=18&hl=en&output=embed`;
+  const label = encodeURIComponent(vertexOfficeMapLabel());
+  return `https://www.google.com/maps?q=${label}%40${lat},${lng}&z=18&hl=en&output=embed`;
 }
 
 function defaultVertexMapsOpenUrl() {
-  const { lat, lng } = vertexOfficeLatLng();
-  return `https://www.google.com/maps?q=${lat},${lng}&z=18&hl=en`;
+  const fromEnv = (
+    import.meta.env.VITE_COMING_SOON_MAP_URL ||
+    import.meta.env.VITE_VERTEX_OFFICE_MAP_URL ||
+    ''
+  ).trim();
+  if (fromEnv) return fromEnv;
+  return VERTEX_OFFICE_GOOGLE_SHORT_URL;
 }
 
 export const siteConfig = {
@@ -104,14 +129,13 @@ export const siteConfig = {
    * Google Maps (opens in app / browser). Coming-soon “Open live map”. Override with
    * `VITE_COMING_SOON_MAP_URL` or `VITE_VERTEX_OFFICE_MAP_URL`.
    */
-  comingSoonGoogleMapsUrl:
-    (import.meta.env.VITE_COMING_SOON_MAP_URL || import.meta.env.VITE_VERTEX_OFFICE_MAP_URL || '')
-      .trim() || defaultVertexMapsOpenUrl(),
+  /** Opens in Google Maps — defaults to official goo.gl pin (same as live map click). */
+  comingSoonGoogleMapsUrl: defaultVertexMapsOpenUrl(),
 
   /** Same office pin as `comingSoonGoogleMapsUrl` — contact page “Visit us” default. */
-  vertexOfficeMapsOpenUrl:
-    (import.meta.env.VITE_VERTEX_OFFICE_MAP_URL || import.meta.env.VITE_COMING_SOON_MAP_URL || '')
-      .trim() || defaultVertexMapsOpenUrl(),
+  vertexOfficeMapsOpenUrl: defaultVertexMapsOpenUrl(),
+
+  vertexOfficeGoogleShortUrl: defaultVertexMapsOpenUrl(),
 
   /**
    * Live Google Maps iframe `src` on the coming-soon screen (embed URL from Maps → Share → Embed a map,
@@ -121,7 +145,13 @@ export const siteConfig = {
     (import.meta.env.VITE_COMING_SOON_MAP_EMBED_URL || import.meta.env.VITE_MAP_EMBED_URL || '')
       .trim() || defaultVertexMapsEmbedUrl(),
 
-  /** Short location line next to the map on coming soon (full address is in the map pin only). */
+  /** Pin label on the live map (and in Google Maps query). */
+  vertexOfficeMapLabel: vertexOfficeMapLabel(),
+
+  /** Full office address shown under the map label. */
+  vertexOfficeAddress: vertexOfficeAddress(),
+
+  /** Short location line next to the map on coming soon. */
   comingSoonLocationLine:
     (import.meta.env.VITE_COMING_SOON_LOCATION_LINE || '').trim() || 'F7 Markaz, Islamabad',
 

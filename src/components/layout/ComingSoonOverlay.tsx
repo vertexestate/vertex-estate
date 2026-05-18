@@ -201,9 +201,14 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
           transition={{ delay: 0.28 }}
           className="mt-3 flex w-full min-w-0 max-w-lg flex-col items-center justify-center gap-2.5 text-xs sm:text-sm"
         >
-          <p className="flex flex-wrap items-center justify-center gap-2 text-sm text-gold-400/90 sm:text-base">
-            <MapPinIcon className="h-4 w-4 shrink-0" aria-hidden />
-            <span className="font-medium text-cream/95">{siteConfig.comingSoonLocationLine}</span>
+          <p className="flex flex-col items-center justify-center gap-1 text-center sm:gap-1.5">
+            <span className="flex flex-wrap items-center justify-center gap-2 text-base font-bold text-cream sm:text-lg">
+              <MapPinIcon className="h-4 w-4 shrink-0 text-gold-400 sm:h-5 sm:w-5" aria-hidden />
+              {siteConfig.vertexOfficeMapLabel}
+            </span>
+            <span className="max-w-md text-xs font-medium text-gold-400/90 sm:text-sm">
+              {siteConfig.vertexOfficeAddress}
+            </span>
           </p>
           {siteConfig.comingSoonGoogleMapsUrl ? (
             <a
@@ -217,21 +222,49 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
             </a>
           ) : null}
           {siteConfig.comingSoonMapEmbedUrl ? (
-            <motion.div
+            <motion.a
+              href={siteConfig.comingSoonGoogleMapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.32, duration: 0.45 }}
-              className="mt-1 w-full min-w-0 max-w-lg overflow-hidden rounded-xl border border-white/12 bg-black/30 shadow-xl ring-1 ring-white/5"
+              className="relative mt-1 block w-full min-w-0 max-w-lg overflow-hidden rounded-xl border border-white/12 bg-black/30 shadow-xl ring-1 ring-white/5 transition hover:border-gold-500/35 hover:ring-gold-500/20"
+              aria-label={`Open ${siteConfig.vertexOfficeMapLabel} on Google Maps`}
             >
+              <div
+                className="pointer-events-none absolute left-3 top-3 z-10 max-w-[calc(100%-1.5rem)] rounded-lg border border-gold-500/35 bg-navy-900/95 px-3 py-2 shadow-lg shadow-black/40 backdrop-blur-sm sm:left-4 sm:px-3.5 sm:py-2.5"
+                aria-hidden
+              >
+                <p className="font-display text-sm font-bold leading-tight text-cream sm:text-base">
+                  {siteConfig.vertexOfficeMapLabel}
+                </p>
+                <p className="mt-0.5 text-[10px] leading-snug text-gold-300/95 sm:text-xs">
+                  {siteConfig.comingSoonLocationLine}
+                </p>
+              </div>
+              <div
+                className="pointer-events-none absolute bottom-[42%] left-1/2 z-10 flex -translate-x-1/2 flex-col items-center"
+                aria-hidden
+              >
+                <MapPinIcon className="h-9 w-9 text-gold-500 drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)] sm:h-10 sm:w-10" />
+                <span className="mt-0.5 rounded-md bg-navy-900/90 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-gold-300 shadow-md sm:text-xs">
+                  {siteConfig.vertexOfficeMapLabel}
+                </span>
+              </div>
               <iframe
-                title="Vertex Estate — Chaudhry Plaza, F-7 Markaz, Islamabad"
+                title={`${siteConfig.vertexOfficeMapLabel} — ${siteConfig.vertexOfficeAddress}`}
                 src={siteConfig.comingSoonMapEmbedUrl}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
                 allowFullScreen
-                className="h-[min(42vh,260px)] w-full border-0 sm:h-auto sm:min-h-[240px] sm:aspect-video"
+                tabIndex={-1}
+                className="pointer-events-none relative z-0 h-[min(42vh,260px)] w-full border-0 sm:h-auto sm:min-h-[240px] sm:aspect-video"
               />
-            </motion.div>
+              <span className="pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-navy-950/90 to-transparent px-3 py-2 text-center text-[10px] font-bold uppercase tracking-wider text-gold-300 sm:text-xs">
+                Tap map to open in Google Maps
+              </span>
+            </motion.a>
           ) : null}
         </motion.div>
 
