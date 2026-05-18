@@ -16,6 +16,8 @@ import {
   sendWaitlistEmails,
   verifySmtpConnection,
 } from './mail.js';
+import { getRobotsTxt } from './robotsTxt.js';
+import { getSitemapXml } from './sitemapXml.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.join(__dirname, '..', '.env') });
@@ -390,6 +392,16 @@ app.get('/stats/launch-interest-count', async (_req, res) => {
       error: e instanceof Error ? e.message : 'Failed to read stats',
     });
   }
+});
+
+app.get('/sitemap.xml', (_req, res) => {
+  res.type('application/xml; charset=utf-8');
+  res.send(getSitemapXml());
+});
+
+app.get('/robots.txt', (_req, res) => {
+  res.type('text/plain; charset=utf-8');
+  res.send(getRobotsTxt());
 });
 
 app.use((_req, res) => {

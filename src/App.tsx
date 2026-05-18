@@ -24,6 +24,8 @@ import { siteConfig } from './config/siteConfig';
 import { ComingSoonOverlay } from './components/layout/ComingSoonOverlay';
 import { Analytics } from '@vercel/analytics/react';
 import { GoogleAnalytics } from './components/analytics/GoogleAnalytics';
+import { RouteSeo } from './components/seo/RouteSeo';
+import { SiteJsonLd } from './components/seo/SiteJsonLd';
 
 function computeComingSoonBoot(): { deadlineMs: number; showSplash: boolean } {
   if (typeof window === 'undefined') {
@@ -118,10 +120,6 @@ export function App() {
     siteConfig.showComingSoon && deadlineMs > 0 && nowTick < deadlineMs;
 
   useEffect(() => {
-    document.title = siteConfig.documentTitle;
-  }, []);
-
-  useEffect(() => {
     if (
       import.meta.env.DEV &&
       siteConfig.showComingSoon &&
@@ -141,6 +139,8 @@ export function App() {
         <PropertiesProvider>
           <AssistantProvider>
             <BrowserRouter>
+              <RouteSeo />
+              <SiteJsonLd />
               <GoogleAnalytics />
               {isLoading && !comingSoonActive && (
                 <LoadingScreen onComplete={() => setIsLoading(false)} />

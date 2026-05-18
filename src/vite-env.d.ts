@@ -3,6 +3,14 @@
 interface ImportMetaEnv {
   /** Canonical public site URL (https://yourdomain.com) — used in links/meta. */
   readonly VITE_SITE_PUBLIC_URL?: string;
+  readonly VITE_SEO_DEFAULT_TITLE?: string;
+  readonly VITE_SEO_DEFAULT_DESCRIPTION?: string;
+  readonly VITE_SEO_KEYWORDS?: string;
+  readonly VITE_SEO_OG_IMAGE?: string;
+  readonly VITE_SEO_TWITTER?: string;
+  readonly VITE_SEO_CONTACT_EMAIL?: string;
+  readonly VITE_SEO_CONTACT_PHONE?: string;
+  readonly VITE_SITE_LOCALE?: string;
   /** Short brand name shown next to logo. */
   readonly VITE_SITE_NAME?: string;
   /** Browser tab title. */

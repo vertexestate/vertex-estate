@@ -32,7 +32,9 @@ function defaultVertexMapsOpenUrl() {
 
 export const siteConfig = {
   /** Public site URL for canonical links (add your domain in `.env`). */
-  publicUrl: (import.meta.env.VITE_SITE_PUBLIC_URL || '').replace(/\/+$/, ''),
+  publicUrl: (
+    import.meta.env.VITE_SITE_PUBLIC_URL || 'https://www.vertexestatepvt.com'
+  ).replace(/\/+$/, ''),
 
   siteName: import.meta.env.VITE_SITE_NAME || 'Vertex Estate',
 

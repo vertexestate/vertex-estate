@@ -8,6 +8,8 @@ const apiProxy = {
     changeOrigin: true,
     rewrite: (p: string) => p.replace(/^\/api/, ''),
   },
+  '/sitemap.xml': { target: 'http://localhost:3001', changeOrigin: true },
+  '/robots.txt': { target: 'http://localhost:3001', changeOrigin: true },
 } as const
 
 // https://vitejs.dev/config/

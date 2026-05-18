@@ -1,0 +1,8 @@
+# https://www.vertexestatepvt.com
+User-agent: *
+Allow: /
+
+Disallow: /dashboard
+Disallow: /dashboard/
+
+Sitemap: https://www.vertexestatepvt.com/sitemap.xml

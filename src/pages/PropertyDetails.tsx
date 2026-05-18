@@ -21,6 +21,9 @@ import { LoginGate } from '../components/auth/LoginGate';
 import { useProperties } from '../context/PropertiesContext';
 import { useAuth } from '../context/AuthContext';
 import { formatPropertyPrice } from '../lib/formatPropertyPrice';
+import { usePageSeo } from '../hooks/usePageSeo';
+import { propertySeoFromListing } from '../lib/pageSeo';
+
 export function PropertyDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -28,6 +31,9 @@ export function PropertyDetails() {
   const { getProperty, publicProperties } = useProperties();
   const { isAuthenticated, user, isEstateOwner } = useAuth();
   const property = id ? getProperty(id) : undefined;
+
+  usePageSeo(property ? propertySeoFromListing(property) : null);
+
   if (!property) {
     return (
       <div className="min-h-screen bg-cream dark:bg-navy-900 pt-24 flex items-center justify-center">

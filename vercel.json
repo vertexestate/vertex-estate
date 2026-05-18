@@ -1,17 +1,31 @@
 {
   "rewrites": [
     {
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap"
+    },
+    {
+      "source": "/robots.txt",
+      "destination": "/api/robots"
+    },
+    {
       "source": "/api(.*)",
       "destination": "/api"
     },
     {
-      "source": "/((?!api/)(?!assets/)(?!brand/)(?!site/).*)",
+      "source": "/(.*)",
       "destination": "/index.html"
     }
   ],
   "functions": {
     "api/index.js": {
       "maxDuration": 30
+    },
+    "api/sitemap.js": {
+      "maxDuration": 10
+    },
+    "api/robots.js": {
+      "maxDuration": 10
     }
   }
 }
