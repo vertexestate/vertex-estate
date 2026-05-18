@@ -78,7 +78,6 @@ export function applyPageSeo(input: PageSeoInput) {
     upsertMeta('name', 'twitter:site', seoConfig.twitterHandle);
   }
 
-  upsertLink('alternate', canonical);
 }
 
 export function propertySeoFromListing(property: {

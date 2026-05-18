@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { SparklesIcon, MapPinIcon, MapIcon, UserPlusIcon } from 'lucide-react';
 import { ComingSoonPromoSlider } from './ComingSoonPromoSlider';
-import { siteConfig } from '../../config/siteConfig';
+import { siteConfig, absoluteUrl } from '../../config/siteConfig';
+import { applyPageSeo } from '../../lib/pageSeo';
+import { buildPageTitle, seoConfig } from '../../config/seoConfig';
 import { useCountdown } from '../../hooks/useCountdown';
 import { Input } from '../ui/Input';
 import { Button } from '../ui/Button';
@@ -61,6 +63,17 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
   const [done, setDone] = useState(() =>
     typeof window !== 'undefined' ? localStorage.getItem(LAUNCH_REGISTERED_LS) === '1' : false
   );
+
+  useEffect(() => {
+    if (!cd.isExpired) {
+      applyPageSeo({
+        title: buildPageTitle(`Official Website — ${seoConfig.officialDomain}`),
+        description: seoConfig.defaultDescription,
+        keywords: seoConfig.defaultKeywords,
+        path: '/',
+      });
+    }
+  }, [cd.isExpired]);
 
   useEffect(() => {
     if (cd.isExpired) {
@@ -134,6 +147,16 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
           </span>
         </motion.div>
 
+        <p className="mb-3 text-center text-xs font-medium text-gold-400/95 sm:text-sm">
+          Official website:{' '}
+          <a
+            href={absoluteUrl('/')}
+            className="font-semibold text-gold-300 underline decoration-gold-500/40 underline-offset-2 hover:text-gold-200"
+          >
+            {seoConfig.officialDomain}
+          </a>
+        </p>
+
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
@@ -165,9 +188,11 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
           transition={{ delay: 0.22, duration: 0.5 }}
           className="mt-4 max-w-xl px-0.5 text-sm leading-relaxed text-navy-200/95 text-pretty sm:mt-6 sm:text-base md:text-lg"
         >
-          We are polishing a new Vertex Estate experience — curated listings, sharper tools, and
-          the same trust you expect from Islamabad to Karachi. The countdown is the same for every
-          visitor and stays in sync when you share the link or switch profiles or devices.
+          <strong>Vertex Estate</strong> is launching a new experience at{' '}
+          <strong>{seoConfig.officialDomain}</strong> — premium homes and commercial property in{' '}
+          {siteConfig.comingSoonLocationLine}, Islamabad (Chaudhry Plaza, F-7 Markaz). Curated
+          listings, sharper tools, and the same trust you expect across Pakistan. Join the waitlist
+          below for early access and launch discounts.
         </motion.p>
 
         <motion.div

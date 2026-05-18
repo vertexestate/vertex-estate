@@ -21,7 +21,7 @@ function readSmtpConfig() {
   const MAIL_SITE_URL = (
     process.env.MAIL_SITE_URL ||
     process.env.SITE_PUBLIC_URL ||
-    'https://www.vertexestatepvt.com'
+    'https://vertexestatepvt.com'
   ).replace(/\/+$/, '');
   const WAITLIST_NOTIFY_EMAIL = (process.env.WAITLIST_NOTIFY_EMAIL || '').trim();
 

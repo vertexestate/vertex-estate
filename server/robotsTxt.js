@@ -1,4 +1,4 @@
-const DEFAULT_ORIGIN = 'https://www.vertexestatepvt.com';
+const DEFAULT_ORIGIN = 'https://vertexestatepvt.com';
 
 function siteOrigin() {
   return (

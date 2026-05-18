@@ -1,5 +1,10 @@
 import { useEffect } from 'react';
-import { buildCanonicalUrl, buildOgImageUrl, getSiteOrigin, seoConfig } from '../../config/seoConfig';
+import {
+  buildCanonicalUrl,
+  buildOgImageUrl,
+  getSiteOrigin,
+  seoConfig,
+} from '../../config/seoConfig';
 import { siteConfig } from '../../config/siteConfig';
 
 const SCRIPT_ID = 'vertex-site-jsonld';
@@ -12,9 +17,12 @@ function buildJsonLd() {
     '@type': 'RealEstateAgent',
     '@id': `${origin}/#organization`,
     name: seoConfig.siteName,
+    legalName: seoConfig.legalName,
+    alternateName: ['Vertex Estate Pakistan', seoConfig.officialDomain],
     url: origin,
     logo,
     image: logo,
+    description: seoConfig.defaultDescription,
     email: seoConfig.contactEmail,
     telephone: seoConfig.contactPhone,
     address: {
@@ -41,7 +49,8 @@ function buildJsonLd() {
     '@type': 'WebSite',
     '@id': `${origin}/#website`,
     url: origin,
-    name: seoConfig.siteName,
+    name: `${seoConfig.siteName} — ${seoConfig.officialDomain}`,
+    alternateName: seoConfig.officialDomain,
     description: seoConfig.defaultDescription,
     publisher: { '@id': `${origin}/#organization` },
     inLanguage: seoConfig.locale.replace('_', '-'),
@@ -66,9 +75,32 @@ function buildJsonLd() {
     inLanguage: seoConfig.locale.replace('_', '-'),
   };
 
+  const faqPage = {
+    '@type': 'FAQPage',
+    '@id': `${origin}/#faq`,
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'What is Vertex Estate?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `Vertex Estate is a premium real estate brand in Islamabad, Pakistan, based in F-7 Markaz (Chaudhry Plaza). The official website is ${origin}.`,
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'What is the official Vertex Estate website?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `The official Vertex Estate website is ${origin} (${seoConfig.officialDomain}).`,
+        },
+      },
+    ],
+  };
+
   return {
     '@context': 'https://schema.org',
-    '@graph': [organization, website, webPage],
+    '@graph': [organization, website, webPage, faqPage],
   };
 }
 

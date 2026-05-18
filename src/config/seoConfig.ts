@@ -1,6 +1,7 @@
 import { absoluteUrl, siteConfig } from './siteConfig';
 
-const DEFAULT_ORIGIN = 'https://www.vertexestatepvt.com';
+/** Primary URL — must match Google canonical (non-www). www redirects here in vercel.json. */
+const DEFAULT_ORIGIN = 'https://vertexestatepvt.com';
 
 export function getSiteOrigin() {
   return (siteConfig.publicUrl || DEFAULT_ORIGIN).replace(/\/+$/, '');
@@ -8,18 +9,22 @@ export function getSiteOrigin() {
 
 export const seoConfig = {
   siteName: siteConfig.siteName,
+  /** Legal / brand line used in schema and copy */
+  legalName:
+    (import.meta.env.VITE_SEO_LEGAL_NAME || '').trim() || 'Vertex Estate (Private) Limited',
+  officialDomain: 'vertexestatepvt.com',
   defaultOrigin: DEFAULT_ORIGIN,
   locale: (import.meta.env.VITE_SITE_LOCALE || 'en_PK').trim(),
   defaultTitle:
     (import.meta.env.VITE_SEO_DEFAULT_TITLE || '').trim() ||
-    'Vertex Estate — Premium Real Estate in Islamabad, Pakistan',
+    'Vertex Estate — Official Website | vertexestatepvt.com | Islamabad',
   titleSuffix: ' | Vertex Estate',
   defaultDescription:
     (import.meta.env.VITE_SEO_DEFAULT_DESCRIPTION || '').trim() ||
-    'Vertex Estate — premium residential and commercial property in Islamabad F-7 Markaz and across Pakistan. Browse listings, book visits, and join the launch waitlist for exclusive offers.',
+    'Vertex Estate — official website (vertexestatepvt.com). Premium real estate in F-7 Markaz, Islamabad, Pakistan. Houses, apartments, and commercial property. Join the launch waitlist.',
   defaultKeywords:
     (import.meta.env.VITE_SEO_KEYWORDS || '').trim() ||
-    'Vertex Estate, real estate Pakistan, property Islamabad, F-7 Markaz, houses for sale Islamabad, commercial property Pakistan, luxury homes Islamabad, vertexestatepvt.com',
+    'Vertex Estate, vertexestatepvt.com, Vertex Estate Islamabad, Vertex Estate F-7 Markaz, real estate Pakistan, property Islamabad, Chaudhry Plaza F-7',
   ogImage:
     (import.meta.env.VITE_SEO_OG_IMAGE || '').trim() ||
     '/brand/logo.png',
@@ -73,11 +78,11 @@ export const staticRouteSeo: Record<
   { title: string; description: string; keywords?: string }
 > = {
   '/': {
-    title: 'Premium Real Estate in Islamabad & Pakistan',
+    title: 'Official Website — vertexestatepvt.com — F-7 Markaz Islamabad',
     description:
-      'Discover premium homes, apartments, and commercial property with Vertex Estate. Based in F-7 Markaz, Islamabad — trusted listings, expert guidance, and launch waitlist perks.',
+      'Vertex Estate official site at vertexestatepvt.com. Premium property in F-7 Markaz, Islamabad (Chaudhry Plaza). Waitlist for launch — curated listings and exclusive offers.',
     keywords:
-      'Vertex Estate Pakistan, real estate Islamabad, property listings F-7 Markaz, buy house Islamabad',
+      'Vertex Estate, vertexestatepvt.com, Vertex Estate official website, real estate F-7 Islamabad, Vertex Estate Pakistan',
   },
   '/listings': {
     title: 'Property Listings — Homes & Commercial',
