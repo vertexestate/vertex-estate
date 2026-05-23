@@ -20,6 +20,7 @@ export default {
           700: '#0F3333',
           800: '#0A2A2A',
           900: '#021616',
+          950: '#010a0a',
         },
         /* Lime accent (reference: #d4ff3f) */
         gold: {
@@ -43,7 +44,15 @@ export default {
       boxShadow: {
         'gold-glow': '0 0 24px rgba(212, 255, 63, 0.35)',
         'gold-glow-lg': '0 0 48px rgba(212, 255, 63, 0.45)',
-        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+        glass: '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+        'btn-primary':
+          '0 2px 0 0 rgba(155, 196, 32, 0.45), 0 8px 22px -4px rgba(2, 22, 22, 0.28), 0 0 0 1px rgba(2, 22, 22, 0.06)',
+        'btn-primary-hover':
+          '0 2px 0 0 rgba(155, 196, 32, 0.55), 0 12px 28px -4px rgba(212, 255, 63, 0.45), 0 0 0 1px rgba(2, 22, 22, 0.08)',
+        'btn-secondary':
+          '0 2px 0 0 rgba(0, 0, 0, 0.2), 0 6px 18px -4px rgba(2, 22, 22, 0.35)',
+        'btn-secondary-hover':
+          '0 2px 0 0 rgba(0, 0, 0, 0.15), 0 10px 24px -4px rgba(2, 22, 22, 0.4), 0 0 0 1px rgba(212, 255, 63, 0.2)',
       },
       backdropBlur: {
         xs: '2px',

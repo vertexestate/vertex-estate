@@ -19,6 +19,7 @@ import {
 import { useAssistant } from '../../context/AssistantContext';
 import { playNotificationSound } from '../../utils/sound';
 import { Property } from '../../types';
+import { siteConfig } from '../../config/siteConfig';
 import { formatPropertyPrice } from '../../lib/formatPropertyPrice';
 export function VertexAssistant() {
   const navigate = useNavigate();
@@ -124,7 +125,10 @@ export function VertexAssistant() {
     e.preventDefault();
     sendUserMessage(input);
   };
-  const formatPrice = (p: Property) => formatPropertyPrice(p);
+  const formatPrice = (p: Property) =>
+    siteConfig.showPublicPrices
+      ? formatPropertyPrice(p)
+      : 'Ask on WhatsApp for rates';
   return (
     <>
       {/* Floating button */}
@@ -150,7 +154,7 @@ export function VertexAssistant() {
             scale: 0.95
           }}
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-[60] w-16 h-16 rounded-full bg-gradient-to-br from-gold-500 to-gold-600 shadow-gold-glow-lg flex items-center justify-center group"
+          className="inset-fab fixed z-[60] flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-gold-500 to-gold-600 shadow-gold-glow-lg group sm:h-16 sm:w-16"
           aria-label="Open Vertex Assistant">
           
             <motion.div
@@ -221,7 +225,7 @@ export function VertexAssistant() {
             stiffness: 300,
             damping: 30
           }}
-          className="fixed bottom-6 right-6 z-[60] w-[calc(100vw-3rem)] sm:w-[400px] h-[600px] max-h-[calc(100vh-3rem)] bg-white dark:bg-navy-800 rounded-3xl shadow-2xl border border-gold-500/20 flex flex-col overflow-hidden">
+          className="fixed inset-x-3 bottom-[max(0.75rem,env(safe-area-inset-bottom,0px))] z-[60] flex max-h-[min(85dvh,600px)] w-auto flex-col overflow-hidden rounded-2xl border border-gold-500/20 bg-white shadow-2xl dark:bg-navy-800 sm:inset-x-auto sm:bottom-6 sm:right-[max(1rem,env(safe-area-inset-right,0px))] sm:h-[600px] sm:max-h-[calc(100dvh-3rem)] sm:w-[min(100vw-1.5rem,400px)] sm:rounded-3xl">
           
             {/* Header */}
             <div className="relative bg-gradient-to-br from-navy-700 to-navy-900 p-5 text-white">
@@ -235,11 +239,11 @@ export function VertexAssistant() {
                   </div>
                   <div>
                     <h3 className="font-display font-bold text-base">
-                      Vertex Assistant
+                      {siteConfig.siteName} Assistant
                     </h3>
                     <p className="text-xs text-navy-200 flex items-center gap-1">
                       <span className="w-1.5 h-1.5 bg-green-500 rounded-full inline-block" />
-                      Online · Replies instantly
+                      Margalla Orchards, WhatsApp help
                     </p>
                   </div>
                 </div>
@@ -274,7 +278,7 @@ export function VertexAssistant() {
             {/* Messages */}
             <div
             ref={scrollRef}
-            className="flex-1 overflow-y-auto p-4 space-y-3 bg-cream dark:bg-navy-900">
+            className="flex-1 space-y-3 overflow-y-auto overscroll-contain p-3 sm:p-4 bg-cream dark:bg-navy-900">
             
               {messages.map((msg) =>
             <motion.div
@@ -295,6 +299,36 @@ export function VertexAssistant() {
                   
                       {msg.text}
                     </div>
+
+                    {msg.actions && msg.actions.length > 0 && msg.sender === 'bot' && (
+                      <div className="flex flex-wrap gap-2">
+                        {msg.actions.map((action) =>
+                          action.type === 'whatsapp' ? (
+                            <a
+                              key={action.label}
+                              href={action.href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 rounded-full bg-[#25D366] px-3 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-[#1ebe5d]"
+                            >
+                              {action.label}
+                            </a>
+                          ) : (
+                            <button
+                              key={action.label}
+                              type="button"
+                              onClick={() => {
+                                navigate(action.href);
+                                setIsOpen(false);
+                              }}
+                              className="inline-flex items-center rounded-full border border-navy-200 bg-white px-3 py-2 text-xs font-semibold text-navy-800 transition hover:border-gold-500/50 dark:border-navy-600 dark:bg-navy-900 dark:text-cream"
+                            >
+                              {action.label}
+                            </button>
+                          )
+                        )}
+                      </div>
+                    )}
 
                     {/* Property cards */}
                     {msg.properties && msg.properties.length > 0 &&
@@ -324,7 +358,7 @@ export function VertexAssistant() {
                                 <p className="text-[11px] text-navy-500 dark:text-navy-400 truncate">
                                   {p.location.city}, {p.location.state}
                                 </p>
-                                <p className="text-sm text-gold-500 font-bold mt-1">
+                                <p className="mt-1 text-xs font-semibold text-[#128C7E] dark:text-[#5dde8a]">
                                   {formatPrice(p)}
                                 </p>
                               </div>
@@ -378,12 +412,12 @@ export function VertexAssistant() {
             {/* Input */}
             <form
             onSubmit={handleSubmit}
-            className="p-3 bg-white dark:bg-navy-800 border-t border-navy-100 dark:border-navy-700 flex gap-2">
+            className="flex gap-2 border-t border-navy-100 bg-white p-3 pb-[max(0.75rem,env(safe-area-inset-bottom,0px))] dark:border-navy-700 dark:bg-navy-800 sm:pb-3">
             
               <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Type your message..."
+              placeholder="Ask about Margalla Orchards or plots…"
               className="flex-1 px-4 py-2.5 bg-cream dark:bg-navy-900 text-navy-900 dark:text-cream rounded-full text-sm border border-transparent focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 outline-none transition-all" />
             
               <motion.button

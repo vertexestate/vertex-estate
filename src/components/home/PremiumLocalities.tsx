@@ -8,28 +8,28 @@ import { useNavigate } from 'react-router-dom';
  */
 const LOCALITIES = [
   {
-    title: 'Bahria Town',
-    subtitle: 'Karachi · Lahore · Rawalpindi',
-    tag: 'Master-planned living',
+    title: 'DHA & CDA',
+    subtitle: 'Islamabad, Lahore, and Karachi',
+    tag: 'Defence and capital sectors',
     image:
       'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1400&h=900&fit=crop&q=82',
   },
   {
     title: 'DHA Defence',
-    subtitle: 'Lahore · Karachi · Islamabad-Rawalpindi',
-    tag: 'Boulevards & secure phases',
+    subtitle: 'Lahore, Karachi, and Islamabad-Rawalpindi',
+    tag: 'Boulevards and secure phases',
     image:
       'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1400&h=900&fit=crop&q=82',
   },
   {
     title: 'Gulberg & Johar Town',
     subtitle: 'Lahore core',
-    tag: 'High-street & corporate adjacency',
+    tag: 'High-street and corporate adjacency',
     image:
       'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1400&h=900&fit=crop&q=82',
   },
   {
-    title: 'F-6 / F-7 / Diplomatic',
+    title: 'F-6, F-7, and Diplomatic Enclave',
     subtitle: 'Islamabad',
     tag: 'Tree-lined avenues',
     image:
@@ -38,7 +38,7 @@ const LOCALITIES = [
   {
     title: 'Clifton & DHA Phase 8',
     subtitle: 'Karachi waterfront belt',
-    tag: 'Sea breeze & skyline',
+    tag: 'Sea breeze and skyline',
     image:
       'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1400&h=900&fit=crop&q=82',
   },

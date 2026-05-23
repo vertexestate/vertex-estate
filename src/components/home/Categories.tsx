@@ -76,7 +76,7 @@ export function Categories() {
             <h3 className="font-display text-xl font-bold text-navy-900 transition-colors group-hover:text-gold-600 dark:text-cream dark:group-hover:text-gold-400">
               {category.title}
             </h3>
-            <p className="mt-2 text-sm leading-relaxed text-navy-600 dark:text-navy-400">
+            <p className="mt-2 text-sm leading-relaxed text-navy-600 dark:text-cream/70">
               {category.description}
             </p>
             <div className="mt-5 flex items-center gap-1 text-sm font-semibold text-gold-600 opacity-0 transition-all group-hover:opacity-100 dark:text-gold-400">

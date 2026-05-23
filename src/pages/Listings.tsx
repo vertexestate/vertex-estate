@@ -8,6 +8,8 @@ import { SearchBar } from '../components/listings/SearchBar';
 import { LoginGate } from '../components/auth/LoginGate';
 import { Select } from '../components/ui/Select';
 import { Button } from '../components/ui/Button';
+import { WhatsAppContactButton } from '../components/ui/WhatsAppContactButton';
+import { siteConfig } from '../config/siteConfig';
 import { useProperties } from '../context/PropertiesContext';
 import { useAuth } from '../context/AuthContext';
 import { FilterOptions } from '../types';
@@ -78,7 +80,7 @@ export function Listings() {
   sortedProperties.slice(0, PREVIEW_COUNT);
   const hiddenCount = sortedProperties.length - visibleProperties.length;
   return (
-    <div className="min-h-screen bg-cream dark:bg-navy-900 pt-24 pb-20">
+    <div className="min-h-screen bg-cream pt-page pb-page dark:bg-navy-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{
@@ -92,19 +94,24 @@ export function Listings() {
           className="mb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           
           <div>
-            <h1 className="text-4xl md:text-5xl font-display font-bold text-navy-900 dark:text-cream mb-3">
-              Verified listings — Pakistan
+            <h1 className="mb-3 font-display text-3xl font-bold leading-tight text-navy-900 dark:text-cream sm:text-4xl md:text-5xl">
+              Verified listings in Pakistan
             </h1>
-            <p className="text-lg text-navy-600 dark:text-navy-400">
-              Bahria Town, DHA, and blue-chip corridors. Prices in PKR; sign in to unlock full details and agent contacts.
+            <p className="text-base text-navy-600 dark:text-navy-400 sm:text-lg">
+              DHA, CDA, and blue-chip corridors. Message us on WhatsApp for rates, or sign in to unlock full details.
             </p>
           </div>
-          {isAuthenticated &&
-          <Button variant="primary" onClick={() => navigate('/dashboard')}>
-              <PlusIcon className="w-5 h-5 mr-2" />
-              List Your Property
-            </Button>
-          }
+          <div className="flex flex-wrap gap-3">
+            {!siteConfig.showPublicPrices && (
+              <WhatsAppContactButton label="Ask for rates on WhatsApp" size="md" />
+            )}
+            {isAuthenticated && (
+              <Button variant="primary" onClick={() => navigate('/dashboard')}>
+                <PlusIcon className="w-5 h-5 mr-2" />
+                List Your Property
+              </Button>
+            )}
+          </div>
         </motion.div>
 
         {/* Live search */}
@@ -153,7 +160,7 @@ export function Listings() {
                   properties
                   {!isAuthenticated && hiddenCount > 0 &&
                   <span className="ml-2 text-gold-500">
-                      · {hiddenCount} locked
+                      , {hiddenCount} locked
                     </span>
                   }
                 </span>
@@ -166,14 +173,12 @@ export function Listings() {
                     value: 'featured',
                     label: 'Featured'
                   },
-                  {
-                    value: 'price-low',
-                    label: 'Price: Low to High'
-                  },
-                  {
-                    value: 'price-high',
-                    label: 'Price: High to Low'
-                  },
+                  ...(siteConfig.showPublicPrices
+                    ? [
+                        { value: 'price-low', label: 'Price: low to high' },
+                        { value: 'price-high', label: 'Price: high to low' },
+                      ]
+                    : []),
                   {
                     value: 'newest',
                     label: 'Newest'

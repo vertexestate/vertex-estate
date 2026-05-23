@@ -13,13 +13,13 @@ export interface SiteHeroContent {
   heroSubheading: string;
 }
 
-const STORAGE_KEY = 'vertex-site-hero';
+const STORAGE_KEY = 'vertex-site-hero-v2';
 
 const DEFAULT_HERO: SiteHeroContent = {
-  heroHeadlineLead: 'Pakistan’s most trusted',
-  heroHeadlineAccent: 'premium addresses',
+  heroHeadlineLead: 'Margalla Orchards Islamabad',
+  heroHeadlineAccent: 'DHA Housing Society',
   heroSubheading:
-    'From Bahria Town to DHA — curated villas, penthouses, and offices in Karachi, Lahore, and Islamabad. Every listing is owner-reviewed before it goes live.',
+    'Margalla Orchards is a DHA-supervised society on Park Road, Islamabad, opposite COMSATS University. Plots are available in 10 Marla, 14 Marla, and 1 Kanal, developed with DHA Islamabad, SCBAP, and FGEHA.',
 };
 
 function loadHero(): SiteHeroContent {

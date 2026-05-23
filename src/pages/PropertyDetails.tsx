@@ -20,7 +20,10 @@ import { Button } from '../components/ui/Button';
 import { LoginGate } from '../components/auth/LoginGate';
 import { useProperties } from '../context/PropertiesContext';
 import { useAuth } from '../context/AuthContext';
+import { siteConfig } from '../config/siteConfig';
 import { formatPropertyPrice } from '../lib/formatPropertyPrice';
+import { WhatsAppContactButton } from '../components/ui/WhatsAppContactButton';
+import { whatsAppMessageForProperty } from '../lib/whatsapp';
 import { usePageSeo } from '../hooks/usePageSeo';
 import { propertySeoFromListing } from '../lib/pageSeo';
 
@@ -36,7 +39,7 @@ export function PropertyDetails() {
 
   if (!property) {
     return (
-      <div className="min-h-screen bg-cream dark:bg-navy-900 pt-24 flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-cream pt-page dark:bg-navy-900">
         <div className="text-center">
           <h1 className="text-4xl font-display font-bold text-navy-900 dark:text-cream mb-4">
             Property Not Found
@@ -53,7 +56,7 @@ export function PropertyDetails() {
   filter((p) => p.id !== property.id && p.type === property.type).
   slice(0, 3);
   return (
-    <div className="min-h-screen bg-cream dark:bg-navy-900 pt-24 pb-20">
+    <div className="min-h-screen bg-cream pt-page pb-page dark:bg-navy-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.button
           initial={{
@@ -129,9 +132,18 @@ export function PropertyDetails() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-3xl font-display font-bold text-gold-500">
-                    {formatPropertyPrice(property)}
-                  </p>
+                  {siteConfig.showPublicPrices ? (
+                    <p className="text-3xl font-display font-bold text-gold-500">
+                      {formatPropertyPrice(property)}
+                    </p>
+                  ) : (
+                    <WhatsAppContactButton
+                      message={whatsAppMessageForProperty(property.title)}
+                      label="Get details on WhatsApp"
+                      size="md"
+                      className="ml-auto"
+                    />
+                  )}
                   <span className="inline-block mt-2 px-3 py-1 bg-gold-500/10 text-gold-500 text-sm font-semibold rounded-full uppercase">
                     {property.type}
                   </span>

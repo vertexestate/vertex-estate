@@ -64,8 +64,8 @@ export function Footer() {
     setNewsletterStatus('ok');
     setNewsletterMsg(
       res.mode === 'offline'
-        ? 'Queued on this device — run the API with MONGODB_URI so signups sync to MongoDB.'
-        : 'Thanks — you are subscribed.'
+        ? 'Queued on this device. Run the API with MONGODB_URI so signups sync to MongoDB.'
+        : 'Thanks, you are subscribed.'
     );
     setEmail('');
   };
@@ -73,7 +73,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-navy-900 dark:bg-navy-950 text-cream pt-16 pb-8">
+    <footer className="bg-navy-900 pb-[calc(2rem+env(safe-area-inset-bottom,0px))] pt-12 text-cream dark:bg-navy-950 sm:pt-16 sm:pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           <div>

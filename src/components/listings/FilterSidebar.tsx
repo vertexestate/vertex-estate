@@ -4,6 +4,7 @@ import { XIcon } from 'lucide-react';
 import { Input } from '../ui/Input';
 import { Select } from '../ui/Select';
 import { Button } from '../ui/Button';
+import { siteConfig } from '../../config/siteConfig';
 import { FilterOptions } from '../../types';
 interface FilterSidebarProps {
   filters: FilterOptions;
@@ -69,35 +70,37 @@ export function FilterSidebar({
       }
 
       <div className="space-y-6">
-        <div>
-          <label className="block text-sm font-semibold text-navy-900 dark:text-cream mb-3">
-            Price Range
-          </label>
-          <div className="space-y-2">
-            <Input
-              type="number"
-              placeholder="Min (PKR)"
-              value={filters.priceRange[0]}
-              onChange={(e) =>
-              onFilterChange({
-                ...filters,
-                priceRange: [Number(e.target.value), filters.priceRange[1]]
-              })
-              } />
-            
-            <Input
-              type="number"
-              placeholder="Max (PKR)"
-              value={filters.priceRange[1]}
-              onChange={(e) =>
-              onFilterChange({
-                ...filters,
-                priceRange: [filters.priceRange[0], Number(e.target.value)]
-              })
-              } />
-            
+        {siteConfig.showPublicPrices && (
+          <div>
+            <label className="block text-sm font-semibold text-navy-900 dark:text-cream mb-3">
+              Price range
+            </label>
+            <div className="space-y-2">
+              <Input
+                type="number"
+                placeholder="Min (PKR)"
+                value={filters.priceRange[0]}
+                onChange={(e) =>
+                  onFilterChange({
+                    ...filters,
+                    priceRange: [Number(e.target.value), filters.priceRange[1]],
+                  })
+                }
+              />
+              <Input
+                type="number"
+                placeholder="Max (PKR)"
+                value={filters.priceRange[1]}
+                onChange={(e) =>
+                  onFilterChange({
+                    ...filters,
+                    priceRange: [filters.priceRange[0], Number(e.target.value)],
+                  })
+                }
+              />
+            </div>
           </div>
-        </div>
+        )}
 
         <div>
           <Input

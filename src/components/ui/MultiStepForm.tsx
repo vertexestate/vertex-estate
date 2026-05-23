@@ -419,7 +419,7 @@ export function MultiStepForm() {
                       {row.label}
                     </span>
                     <span className="text-navy-900 dark:text-cream font-semibold text-sm capitalize">
-                      {row.value || '—'}
+                      {row.value || 'Not set'}
                     </span>
                   </div>
               )}

@@ -86,6 +86,17 @@ function saveUsersDB(users: StoredUser[]) {
 function generateCode(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
+
+function toPublicUser(stored: StoredUser): User {
+  const { password: _pw, ...publicUser } = stored;
+  return publicUser;
+}
+
+function commitSession(stored: StoredUser) {
+  const publicUser = toPublicUser(stored);
+  localStorage.setItem(USER_STORAGE, JSON.stringify(publicUser));
+  return publicUser;
+}
 function migrateLegacyRoles(db: StoredUser[]): boolean {
   let changed = false;
   for (const u of db) {
@@ -176,6 +187,32 @@ export function AuthProvider({ children }: {children: React.ReactNode;}) {
     phone: string;
     password: string;
   }) => {
+    if (!siteConfig.authDemoMode) {
+      const db = loadUsersDB();
+      if (db.some((u) => u.email.toLowerCase() === data.email.toLowerCase())) {
+        return 'DUPLICATE';
+      }
+      const newUser: StoredUser = {
+        id: `user-${Date.now()}`,
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        role: 'user',
+        emailVerified: true,
+        phoneVerified: false,
+        vertexVerified: false,
+        createdAt: Date.now(),
+        savedProperties: [],
+        favoriteProperties: [],
+        password: data.password,
+      };
+      db.push(newUser);
+      saveUsersDB(db);
+      const activeUser = commitSession(newUser);
+      setUser(activeUser);
+      setIsAuthModalOpen(false);
+      return '';
+    }
     const code = generateCode();
     setPendingVerification({
       type: 'email',
@@ -202,6 +239,12 @@ export function AuthProvider({ children }: {children: React.ReactNode;}) {
       ok: false,
       error: 'Incorrect password.'
     };
+    if (!siteConfig.authDemoMode) {
+      const activeUser = commitSession(found);
+      setUser(activeUser);
+      setIsAuthModalOpen(false);
+      return { ok: true };
+    }
     const code = generateCode();
     setPendingVerification({
       type: 'email',
@@ -216,6 +259,9 @@ export function AuthProvider({ children }: {children: React.ReactNode;}) {
     };
   };
   const startWhatsAppLogin = (phone: string) => {
+    if (!siteConfig.authDemoMode) {
+      return '';
+    }
     const code = generateCode();
     const db = loadUsersDB();
     const existing = db.find((u) => u.phone === phone);
@@ -305,6 +351,7 @@ export function AuthProvider({ children }: {children: React.ReactNode;}) {
       activeUser = publicUser;
     }
     setUser(activeUser);
+    localStorage.setItem(USER_STORAGE, JSON.stringify(activeUser));
     setPendingVerification(null);
     setIsAuthModalOpen(false);
     return {

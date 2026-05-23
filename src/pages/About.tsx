@@ -52,7 +52,7 @@ export function About() {
   }];
 
   return (
-    <div className="min-h-screen bg-cream dark:bg-navy-900 pt-24 pb-20">
+    <div className="min-h-screen bg-cream pt-page pb-page dark:bg-navy-900">
       <div className="relative h-96 mb-20">
         <div className="absolute inset-0 bg-gradient-to-r from-navy-900/90 to-navy-900/70" />
         <img
@@ -114,7 +114,7 @@ export function About() {
             <p className="text-lg text-navy-700 dark:text-navy-300 leading-relaxed">
               Our team of dedicated professionals brings together decades of
               experience in real estate, technology, and customer service. We're
-              not just selling properties—we're helping people find where they
+              not just selling properties. We are helping people find where they
               belong.
             </p>
           </motion.div>

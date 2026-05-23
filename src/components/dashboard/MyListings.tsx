@@ -26,7 +26,7 @@ export function MyListings({ onCreateNew }: MyListingsProps) {
           No listings yet
         </h3>
         <p className="text-navy-600 dark:text-navy-400 mb-6">
-          List a property — it stays in <strong>Pending Review</strong> until the
+          List a property. It stays in <strong>Pending Review</strong> until the
           Vertex Estate Owner publishes it. No listing goes public without that
           approval.
         </p>
@@ -91,7 +91,7 @@ export function MyListings({ onCreateNew }: MyListingsProps) {
                 </span>
               </div>
               <p className="text-sm text-navy-600 dark:text-navy-400 mb-2">
-                {p.location.city}, {p.location.state} · {p.category}
+                {p.location.city}, {p.location.state}, {p.category}
               </p>
               <p className="text-gold-500 font-bold text-lg mb-3">
                 ${p.price.toLocaleString()}

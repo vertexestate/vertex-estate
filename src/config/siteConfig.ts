@@ -63,7 +63,19 @@ export const siteConfig = {
 
   siteName: import.meta.env.VITE_SITE_NAME || 'Vertex Estate',
 
-  documentTitle: import.meta.env.VITE_SITE_TITLE || 'Vertex Estate — Premium real estate',
+  /** WhatsApp Business number (digits only or +92…). Used for public inquiry links. */
+  whatsappPhone:
+    (import.meta.env.VITE_WHATSAPP_PHONE || '').trim().replace(/\D/g, '') || '923109882888',
+
+  whatsappDefaultMessage:
+    (import.meta.env.VITE_WHATSAPP_DEFAULT_MESSAGE || '').trim() ||
+    'Hi Vertex Estate! I would like to know about plots at DHA Margalla Orchards. Please share current availability and rates.',
+
+  /** When false, listing cards and detail pages hide prices and show WhatsApp instead. */
+  showPublicPrices:
+    (import.meta.env.VITE_SHOW_PUBLIC_PRICES ?? 'false').toLowerCase() === 'true',
+
+  documentTitle: import.meta.env.VITE_SITE_TITLE || 'Vertex Estate | Premium real estate',
 
   /** Google Analytics 4 measurement ID (must match `index.html` gtag if you change it). */
   googleAnalyticsId:
@@ -93,8 +105,16 @@ export const siteConfig = {
 
   propertiesJsonUrl: (import.meta.env.VITE_PROPERTIES_JSON_URL || '').trim(),
 
+  /** Bundled sample listings (off by default — use MongoDB / your JSON catalog). */
   includeSeedProperties:
-    (import.meta.env.VITE_INCLUDE_SEED_PROPERTIES ?? 'true').toLowerCase() !== 'false',
+    (import.meta.env.VITE_INCLUDE_SEED_PROPERTIES ?? 'false').toLowerCase() === 'true',
+
+  /**
+   * Shows OTP on-screen during login (dev only). Production: false — email/password logs in directly;
+   * WhatsApp OTP needs Meta WhatsApp Business API (see `.env.example`).
+   */
+  authDemoMode:
+    (import.meta.env.VITE_AUTH_DEMO_MODE ?? 'false').toLowerCase() === 'true',
 
   estateOwnerEmail:
     import.meta.env.VITE_ESTATE_OWNER_EMAIL || 'owner@vertex.estate',
@@ -111,7 +131,7 @@ export const siteConfig = {
    * built-in default below — same countdown in all browsers and profiles).
    */
   showComingSoon:
-    (import.meta.env.VITE_SHOW_COMING_SOON ?? 'true').toLowerCase() !== 'false',
+    (import.meta.env.VITE_SHOW_COMING_SOON ?? 'false').toLowerCase() === 'true',
   /**
    * Parsed `VITE_COMING_SOON_UNTIL` (ISO 8601). If unset or invalid, uses the same default for everyone.
    * Change the default string here or set env per deploy.
@@ -165,7 +185,7 @@ export const siteConfig = {
     const single = (import.meta.env.VITE_COMING_SOON_TAGLINE || '').trim();
     if (single) return [single];
     return [
-      'Fill out the waitlist form — get a special launch discount',
+      'Fill out the waitlist form and get a special launch discount',
       'Early members get priority access before public launch',
       'Exclusive offers on Joining The Waitlist',
     ];

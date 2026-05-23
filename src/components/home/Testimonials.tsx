@@ -3,10 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeftIcon, ChevronRightIcon, StarIcon, QuoteIcon } from 'lucide-react';
 import { testimonials as seedTestimonials } from '../../data/properties';
 import { fetchJson } from '../../lib/fetchJson';
+import { siteConfig } from '../../config/siteConfig';
 import type { SiteTestimonialsFile } from '../../types/siteFiles';
 
 export function Testimonials() {
-  const [items, setItems] = useState(seedTestimonials);
+  const [items, setItems] = useState(() =>
+    siteConfig.includeSeedProperties ? seedTestimonials : []
+  );
 
   useEffect(() => {
     fetchJson<SiteTestimonialsFile>('/site/testimonials.json').then((file) => {
@@ -33,6 +36,8 @@ export function Testimonials() {
   const prev = () => {
     setCurrentIndex((prev) => (prev - 1 + items.length) % items.length);
   };
+  if (items.length === 0) return null;
+
   const t = items[currentIndex];
 
   return (
@@ -76,7 +81,7 @@ export function Testimonials() {
               {t.rating}.0 client rating
             </span>
           </div>
-          <blockquote className="relative mt-8 border-l-4 border-gold-500 pl-5 font-display text-xl not-italic leading-relaxed text-navy-800 dark:text-navy-100 md:text-2xl md:pl-6">
+          <blockquote className="relative mt-8 border-l-4 border-gold-500 pl-5 font-display text-xl not-italic leading-relaxed text-navy-800 dark:text-cream/90 md:text-2xl md:pl-6">
             {t.quote}
           </blockquote>
           <div className="relative mt-10 flex items-center gap-4 border-t border-navy-100 pt-8 dark:border-navy-600">

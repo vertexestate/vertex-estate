@@ -27,7 +27,7 @@ const defaultMapEmbed = siteConfig.mapEmbedUrl;
 
 const defaultOffices: SiteContactOffice[] = [
   {
-    city: 'Islamabad — F-7 Markaz',
+    city: 'Islamabad, F-7 Markaz',
     address:
       '2nd Floor, Chaudhry Plaza, up to Subway near Mr Chips, F-7 Markaz, Islamabad',
     phone: '+92 310 9882888',
@@ -163,7 +163,7 @@ export function Contact() {
   const { offices, quickActions, mapSrc } = resolved;
 
   return (
-    <div className="min-h-screen bg-cream dark:bg-navy-900 pt-24 pb-20">
+    <div className="min-h-screen bg-cream pt-page pb-page dark:bg-navy-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{
@@ -256,7 +256,7 @@ export function Contact() {
                 </p>
                 {import.meta.env.PROD && !siteConfig.apiBaseUrl && (
                   <p className="mt-4 text-sm text-navy-500 dark:text-navy-400">
-                    API URL is not configured yet — your message was queued in this
+                    API URL is not configured yet. Your message was queued in this
                     browser (see localStorage key <code className="text-gold-500">vertex-lead-queue</code>
                     ) until your backend is connected.
                   </p>

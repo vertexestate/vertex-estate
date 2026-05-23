@@ -11,7 +11,7 @@ interface LoginGateProps {
 }
 export function LoginGate({
   title = 'Members Only',
-  message = 'Sign in to unlock the full experience — exclusive listings, verified contacts, and personalized recommendations.',
+  message = 'Sign in to unlock the full experience: exclusive listings, verified contacts, and personalized recommendations.',
   variant = 'card',
   className = ''
 }: LoginGateProps) {

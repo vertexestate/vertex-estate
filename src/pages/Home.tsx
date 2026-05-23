@@ -1,20 +1,22 @@
 import type { ReactNode } from 'react';
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { motion, AnimatePresence, useScroll } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowRightIcon, ArrowUpIcon } from 'lucide-react';
 import { Hero } from '../components/home/Hero';
 import { Categories } from '../components/home/Categories';
 import { Stats } from '../components/home/Stats';
 import { CTA } from '../components/home/CTA';
-import { PremiumLocalities } from '../components/home/PremiumLocalities';
+import { ProjectGallery } from '../components/home/ProjectGallery';
+import { LocationShowcase } from '../components/home/LocationShowcase';
+import { MargallaMasterPlanMap } from '../components/margalla/MargallaMasterPlanMap';
+import { MargallaPromoShowcase } from '../components/margalla/MargallaPromoShowcase';
+import { WhatsAppInquiryCard } from '../components/contact/WhatsAppInquiryCard';
+import { AmenitiesShowcase } from '../components/home/AmenitiesShowcase';
 import { SectionHeading } from '../components/ui/SectionHeading';
 
 const FeaturedSlider = lazy(() =>
   import('../components/home/FeaturedSlider').then((m) => ({ default: m.FeaturedSlider }))
-);
-const DealOfTheDay = lazy(() =>
-  import('../components/home/DealOfTheDay').then((m) => ({ default: m.DealOfTheDay }))
 );
 const Testimonials = lazy(() =>
   import('../components/home/Testimonials').then((m) => ({ default: m.Testimonials }))
@@ -56,7 +58,7 @@ function SectionShell({
   return (
     <section
       id={id}
-      className={`relative scroll-mt-24 overflow-hidden px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24 ${className}`}
+      className={`relative scroll-mt-header overflow-hidden px-4 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-24 ${className}`}
     >
       {beam && (
         <motion.div
@@ -145,6 +147,7 @@ function SectionDeferredFallback() {
 
 export function Home() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [showTop, setShowTop] = useState(false);
   const reduceMotion = usePrefersReducedMotion();
 
@@ -155,8 +158,22 @@ export function Home() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  useEffect(() => {
+    const id = location.hash.replace(/^#/, '');
+    if (!id) return;
+    const scrollToTarget = () => {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+    const frame = requestAnimationFrame(scrollToTarget);
+    const retry = window.setTimeout(scrollToTarget, 120);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.clearTimeout(retry);
+    };
+  }, [location.hash]);
+
   return (
-    <main className="relative isolate overflow-x-hidden bg-gradient-to-b from-cream via-[#f6f4ef] to-cream dark:from-navy-900 dark:via-[#050a14] dark:to-navy-900">
+    <main className="relative isolate overflow-x-hidden bg-gradient-to-b from-cream via-[#f6f4ef] to-cream text-navy-900 dark:from-navy-900 dark:via-[#050a14] dark:to-navy-900 dark:text-cream">
       <AmbientBackdrop active={!reduceMotion} />
       <ScrollProgress />
 
@@ -165,37 +182,87 @@ export function Home() {
 
         <SectionShell
           beam
-          className="z-10 -mt-10 rounded-t-[1.75rem] border-t border-white/60 bg-cream shadow-[0_-16px_60px_-14px_rgba(4,8,13,0.14)] dark:border-white/[0.06] dark:bg-navy-900 dark:shadow-[0_-16px_60px_-14px_rgba(0,0,0,0.5)] sm:-mt-14 sm:rounded-t-[2.25rem]"
+          id="highlights"
+          className="border-t border-navy-100/80 bg-white dark:border-navy-700 dark:bg-navy-900"
         >
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_42%_at_50%_-8%,rgba(212,255,63,0.1),transparent_58%)] dark:bg-[radial-gradient(ellipse_70%_42%_at_50%_-8%,rgba(212,255,63,0.07),transparent_58%)]" />
           <div className="relative mx-auto max-w-7xl">
             <SectionHeading
-              eyebrow="Neighbourhood intelligence"
-              title="Bahria Town, DHA & capital belts"
-              subtitle="Photography showcases premium gated-community architecture — tours and paperwork are always verified against the actual plot or unit."
+              eyebrow="DHA Margalla Orchards"
+              title="Park Road living with Margalla Hills views"
+              subtitle="A gated DHA society opposite COMSATS University. Secure investment, wide roads, and plot sizes for every family budget."
             />
             <Reveal className="mt-10 sm:mt-12">
-              <PremiumLocalities />
+              <MargallaPromoShowcase />
             </Reveal>
           </div>
         </SectionShell>
 
         <SectionShell
           beam
-          id="featured-deal"
+          id="gallery"
+          className="border-t border-navy-100/80 bg-white dark:border-navy-700 dark:bg-navy-900"
+        >
+          <div className="relative mx-auto max-w-7xl">
+            <SectionHeading
+              eyebrow="Project visuals"
+              title="See Margalla Orchards"
+              subtitle="Avenues, villas, and Margalla Hills views. This is the lifestyle DHA Margalla Orchard is built for."
+            />
+            <Reveal className="mt-10 sm:mt-12">
+              <ProjectGallery />
+            </Reveal>
+          </div>
+        </SectionShell>
+
+        <SectionShell
+          beam
+          id="master-plan"
+          className="border-y border-navy-100/80 bg-gradient-to-b from-white to-cream dark:border-navy-700 dark:from-navy-900 dark:to-navy-950"
+        >
+          <div className="relative mx-auto max-w-7xl">
+            <SectionHeading
+              eyebrow="Master plan"
+              title="DHA Margalla Orchards map"
+              subtitle="See every block, plot size, road, park, and commercial zone on Park Road, Islamabad."
+            />
+            <Reveal className="mt-10 sm:mt-12">
+              <MargallaMasterPlanMap showProjectLink />
+            </Reveal>
+          </div>
+        </SectionShell>
+
+        <SectionShell
+          beam
+          id="location"
+          className="bg-cream dark:bg-navy-950"
+        >
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_42%_at_50%_-8%,rgba(212,255,63,0.1),transparent_58%)] dark:bg-[radial-gradient(ellipse_70%_42%_at_50%_-8%,rgba(212,255,63,0.07),transparent_58%)]" />
+          <div className="relative mx-auto max-w-7xl">
+            <SectionHeading
+              eyebrow="Park Road, Islamabad"
+              title="Prime location at Margalla Orchards"
+              subtitle="Opposite COMSATS University with Margalla Hills views, and a short drive to Islamabad’s main business areas."
+            />
+            <Reveal className="mt-10 sm:mt-12">
+              <LocationShowcase />
+            </Reveal>
+          </div>
+        </SectionShell>
+
+        <SectionShell
+          beam
+          id="pricing"
           className="border-t border-navy-100/70 bg-cream/90 dark:border-white/[0.06] dark:bg-navy-950/90"
         >
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_42%_at_50%_-8%,rgba(212,255,63,0.08),transparent_58%)] dark:bg-[radial-gradient(ellipse_70%_42%_at_50%_-8%,rgba(212,255,63,0.06),transparent_58%)]" />
           <div className="relative mx-auto max-w-7xl">
             <SectionHeading
-              eyebrow="Exclusive offer"
-              title="Featured luxury deal"
-              subtitle="A hand-rotated spotlight property — refined finishes, prime locations, limited-time presentation."
+              eyebrow="Get in touch"
+              title="Ask about plots on WhatsApp"
+              subtitle="10 Marla, 14 Marla, and 1 Kanal plots with DHA planning. Our team replies with today’s availability and a clear quote."
             />
             <Reveal className="mt-12 sm:mt-14 lg:mt-16">
-              <Suspense fallback={<SectionDeferredFallback />}>
-                <DealOfTheDay />
-              </Suspense>
+              <WhatsAppInquiryCard />
             </Reveal>
           </div>
         </SectionShell>
@@ -203,6 +270,7 @@ export function Home() {
         <SectionShell
           beam
           pattern
+          id="plots"
           className="border-y border-navy-100/80 bg-white/90 dark:border-navy-700/80 dark:bg-navy-800/95"
         >
           <div className="pointer-events-none absolute inset-0 opacity-[0.4] dark:opacity-25">
@@ -213,16 +281,16 @@ export function Home() {
             <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
               <div className="max-w-2xl">
                 <SectionHeading
-                  eyebrow="Featured properties"
-                  title="Signature homes & penthouses"
-                  subtitle="Live inventory across Bahria Town, DHA, Gulberg, Clifton, and Islamabad’s F-sectors — each card opens verified photography and specs."
+                  eyebrow="Available plots"
+                  title="Residential and commercial inventory"
+                  subtitle="Browse listings at Margalla Orchards and nearby developments. Each card shows photos, plot size, and location."
                   align="left"
                 />
               </div>
               <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }}>
                 <Button
-                  variant="secondary"
-                  className="shrink-0 border-gold-500/35 bg-white/80 shadow-md shadow-gold-500/10 backdrop-blur-sm hover:border-gold-500/55 dark:bg-navy-900/60"
+                  variant="outline"
+                  className="shrink-0 bg-white/90 backdrop-blur-sm dark:bg-navy-900/70"
                   onClick={() => navigate('/listings')}
                 >
                   View all listings
@@ -241,16 +309,19 @@ export function Home() {
         <SectionShell
           beam
           pattern
-          id="categories"
+          id="amenities"
           className="bg-gradient-to-b from-cream to-[#f3f1eb] dark:from-navy-900 dark:to-navy-950"
         >
           <div className="relative mx-auto max-w-7xl">
             <SectionHeading
-              eyebrow="What we offer"
-              title="Property categories"
-              subtitle="Choose how you want to move — buy, rent, luxury, or commercial — and we will shape the experience around you."
+              eyebrow="Society amenities"
+              title="Built for modern family living"
+              subtitle="DHA-standard infrastructure, security, and green spaces. Everything you expect from a supervised housing society."
             />
             <Reveal className="mt-12 sm:mt-14 lg:mt-16">
+              <AmenitiesShowcase />
+            </Reveal>
+            <Reveal className="mt-14 lg:mt-16">
               <Categories />
             </Reveal>
           </div>
@@ -259,13 +330,14 @@ export function Home() {
         <SectionShell
           beam
           pattern
+          id="noc"
           className="border-y border-navy-100/80 bg-white/90 dark:border-navy-700/80 dark:bg-navy-800/95"
         >
           <div className="relative mx-auto max-w-7xl">
             <SectionHeading
-              eyebrow="Our impact"
-              title="Trusted by thousands"
-              subtitle="Numbers that reflect a global community of owners, renters, and investors who expect more from a real estate brand."
+              eyebrow="NOC and approvals"
+              title="DHA-supervised development"
+              subtitle="Margalla Orchards is developed under DHA Islamabad with SCBAP and FGEHA, so buyers get clear planning, solid infrastructure, and long-term value."
             />
             <Reveal className="mt-12 sm:mt-14 lg:mt-16">
               <Stats />
@@ -282,7 +354,7 @@ export function Home() {
             <SectionHeading
               eyebrow="Personalized search"
               title="Find your perfect match"
-              subtitle="Share your goals in a few guided steps — our team uses your answers to curate options that actually fit your life."
+              subtitle="Share your goals in a few guided steps. Our team uses your answers to shortlist options that fit your budget and timeline."
             />
             <Reveal className="mt-12 sm:mt-14">
               <Suspense fallback={<SectionDeferredFallback />}>
@@ -295,6 +367,7 @@ export function Home() {
         <SectionShell
           beam
           pattern
+          id="faq"
           className="border-y border-navy-100/80 bg-white/90 dark:border-navy-700/80 dark:bg-navy-800/95"
         >
           <div className="relative mx-auto max-w-7xl">
@@ -330,7 +403,7 @@ export function Home() {
             transition={{ type: 'spring', stiffness: 420, damping: 28 }}
             whileHover={{ scale: 1.06, y: -2 }}
             whileTap={{ scale: 0.94 }}
-            className="fixed bottom-6 right-6 z-[100] flex h-12 w-12 items-center justify-center rounded-full border border-gold-500/45 bg-navy-900 text-gold-400 shadow-xl shadow-black/35 transition-colors hover:bg-navy-800 hover:text-gold-300 dark:bg-navy-800 dark:hover:bg-navy-700"
+            className="inset-fab-above-chat fixed z-[55] flex h-11 w-11 items-center justify-center rounded-full border border-gold-500/45 bg-navy-900 text-gold-400 shadow-xl shadow-black/35 transition-colors hover:bg-navy-800 hover:text-gold-300 sm:h-12 sm:w-12 dark:bg-navy-800 dark:hover:bg-navy-700"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             aria-label="Back to top"
           >

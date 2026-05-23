@@ -12,7 +12,10 @@ import {
 import { Property } from '../../types';
 import { useAuth } from '../../context/AuthContext';
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
+import { siteConfig } from '../../config/siteConfig';
 import { formatPropertyPrice } from '../../lib/formatPropertyPrice';
+import { WhatsAppContactButton } from './WhatsAppContactButton';
+import { whatsAppMessageForProperty } from '../../lib/whatsapp';
 interface PropertyCardProps {
   property: Property;
   onClick?: () => void;
@@ -59,7 +62,7 @@ function PropertyCardInner({ property, onClick }: PropertyCardProps) {
         style={reduceMotion ? undefined : { transform: 'translateZ(20px)' }}
         className="relative overflow-hidden rounded-[1.35rem] border border-navy-100/80 bg-white ring-1 ring-transparent transition-shadow duration-300 group-hover:border-gold-500/25 group-hover:shadow-gold-glow-lg group-hover:ring-gold-500/15 dark:border-navy-600 dark:bg-navy-800"
       >
-        <div className="relative h-64 overflow-hidden">
+        <div className="relative h-52 overflow-hidden sm:h-64">
           <img
             src={property.images[0]}
             alt={property.title}
@@ -120,7 +123,7 @@ function PropertyCardInner({ property, onClick }: PropertyCardProps) {
           </div>
         </div>
 
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           <div className="flex items-start justify-between mb-3">
             <h3 className="text-xl font-display font-bold text-navy-900 dark:text-cream group-hover:text-gold-500 transition-colors line-clamp-2">
               {property.title}
@@ -152,9 +155,20 @@ function PropertyCardInner({ property, onClick }: PropertyCardProps) {
           </div>
 
           <div className="pt-4 border-t border-navy-200 dark:border-navy-700">
-            <p className="text-2xl font-display font-bold text-gold-500">
-              {formatPropertyPrice(property)}
-            </p>
+            {siteConfig.showPublicPrices ? (
+              <p className="text-2xl font-display font-bold text-gold-500">
+                {formatPropertyPrice(property)}
+              </p>
+            ) : (
+              <WhatsAppContactButton
+                message={whatsAppMessageForProperty(property.title)}
+                label="Ask on WhatsApp"
+                size="sm"
+                variant="soft"
+                className="w-full"
+                onClick={(e) => e.stopPropagation()}
+              />
+            )}
           </div>
         </div>
       </div>

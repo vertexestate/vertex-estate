@@ -87,7 +87,7 @@ export function Dashboard() {
   }, [user]);
   if (!isAuthenticated || !user) {
     return (
-      <div className="min-h-screen bg-cream dark:bg-navy-900 pt-24 pb-20 flex items-center justify-center px-4">
+      <div className="flex min-h-screen items-center justify-center bg-cream px-4 pt-page pb-page dark:bg-navy-900">
         <motion.div
           initial={{
             opacity: 0,
@@ -223,7 +223,7 @@ export function Dashboard() {
     (p) => p.approvalStatus === 'pending'
   ).length;
   return (
-    <div className="min-h-screen bg-cream dark:bg-navy-900 pt-24 pb-20">
+    <div className="min-h-screen bg-cream pt-page pb-page dark:bg-navy-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{
@@ -243,7 +243,7 @@ export function Dashboard() {
               </h1>
               <p className="text-xl text-navy-600 dark:text-navy-400">
                 {isEstateOwner ?
-                'Estate Owner dashboard — curated control of Vertex Estate' :
+                'Estate Owner dashboard: curated control of Vertex Estate' :
                 'Manage your properties and account'}
               </p>
             </div>
@@ -390,7 +390,7 @@ export function Dashboard() {
                           </p>
                           <p className="text-sm text-navy-600 dark:text-navy-300 mt-1">
                             New submissions stay in Pending Review until you
-                            approve them — they are not public yet.
+                            approve them. They are not public yet.
                           </p>
                           <Button
                           variant="primary"
@@ -428,7 +428,7 @@ export function Dashboard() {
                           <p className="text-sm text-navy-700 dark:text-navy-200 mb-4">
                             Your property is in{' '}
                             <strong>Pending Review</strong>. The Vertex Estate
-                            Owner personally approves every listing — nothing is
+                            Owner personally approves every listing. Nothing is
                             published until then.
                           </p>
                           <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
@@ -622,7 +622,7 @@ export function Dashboard() {
                 <div className="text-center py-12">
                       <HeartIcon className="w-16 h-16 text-navy-400 mx-auto mb-4" />
                       <p className="text-xl text-navy-600 dark:text-navy-400 mb-4">
-                        No favorites yet — tap the heart on any property
+                        No favorites yet. Tap the heart on any property
                       </p>
                       <Button
                     variant="primary"
@@ -663,7 +663,7 @@ export function Dashboard() {
                     {isEstateOwner ?
                     <>
                           Even listings you add yourself go to{' '}
-                          <strong>Pending Review</strong> first — same rule as
+                          <strong>Pending Review</strong> first. Same rule as
                           everyone else. Approve them in{' '}
                           <strong>Owner view</strong> or <strong>Estate Control</strong>{' '}
                           before they appear in public search.
@@ -671,7 +671,7 @@ export function Dashboard() {
 
                     <>
                           Every submission is reviewed by the Estate Owner before
-                          it can appear in public search — members and agents
+                          it can appear in public search. Members and agents
                           cannot self-publish.
                         </>
                     }

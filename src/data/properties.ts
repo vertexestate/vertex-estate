@@ -9,7 +9,7 @@ export const agents: Agent[] = [
     phone: '+92 321 5550142',
     email: 'ayesha.malik@vertexestate.com',
     rating: 4.9,
-    specialization: 'DHA & Bahria — Lahore',
+    specialization: 'DHA and CDA. Lahore',
   },
   {
     id: '2',
@@ -19,7 +19,7 @@ export const agents: Agent[] = [
     phone: '+92 300 5550198',
     email: 'hassan.raza@vertexestate.com',
     rating: 4.8,
-    specialization: 'Commercial — Karachi & Islamabad',
+    specialization: 'Commercial in Karachi and Islamabad',
   },
   {
     id: '3',
@@ -29,18 +29,18 @@ export const agents: Agent[] = [
     phone: '+92 333 5550271',
     email: 'sara.khan@vertexestate.com',
     rating: 5.0,
-    specialization: 'Luxury villas & farmhouses',
+    specialization: 'Luxury villas and farmhouses',
   },
 ];
 
 export const properties: Property[] = [
   {
     id: '1',
-    title: 'Bahria Town Karachi — Iconic corner villa',
+    title: 'DHA Phase 8 Karachi: iconic corner villa',
     price: 85000000,
     priceCurrency: 'PKR',
     location: {
-      address: 'Precinct 15, near theme park',
+      address: 'Phase 8, near Clifton belt',
       city: 'Karachi',
       state: 'Sindh',
       country: 'Pakistan',
@@ -62,7 +62,7 @@ export const properties: Property[] = [
       'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1200&h=800&fit=crop&q=82',
     ],
     description:
-      'Statement Bahria Town Karachi villa with double-height lounge, cinema, and temperature-controlled pool deck. Gated precinct living with boulevard frontage — ideal for multigenerational families who want resort amenities at home.',
+      'Statement DHA Phase 8 Karachi villa with double-height lounge, cinema, and temperature-controlled pool deck. Gated defence living with boulevard frontage. ideal for multigenerational families who want resort amenities at home.',
     features: [
       'Swimming pool',
       'Home theatre',
@@ -78,7 +78,7 @@ export const properties: Property[] = [
   },
   {
     id: '2',
-    title: 'DHA Phase 6 Lahore — Sky residence',
+    title: 'DHA Phase 6 Lahore. Sky residence',
     price: 120000000,
     priceCurrency: 'PKR',
     location: {
@@ -103,7 +103,7 @@ export const properties: Property[] = [
       'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&h=800&fit=crop&q=82',
     ],
     description:
-      'Rare full-floor penthouse overlooking DHA Phase 6 greens. Private lift lobby, wraparound terraces, and concierge-grade finishes — the Lahore skyline as your daily backdrop.',
+      'Rare full-floor penthouse overlooking DHA Phase 6 greens. Private lift lobby, wraparound terraces, and concierge-grade finishes. the Lahore skyline as your daily backdrop.',
     features: [
       'Private lift lobby',
       '360° terraces',
@@ -118,7 +118,7 @@ export const properties: Property[] = [
   },
   {
     id: '3',
-    title: 'Islamabad F-7 — Diplomatic enclave estate',
+    title: 'Islamabad F-7. Diplomatic enclave estate',
     price: 155000000,
     priceCurrency: 'PKR',
     location: {
@@ -159,7 +159,7 @@ export const properties: Property[] = [
   },
   {
     id: '4',
-    title: 'DHA Phase 8 — Sea-facing apartment',
+    title: 'DHA Phase 8. Sea-facing apartment',
     price: 42000000,
     priceCurrency: 'PKR',
     location: {
@@ -191,7 +191,7 @@ export const properties: Property[] = [
   },
   {
     id: '5',
-    title: 'Gulberg III — Designer loft',
+    title: 'Gulberg III. Designer loft',
     price: 385000,
     priceCurrency: 'PKR',
     location: {
@@ -215,7 +215,7 @@ export const properties: Property[] = [
       'https://images.unsplash.com/photo-1536376072261-38c75010e6c9?w=1200&h=800&fit=crop&q=82',
     ],
     description:
-      'Executive loft above Gulberg’s retail pulse — floor-to-ceiling glazing, chef kitchen, and blackout bedroom suite for consultants on rotation.',
+      'Executive loft above Gulberg’s retail pulse. floor-to-ceiling glazing, chef kitchen, and blackout bedroom suite for consultants on rotation.',
     features: ['City views', 'High ceilings', 'In-unit laundry', 'Fiber-ready'],
     agent: agents[1],
     featured: false,
@@ -223,7 +223,7 @@ export const properties: Property[] = [
   },
   {
     id: '6',
-    title: 'Blue Area — Grade-A office plate',
+    title: 'Blue Area. Grade-A office plate',
     price: 68000000,
     priceCurrency: 'PKR',
     location: {
@@ -247,7 +247,7 @@ export const properties: Property[] = [
       'https://images.unsplash.com/photo-1497215842964-222b430dc094?w=1200&h=800&fit=crop&q=82',
     ],
     description:
-      'Blue Area tower plate with LEED-inspired HVAC, executive washrooms, and dedicated lift bank — built for banks, embassies, and tech HQs expanding in the capital.',
+      'Blue Area tower plate with LEED-inspired HVAC, executive washrooms, and dedicated lift bank. built for banks, embassies, and tech HQs expanding in the capital.',
     features: [
       'Raised flooring',
       'Dedicated lifts',
@@ -261,13 +261,13 @@ export const properties: Property[] = [
   },
   {
     id: '7',
-    title: 'Bahria Orchard — Family home',
+    title: 'CDA Sector. Family home',
     price: 28500000,
     priceCurrency: 'PKR',
     location: {
-      address: 'Phase 2 extension',
-      city: 'Lahore',
-      state: 'Punjab',
+      address: 'Sector F-8 / G-11 belt',
+      city: 'Islamabad',
+      state: 'ICT',
       country: 'Pakistan',
       lat: 31.3781,
       lng: 74.2,
@@ -286,7 +286,7 @@ export const properties: Property[] = [
       'https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=1200&h=800&fit=crop&q=82',
     ],
     description:
-      'Bahria Orchard corner with lawn, driver quarters, and solar-ready roof — quiet cul-de-sac minutes from Ring Road access.',
+      'CDA-sector corner plot with lawn, driver quarters, and solar-ready roof. quiet cul-de-sac minutes from Margalla access.',
     features: ['Lawn', 'Solar-ready', 'Corner plot', 'CCTV pre-wired'],
     agent: agents[0],
     featured: false,
@@ -294,7 +294,7 @@ export const properties: Property[] = [
   },
   {
     id: '8',
-    title: 'Clifton Block 4 — Furnished rental',
+    title: 'Clifton Block 4. Furnished rental',
     price: 950000,
     priceCurrency: 'PKR',
     location: {
@@ -318,7 +318,7 @@ export const properties: Property[] = [
       'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200&h=800&fit=crop&q=82',
     ],
     description:
-      'Fully furnished Clifton rental with sea-facing deck, blackout drapes, and white-glove handover — ideal for expat postings.',
+      'Fully furnished Clifton rental with sea-facing deck, blackout drapes, and white-glove handover. ideal for expat postings.',
     features: ['Furnished', 'Sea-facing deck', 'Backup', 'Concierge'],
     agent: agents[2],
     featured: false,
@@ -330,17 +330,17 @@ export const testimonials: Testimonial[] = [
   {
     id: '1',
     name: 'Fatima Noor',
-    role: 'Buyer — DHA Lahore',
+    role: 'Buyer. DHA Lahore',
     photo:
       'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop',
     quote:
-      'Vertex helped us compare Phase 6 vs Bahria Orchard with real data — not brochure fluff. We closed on a corner villa in six weeks.',
+      'Vertex helped us compare DHA Phase 6 vs CDA sectors with real data. not brochure fluff. We closed on a corner villa in six weeks.',
     rating: 5,
   },
   {
     id: '2',
     name: 'Omar Siddiqui',
-    role: 'Investor — Karachi',
+    role: 'Investor. Karachi',
     photo:
       'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
     quote:
@@ -350,7 +350,7 @@ export const testimonials: Testimonial[] = [
   {
     id: '3',
     name: 'Zainab Hussain',
-    role: 'First-time buyer — Islamabad',
+    role: 'First-time buyer. Islamabad',
     photo:
       'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop',
     quote:
@@ -360,11 +360,11 @@ export const testimonials: Testimonial[] = [
   {
     id: '4',
     name: 'Bilal Ahmed',
-    role: 'Founder — Logistics',
+    role: 'Founder. Logistics',
     photo:
       'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop',
     quote:
-      'We leased Blue Area offices through Vertex — fast legal coordination and a landlord who actually maintained the building.',
+      'We leased Blue Area offices through Vertex. fast legal coordination and a landlord who actually maintained the building.',
     rating: 5,
   },
 ];
@@ -373,10 +373,10 @@ export const teamMembers: TeamMember[] = [
   {
     id: '1',
     name: 'Alexandra Sterling',
-    role: 'CEO & Founder',
+    role: 'CEO and Founder',
     photo:
       'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&h=600&fit=crop',
-    bio: 'Alexandra founded Vertex Estate after two decades advising HNW families across DHA, Bahria, and diplomatic belts in Pakistan’s major metros.',
+    bio: 'Alexandra founded Vertex Estate after two decades advising HNW families across DHA, CDA, and diplomatic belts in Pakistan’s major metros.',
     email: 'alexandra@vertexestate.com',
     linkedin: '#',
     twitter: '#',
@@ -387,7 +387,7 @@ export const teamMembers: TeamMember[] = [
     role: 'Chief Technology Officer',
     photo:
       'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&h=600&fit=crop',
-    bio: 'Marcus leads the platform vision — from verified listings to immersive virtual tours built for busy buyers in Lahore, Karachi, and Islamabad.',
+    bio: 'Marcus leads the platform vision. from verified listings to immersive virtual tours built for busy buyers in Lahore, Karachi, and Islamabad.',
     email: 'marcus@vertexestate.com',
     linkedin: '#',
   },
@@ -397,7 +397,7 @@ export const teamMembers: TeamMember[] = [
     role: 'Head of Luxury Division',
     photo:
       'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=600&h=600&fit=crop',
-    bio: 'Sophia curates trophy homes and farmhouses, with a portfolio spanning Bahria Town, DHA waterfront, and Islamabad’s F-sectors.',
+    bio: 'Sophia curates trophy homes and farmhouses, with a portfolio spanning DHA, CDA sectors, and Islamabad’s F-sectors.',
     email: 'sophia@vertexestate.com',
     linkedin: '#',
     twitter: '#',
@@ -408,7 +408,7 @@ export const teamMembers: TeamMember[] = [
     role: 'Director of Operations',
     photo:
       'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=600&h=600&fit=crop',
-    bio: 'James orchestrates inspections, documentation, and handovers so every transaction feels calm — even at nine-figure PKR ticket sizes.',
+    bio: 'James orchestrates inspections, documentation, and handovers so every transaction feels calm. even at nine-figure PKR ticket sizes.',
     email: 'james@vertexestate.com',
     linkedin: '#',
   },
@@ -418,7 +418,7 @@ export const teamMembers: TeamMember[] = [
     role: 'Head of Marketing',
     photo:
       'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=600&h=600&fit=crop',
-    bio: 'Emma tells the stories behind each precinct — the boulevards, schools, and sunset views that make a house a home.',
+    bio: 'Emma tells the stories behind each precinct. the boulevards, schools, and sunset views that make a house a home.',
     email: 'emma@vertexestate.com',
     twitter: '#',
   },

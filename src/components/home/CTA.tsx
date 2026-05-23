@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { ArrowRightIcon, SparklesIcon } from 'lucide-react';
 import { Button } from '../ui/Button';
+import { WhatsAppContactButton } from '../ui/WhatsAppContactButton';
 import { useNavigate } from 'react-router-dom';
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
 
@@ -54,27 +55,25 @@ export function CTA() {
             Find your next chapter
           </h2>
           <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-navy-100/95 sm:text-lg">
-            Browse curated listings or speak with our team — Vertex Estate pairs
-            craft with clarity so every move feels considered.
+            Browse listings or say hello on WhatsApp. We help you compare plots, book visits,
+            and move forward at your pace.
           </p>
-          <div className="mt-10 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center sm:gap-4">
+          <div className="mt-10 flex w-full max-w-md flex-col items-stretch justify-center gap-3 sm:mx-auto sm:max-w-none sm:flex-row sm:items-center sm:gap-4">
             <Button
               variant="primary"
               size="lg"
-              className="shadow-lg shadow-gold-500/25"
+              className="w-full sm:w-auto"
               onClick={() => navigate('/listings')}
             >
               Browse properties
-              <ArrowRightIcon className="ml-2 h-5 w-5" aria-hidden />
+              <ArrowRightIcon className="h-5 w-5" aria-hidden />
             </Button>
-            <Button
-              variant="secondary"
+            <WhatsAppContactButton
               size="lg"
-              className="border-cream/40 text-cream hover:bg-white/10 hover:text-cream"
-              onClick={() => navigate('/contact')}
-            >
-              Contact us
-            </Button>
+              variant="solid"
+              label="Chat on WhatsApp"
+              className="w-full sm:w-auto"
+            />
           </div>
         </motion.div>
       </div>

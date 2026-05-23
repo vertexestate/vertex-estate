@@ -49,7 +49,7 @@ function buildJsonLd() {
     '@type': 'WebSite',
     '@id': `${origin}/#website`,
     url: origin,
-    name: `${seoConfig.siteName} — ${seoConfig.officialDomain}`,
+    name: `${seoConfig.siteName} (${seoConfig.officialDomain})`,
     alternateName: seoConfig.officialDomain,
     description: seoConfig.defaultDescription,
     publisher: { '@id': `${origin}/#organization` },

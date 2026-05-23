@@ -32,16 +32,6 @@ interface FormState {
   features: string;
   images: string[];
 }
-const SAMPLE_IMAGES = [
-'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1200&h=800&fit=crop',
-'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&h=800&fit=crop',
-'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200&h=800&fit=crop',
-'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&h=800&fit=crop',
-'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&h=800&fit=crop',
-'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1200&h=800&fit=crop',
-'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&h=800&fit=crop',
-'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&h=800&fit=crop'];
-
 const initial: FormState = {
   title: '',
   type: 'buy',
@@ -95,11 +85,6 @@ export function UploadPropertyForm({
       };
       reader.readAsDataURL(file);
     });
-  };
-  const addSampleImage = (url: string) => {
-    if (!data.images.includes(url)) {
-      update('images', [...data.images, url]);
-    }
   };
   const removeImage = (idx: number) => {
     update(
@@ -186,14 +171,14 @@ export function UploadPropertyForm({
           {isEstateOwner ?
           <>
                 Your property is in <strong>Pending Review</strong>. It now
-                appears in your <strong>Owner view</strong> queue — open{' '}
+                appears in your <strong>Owner view</strong> queue. Open{' '}
                 <strong>Pending Review</strong> there and tap <strong>Approve</strong>{' '}
                 when you are ready to publish it publicly.
               </> :
 
           <>
                 Your property is in <strong>Pending Review</strong>. The Vertex
-                Estate Owner personally approves every listing — nothing is
+                Estate Owner personally approves every listing. Nothing is
                 published until then.
               </>
           }
@@ -481,29 +466,6 @@ export function UploadPropertyForm({
                 </p>
               </label>
 
-              {/* Sample images for demo */}
-              <div>
-                <p className="text-xs text-navy-500 dark:text-navy-400 mb-2 uppercase tracking-wider font-semibold">
-                  Or pick demo images
-                </p>
-                <div className="grid grid-cols-4 gap-2">
-                  {SAMPLE_IMAGES.map((url) =>
-                <button
-                  key={url}
-                  type="button"
-                  onClick={() => addSampleImage(url)}
-                  className={`relative h-16 rounded-lg overflow-hidden border-2 transition-all ${data.images.includes(url) ? 'border-gold-500 ring-2 ring-gold-500/30' : 'border-transparent hover:border-gold-500/50'}`}>
-                  
-                      <img
-                    src={url}
-                    alt=""
-                    className="w-full h-full object-cover" />
-                  
-                    </button>
-                )}
-                </div>
-              </div>
-
               {data.images.length > 0 &&
             <div>
                   <p className="text-xs text-navy-500 dark:text-navy-400 mb-2 uppercase tracking-wider font-semibold">
@@ -550,7 +512,7 @@ export function UploadPropertyForm({
             },
             {
               l: 'Type',
-              v: `${data.type} · ${data.category}`
+              v: `${data.type}, ${data.category}`
             },
             {
               l: 'Price',
@@ -562,7 +524,7 @@ export function UploadPropertyForm({
             },
             {
               l: 'Specs',
-              v: `${data.bedrooms} BR · ${data.bathrooms} BA · ${data.sqft} sqft`
+              v: `${data.bedrooms} BR, ${data.bathrooms} BA, ${data.sqft} sqft`
             },
             {
               l: 'Images',

@@ -34,7 +34,7 @@ const DEFAULT_SLIDES = ['Join the waitlist for an exclusive launch discount'] as
 export function ComingSoonPromoSlider({ slides }: ComingSoonPromoSliderProps) {
   const items = slides.length > 0 ? slides : DEFAULT_SLIDES;
   const half = useMemo(() => buildMarqueeHalf(items), [slides]);
-  const label = items.join(' · ');
+  const label = items.join(', ');
 
   const trackRef = useRef<HTMLDivElement>(null);
   const offsetRef = useRef(0);

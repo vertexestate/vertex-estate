@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { AnimatedCounter } from '../ui/AnimatedCounter';
 import { HomeIcon, MapPinIcon, UsersIcon, AwardIcon } from 'lucide-react';
 import { fetchJson } from '../../lib/fetchJson';
+import { siteConfig } from '../../config/siteConfig';
 import type { SiteStatsFile } from '../../types/siteFiles';
 
 const list = {
@@ -60,7 +61,9 @@ const defaultStats: StatRow[] = [
 ];
 
 export function Stats() {
-  const [stats, setStats] = useState<StatRow[]>(defaultStats);
+  const [stats, setStats] = useState<StatRow[]>(() =>
+    siteConfig.includeSeedProperties ? defaultStats : []
+  );
 
   useEffect(() => {
     fetchJson<SiteStatsFile>('/site/stats.json').then((file) => {
@@ -74,6 +77,8 @@ export function Stats() {
       setStats(next);
     });
   }, []);
+
+  if (stats.length === 0) return null;
 
   return (
     <motion.div
@@ -98,7 +103,7 @@ export function Stats() {
           <div className="relative font-display text-3xl font-bold tabular-nums text-navy-900 dark:text-cream sm:text-4xl md:text-5xl">
             <AnimatedCounter end={stat.value} suffix={stat.suffix} />
           </div>
-          <p className="relative mt-2 text-xs font-semibold uppercase tracking-wider text-navy-500 dark:text-navy-400 sm:text-sm">
+          <p className="relative mt-2 text-xs font-semibold uppercase tracking-wider text-navy-500 dark:text-cream/65 sm:text-sm">
             {stat.label}
           </p>
         </motion.div>

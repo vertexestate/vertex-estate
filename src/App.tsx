@@ -18,6 +18,7 @@ import { Listings } from './pages/Listings';
 import { PropertyDetails } from './pages/PropertyDetails';
 import { About } from './pages/About';
 import { Contact } from './pages/Contact';
+import { MargallaOrchards } from './pages/MargallaOrchards';
 import { Dashboard } from './pages/Dashboard';
 import { EstateOwnerView } from './pages/EstateOwnerView';
 import { siteConfig } from './config/siteConfig';
@@ -72,6 +73,14 @@ function AnimatedRoutes() {
           element={
           <PageTransition>
               <About />
+            </PageTransition>
+          } />
+
+        <Route
+          path="/dha-margalla-orchards"
+          element={
+          <PageTransition>
+              <MargallaOrchards />
             </PageTransition>
           } />
         
@@ -145,7 +154,7 @@ export function App() {
               {isLoading && !comingSoonActive && (
                 <LoadingScreen onComplete={() => setIsLoading(false)} />
               )}
-              <div className="relative min-h-screen bg-cream dark:bg-navy-900 transition-colors duration-200">
+              <div className="relative min-h-screen bg-cream text-navy-900 transition-colors duration-200 dark:bg-navy-900 dark:text-cream">
                 <ParticlesBackground />
                 <div className="relative z-10">
                   <Navbar />

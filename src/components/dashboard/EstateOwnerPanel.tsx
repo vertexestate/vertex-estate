@@ -80,11 +80,11 @@ function MongoConnectionBanner() {
             <p className="font-semibold text-navy-900 dark:text-cream">MongoDB connected</p>
             <p className="mt-0.5 text-xs leading-relaxed text-navy-600 dark:text-navy-300">
               Database <span className="font-mono text-navy-800 dark:text-cream">{health.db}</span>
-              {' · '}
+              {', '}
               leads: <span className="font-mono">{health.leadsCollection}</span>
               {typeof health.launchWaitlistCount === 'number' ? (
                 <>
-                  {' · '}
+                  {', '}
                   coming-soon signups in MongoDB:{' '}
                   <span className="font-semibold text-navy-900 dark:text-cream">
                     {health.launchWaitlistCount}
@@ -112,7 +112,7 @@ function MongoConnectionBanner() {
         <p className="mt-1 text-xs leading-relaxed text-navy-700 dark:text-navy-300">
           {health.error ||
             'Set MONGODB_URI in the project `.env`, run `npm run dev` (starts Vite + API), and ensure the API port matches your proxy.'}{' '}
-          Waitlist and contact forms only reach MongoDB when the API returns HTTP 201 — otherwise they
+          Waitlist and contact forms only reach MongoDB when the API returns HTTP 201. Otherwise they
           are queued in <span className="font-mono">localStorage</span> key{' '}
           <span className="font-mono">vertex-lead-queue</span>.
         </p>
@@ -254,9 +254,8 @@ export function EstateOwnerPanel() {
                 No properties are waiting for your review.
               </p>
               <p className="text-xs text-navy-500 dark:text-navy-400 max-w-lg mx-auto mt-3 leading-relaxed">
-                In this demo, listings are saved in this browser only. If you
-                just submitted one from <strong>List Property</strong>, open{' '}
-                <strong>Pending Review</strong> here again — or use{' '}
+                If you just submitted from <strong>List Property</strong>, open{' '}
+                <strong>Pending Review</strong> again, or use{' '}
                 <strong>Open review queue</strong> on the confirmation screen.
               </p>
               <Button
@@ -289,15 +288,15 @@ export function EstateOwnerPanel() {
                     {p.title}
                   </h3>
                   <p className="text-sm text-navy-600 dark:text-navy-400">
-                    {p.location.city}, {p.location.state} · {p.category}
+                    {p.location.city}, {p.location.state}, {p.category}
                   </p>
                   <p className="text-gold-500 font-bold mt-1">
                     ${p.price.toLocaleString()}
                     {p.type === 'rent' ? '/mo' : ''}
                   </p>
                   <p className="text-xs text-navy-500 dark:text-navy-400 mt-1">
-                    {p.bedrooms} BR · {p.bathrooms} BA ·{' '}
-                    {p.sqft.toLocaleString()} sqft · Pending Review
+                    {p.bedrooms} BR, {p.bathrooms} BA,{' '}
+                    {p.sqft.toLocaleString()} sqft, Pending Review
                   </p>
                 </div>
                 <div className="flex sm:flex-col gap-2 sm:w-36">
@@ -343,7 +342,7 @@ export function EstateOwnerPanel() {
                   {p.title}
                 </p>
                 <p className="text-xs text-navy-500 dark:text-navy-400">
-                  {p.location.city} · ${p.price.toLocaleString()}
+                  {p.location.city}, ${p.price.toLocaleString()}
                 </p>
               </div>
               <span
@@ -461,7 +460,7 @@ export function EstateOwnerPanel() {
               { label: 'Platform-verified', value: verifiedMembers },
               {
                 label: 'Coming soon signups',
-                value: launchSignupCount ?? '—',
+                value: launchSignupCount ?? '0',
                 hint:
                   launchSignupCount === null
                     ? 'Connect MongoDB and open the site with the API running to load this count.'
@@ -489,7 +488,7 @@ export function EstateOwnerPanel() {
           <div className="col-span-2 md:col-span-3 p-4 rounded-xl bg-gold-500/10 border border-gold-500/25 text-sm text-navy-700 dark:text-cream">
             You are the only role that can publish listings, verify accounts, or
             remove content. Members and agents always submit to{' '}
-            <strong>Pending Review</strong> first — nothing goes public without
+            <strong>Pending Review</strong> first. Nothing goes public without
             your approval.
           </div>
         </div>

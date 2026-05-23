@@ -18,7 +18,7 @@ export function EstateOwnerView() {
 
   if (!isAuthenticated || !user) {
     return (
-      <div className="min-h-screen bg-cream dark:bg-navy-900 pt-24 pb-20 flex items-center justify-center px-4">
+      <div className="flex min-h-screen items-center justify-center bg-cream px-4 pt-page pb-page dark:bg-navy-900">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -43,7 +43,7 @@ export function EstateOwnerView() {
 
   if (!isEstateOwner) {
     return (
-      <div className="min-h-screen bg-cream dark:bg-navy-900 pt-24 pb-20 flex items-center justify-center px-4">
+      <div className="flex min-h-screen items-center justify-center bg-cream px-4 pt-page pb-page dark:bg-navy-900">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -65,7 +65,7 @@ export function EstateOwnerView() {
   }
 
   return (
-    <div className="min-h-screen bg-cream dark:bg-navy-900 pt-24 pb-20">
+    <div className="min-h-screen bg-cream pt-page pb-page dark:bg-navy-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 16 }}

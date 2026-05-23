@@ -1,12 +1,19 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <script>
+      (function () {
+        var t = localStorage.getItem('theme');
+        if (t === 'light') document.documentElement.classList.remove('dark');
+        else document.documentElement.classList.add('dark');
+      })();
+    </script>
     <meta charset="UTF-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1, viewport-fit=cover"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5"
     />
-    <title>Vertex Estate — Official Website | vertexestatepvt.com | Islamabad</title>
+    <title>Vertex Estate | Official website | vertexestatepvt.com | Islamabad</title>
     <meta
       name="description"
       content="Vertex Estate official website (vertexestatepvt.com). Premium real estate in F-7 Markaz, Islamabad, Pakistan. Join the launch waitlist."
@@ -24,7 +31,7 @@
     <meta property="og:site_name" content="Vertex Estate" />
     <meta
       property="og:title"
-      content="Vertex Estate — Official Website | vertexestatepvt.com"
+      content="Vertex Estate | Official website | vertexestatepvt.com"
     />
     <meta
       property="og:description"
@@ -40,7 +47,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="twitter:title"
-      content="Vertex Estate — Premium Real Estate in Islamabad, Pakistan"
+      content="Vertex Estate | Premium real estate in Islamabad, Pakistan"
     />
     <meta
       name="twitter:description"

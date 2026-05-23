@@ -12,7 +12,8 @@ import {
 } from 'lucide-react';
 import { properties } from '../../data/properties';
 import { Button } from '../ui/Button';
-import { formatPropertyPrice } from '../../lib/formatPropertyPrice';
+import { WhatsAppContactButton } from '../ui/WhatsAppContactButton';
+import { whatsAppMessageForProperty } from '../../lib/whatsapp';
 export function DealOfTheDay() {
   const navigate = useNavigate();
   const luxuryDeals = properties.filter(
@@ -87,7 +88,7 @@ export function DealOfTheDay() {
 
       <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-0">
         {/* Image side */}
-        <div className="relative h-80 lg:h-auto overflow-hidden">
+        <div className="relative h-56 overflow-hidden sm:h-72 lg:h-auto">
           <AnimatePresence mode="wait">
             <motion.img
               key={deal.id}
@@ -121,7 +122,7 @@ export function DealOfTheDay() {
         </div>
 
         {/* Content side */}
-        <div className="relative flex flex-col justify-center border-t border-white/10 bg-gradient-to-br from-white/[0.07] via-transparent to-navy-900/40 p-8 backdrop-blur-md sm:p-10 lg:border-l lg:border-t-0 lg:p-12">
+        <div className="relative flex flex-col justify-center border-t border-white/10 bg-gradient-to-br from-white/[0.07] via-transparent to-navy-900/40 p-5 backdrop-blur-md sm:p-10 lg:border-l lg:border-t-0 lg:p-12">
           <AnimatePresence mode="wait">
             <motion.div
               key={deal.id}
@@ -142,9 +143,9 @@ export function DealOfTheDay() {
               }}>
               
               <p className="text-gold-500 text-sm uppercase tracking-[0.2em] mb-3 font-semibold">
-                Featured Luxury · Limited Time
+                Featured luxury, limited time
               </p>
-              <h3 className="text-3xl md:text-4xl font-display font-bold text-cream mb-3">
+              <h3 className="mb-3 font-display text-2xl font-bold leading-tight text-cream sm:text-3xl md:text-4xl">
                 {deal.title}
               </h3>
               <div className="flex items-center text-navy-200 mb-6">
@@ -170,12 +171,18 @@ export function DealOfTheDay() {
               </div>
 
               <div className="mb-6">
-                <p className="text-navy-300 text-xs uppercase tracking-wider mb-1">
-                  Exclusive Price
+                <p className="text-navy-300 text-xs uppercase tracking-wider mb-2">
+                  Interested in this home?
                 </p>
-                <p className="text-4xl md:text-5xl font-display font-bold text-gold-500">
-                  {formatPropertyPrice(deal)}
+                <p className="text-cream/90 text-sm leading-relaxed mb-4">
+                  Message our team on WhatsApp for photos, availability, and a friendly quote.
                 </p>
+                <WhatsAppContactButton
+                  message={whatsAppMessageForProperty(deal.title)}
+                  label="Chat on WhatsApp"
+                  size="lg"
+                  className="w-full sm:w-auto"
+                />
               </div>
             </motion.div>
           </AnimatePresence>

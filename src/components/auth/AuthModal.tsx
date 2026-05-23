@@ -15,6 +15,7 @@ import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { OTPInput } from './OTPInput';
 import { useAuth } from '../../context/AuthContext';
+import { siteConfig } from '../../config/siteConfig';
 type AuthMode = 'login' | 'signup';
 type AuthMethod = 'email' | 'whatsapp';
 export function AuthModal() {
@@ -105,6 +106,11 @@ export function AuthModal() {
       return;
     }
     const generated = startSignup(form);
+    if (generated === 'DUPLICATE') {
+      setError('An account with this email already exists. Try signing in.');
+      return;
+    }
+    if (!siteConfig.authDemoMode) return;
     setDemoCode(generated);
     setResendTimer(30);
   };
@@ -116,6 +122,12 @@ export function AuthModal() {
       return;
     }
     const generated = startWhatsAppLogin(form.phone);
+    if (!siteConfig.authDemoMode) {
+      setError(
+        'WhatsApp sign-in is not enabled yet. Use email and password, or message us on WhatsApp from the Contact page.'
+      );
+      return;
+    }
     setDemoCode(generated);
     setResendTimer(30);
   };
@@ -157,7 +169,7 @@ export function AuthModal() {
           onClick={handleClose}
           className="fixed inset-0 bg-navy-900/70 backdrop-blur-md z-[70]" />
         
-          <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 pointer-events-none">
+          <div className="fixed inset-0 z-[70] flex items-end justify-center p-3 pb-[max(0.75rem,env(safe-area-inset-bottom,0px))] pointer-events-none sm:items-center sm:p-4">
             <motion.div
             initial={{
               opacity: 0,
@@ -179,7 +191,7 @@ export function AuthModal() {
               stiffness: 300,
               damping: 30
             }}
-            className="relative w-full max-w-md bg-white dark:bg-navy-800 rounded-3xl shadow-2xl border border-gold-500/20 pointer-events-auto max-h-[90vh] overflow-y-auto">
+            className="relative pointer-events-auto max-h-[min(92dvh,640px)] w-full max-w-md overflow-y-auto overscroll-contain rounded-2xl border border-gold-500/20 bg-white shadow-2xl dark:bg-navy-800 sm:max-h-[90vh] sm:rounded-3xl">
             
               <button
               onClick={handleClose}
@@ -250,8 +262,15 @@ export function AuthModal() {
                         </p>
                       </div>
 
-                      {/* Demo code helper */}
-                      {demoCode &&
+                      {!siteConfig.authDemoMode && (
+                        <p className="mb-5 rounded-xl border border-navy-200/80 bg-navy-50/80 px-4 py-3 text-center text-sm text-navy-600 dark:border-navy-600 dark:bg-navy-800/50 dark:text-navy-300">
+                          Enter the verification code we sent to your{' '}
+                          {pendingVerification.type === 'email' ? 'email' : 'WhatsApp'}.
+                        </p>
+                      )}
+
+                      {/* Demo code helper — dev only */}
+                      {siteConfig.authDemoMode && demoCode && (
                   <motion.div
                     initial={{
                       opacity: 0,
@@ -276,7 +295,7 @@ export function AuthModal() {
                             {demoCode}
                           </p>
                         </motion.div>
-                  }
+                      )}
 
                       <OTPInput
                     value={code}

@@ -67,7 +67,7 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
   useEffect(() => {
     if (!cd.isExpired) {
       applyPageSeo({
-        title: buildPageTitle(`Official Website — ${seoConfig.officialDomain}`),
+        title: buildPageTitle(`Official website | ${seoConfig.officialDomain}`),
         description: seoConfig.defaultDescription,
         keywords: seoConfig.defaultKeywords,
         path: '/',
@@ -89,8 +89,9 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
     document.body.style.overflow = 'hidden';
     document.body.style.overflowX = 'hidden';
     document.documentElement.style.overflowX = 'hidden';
-    const base = siteConfig.documentTitle.split('—')[0]?.trim() || siteConfig.siteName;
-    document.title = `${base} — Opening soon`;
+    const base =
+      siteConfig.documentTitle.split(/\s*[|—]\s*/)[0]?.trim() || siteConfig.siteName;
+    document.title = `${base} | Opening soon`;
     return () => {
       document.body.style.overflow = prevOverflow;
       document.body.style.overflowX = prevOverflowX;
@@ -189,7 +190,7 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
           className="mt-4 max-w-xl px-0.5 text-sm leading-relaxed text-navy-200/95 text-pretty sm:mt-6 sm:text-base md:text-lg"
         >
           <strong>Vertex Estate</strong> is launching a new experience at{' '}
-          <strong>{seoConfig.officialDomain}</strong> — premium homes and commercial property in{' '}
+          <strong>{seoConfig.officialDomain}</strong>, premium homes and commercial property in{' '}
           {siteConfig.comingSoonLocationLine}, Islamabad (Chaudhry Plaza, F-7 Markaz). Curated
           listings, sharper tools, and the same trust you expect across Pakistan. Join the waitlist
           below for early access and launch discounts.
@@ -253,7 +254,7 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
                 </span>
               </div>
               <iframe
-                title={`${siteConfig.vertexOfficeMapLabel} — ${siteConfig.vertexOfficeAddress}`}
+                title={`${siteConfig.vertexOfficeMapLabel}, ${siteConfig.vertexOfficeAddress}`}
                 src={siteConfig.comingSoonMapEmbedUrl}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
@@ -297,14 +298,14 @@ export function ComingSoonOverlay({ targetMs }: ComingSoonOverlayProps) {
                 <p>
                   {import.meta.env.DEV ? (
                     <>
-                      You are on the list in this browser only — the API was not reached. For local
+                      You are on the list in this browser only. The API was not reached. For local
                       dev, run <span className="font-mono">npm run dev</span> (starts Vite + Node) and
                       set <span className="font-mono">MONGODB_URI</span> in <span className="font-mono">.env</span>.
                       Queued data: <span className="font-mono">vertex-lead-queue</span> in localStorage.
                     </>
                   ) : (
                     <>
-                      You are on the list in this browser only — the live site did not reach the API.
+                      You are on the list in this browser only. The live site did not reach the API.
                       Configure your host to forward <span className="font-mono">/api</span> to your Node
                       server (same origin), or rebuild with{' '}
                       <span className="font-mono">VITE_API_BASE_URL=https://your-api-host</span> pointing at

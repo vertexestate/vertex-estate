@@ -17,11 +17,11 @@ export const seoConfig = {
   locale: (import.meta.env.VITE_SITE_LOCALE || 'en_PK').trim(),
   defaultTitle:
     (import.meta.env.VITE_SEO_DEFAULT_TITLE || '').trim() ||
-    'Vertex Estate — Official Website | vertexestatepvt.com | Islamabad',
+    'Vertex Estate | Official website | vertexestatepvt.com | Islamabad',
   titleSuffix: ' | Vertex Estate',
   defaultDescription:
     (import.meta.env.VITE_SEO_DEFAULT_DESCRIPTION || '').trim() ||
-    'Vertex Estate — official website (vertexestatepvt.com). Premium real estate in F-7 Markaz, Islamabad, Pakistan. Houses, apartments, and commercial property. Join the launch waitlist.',
+    'Vertex Estate official website (vertexestatepvt.com). Premium real estate in F-7 Markaz, Islamabad, Pakistan. Houses, apartments, and commercial property. Join the launch waitlist.',
   defaultKeywords:
     (import.meta.env.VITE_SEO_KEYWORDS || '').trim() ||
     'Vertex Estate, vertexestatepvt.com, Vertex Estate Islamabad, Vertex Estate F-7 Markaz, real estate Pakistan, property Islamabad, Chaudhry Plaza F-7',
@@ -78,14 +78,14 @@ export const staticRouteSeo: Record<
   { title: string; description: string; keywords?: string }
 > = {
   '/': {
-    title: 'Official Website — vertexestatepvt.com — F-7 Markaz Islamabad',
+    title: 'Official website | vertexestatepvt.com | F-7 Markaz Islamabad',
     description:
-      'Vertex Estate official site at vertexestatepvt.com. Premium property in F-7 Markaz, Islamabad (Chaudhry Plaza). Waitlist for launch — curated listings and exclusive offers.',
+      'Vertex Estate official site at vertexestatepvt.com. Premium property in F-7 Markaz, Islamabad (Chaudhry Plaza). Join the waitlist for curated listings and launch offers.',
     keywords:
       'Vertex Estate, vertexestatepvt.com, Vertex Estate official website, real estate F-7 Islamabad, Vertex Estate Pakistan',
   },
   '/listings': {
-    title: 'Property Listings — Homes & Commercial',
+    title: 'Property listings: homes and commercial',
     description:
       'Browse curated property listings across Islamabad and Pakistan. Filter by type, location, and budget on Vertex Estate.',
     keywords: 'property listings Pakistan, homes for sale, commercial plots Islamabad',
@@ -93,13 +93,20 @@ export const staticRouteSeo: Record<
   '/about': {
     title: 'About Vertex Estate',
     description:
-      'Learn about Vertex Estate — our mission, team, and commitment to premium real estate service in Islamabad and beyond.',
+      'Learn about Vertex Estate, our mission, team, and commitment to premium real estate service in Islamabad and beyond.',
   },
   '/contact': {
-    title: 'Contact Vertex Estate — F-7 Markaz, Islamabad',
+    title: 'Contact Vertex Estate, F-7 Markaz, Islamabad',
     description:
       'Contact Vertex Estate in F-7 Markaz, Islamabad. Call, email, WhatsApp, or visit our office at Chaudhry Plaza for viewings and inquiries.',
     keywords: 'Vertex Estate contact, real estate office F-7 Islamabad',
+  },
+  '/dha-margalla-orchards': {
+    title: 'DHA Margalla Orchards: plots, NOC and location',
+    description:
+      'Guide to DHA Margalla Orchards Islamabad: 10 Marla, 14 Marla, and 1 Kanal plots on Park Road opposite COMSATS. CDA NOC, amenities, master plan, FAQ, and WhatsApp inquiries.',
+    keywords:
+      'DHA Margalla Orchards, Margalla Orchards Islamabad, Park Road plots, DHA housing society',
   },
 };
 

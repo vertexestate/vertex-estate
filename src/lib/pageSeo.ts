@@ -90,9 +90,9 @@ export function propertySeoFromListing(property: {
 }): PageSeoInput {
   const desc =
     property.description?.slice(0, 155) ||
-    `${property.type} in ${property.location} — listed on Vertex Estate, Islamabad. Book a viewing today.`;
+    `${property.type} in ${property.location}, listed on Vertex Estate, Islamabad. Book a viewing today.`;
   return {
-    title: buildPageTitle(`${property.title} — ${property.location}`),
+    title: buildPageTitle(`${property.title} in ${property.location}`),
     description: desc,
     keywords: `${property.title}, ${property.location}, ${property.type}, Vertex Estate, property Pakistan`,
     path: `/property/${property.id}`,

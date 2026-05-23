@@ -17,6 +17,12 @@
   --gold-500: #d4ff3f;
   --gold-600: #b8e628;
   --cream: #eff5f3;
+  --cream-muted: rgba(239, 245, 243, 0.72);
+  --cream-subtle: rgba(239, 245, 243, 0.55);
+}
+
+.dark {
+  color-scheme: dark;
 }
 * {
   margin: 0;
@@ -34,7 +40,28 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   max-width: 100%;
+  color: var(--navy-900);
+  background-color: var(--cream);
 }
+
+.dark body {
+  color: var(--cream);
+  background-color: var(--navy-900);
+}
+
+/* Dark mode: keep Playfair display headings crisp (no faint gradient clip) */
+.dark .font-display {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
@@ -72,4 +99,64 @@ body {
 :focus-visible {
   outline: 2px solid var(--gold-500);
   outline-offset: 2px;
+}
+
+/* --- Mobile / safe-area utilities --- */
+.pt-page {
+  padding-top: calc(4.25rem + env(safe-area-inset-top, 0px));
+}
+@media (min-width: 640px) {
+  .pt-page {
+    padding-top: 7rem;
+  }
+}
+
+.pb-page {
+  padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+}
+
+.scroll-mt-header {
+  scroll-margin-top: calc(4.25rem + env(safe-area-inset-top, 0px));
+}
+@media (min-width: 640px) {
+  .scroll-mt-header {
+    scroll-margin-top: 6rem;
+  }
+}
+
+.inset-fab {
+  right: max(0.75rem, env(safe-area-inset-right, 0px));
+  bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+}
+
+.inset-fab-above-chat {
+  right: max(0.75rem, env(safe-area-inset-right, 0px));
+  bottom: calc(5.25rem + env(safe-area-inset-bottom, 0px));
+}
+@media (min-width: 640px) {
+  .inset-fab-above-chat {
+    bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
+  }
+}
+
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.snap-x-mandatory {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+.snap-start {
+  scroll-snap-align: start;
+}
+
+/* Prevent iOS zoom on small form fields */
+@media (max-width: 639px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
 }

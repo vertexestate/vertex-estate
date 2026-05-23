@@ -1,11 +1,11 @@
 [
   {
     "id": "mongo-seed-1",
-    "title": "Bahria Town Karachi — Iconic corner villa",
+    "title": "DHA Phase 8 Karachi — Iconic corner villa",
     "price": 85000000,
     "priceCurrency": "PKR",
     "location": {
-      "address": "Precinct 15, near theme park",
+      "address": "Phase 8, near Clifton belt",
       "city": "Karachi",
       "state": "Sindh",
       "country": "Pakistan",
@@ -23,7 +23,7 @@
     "images": [
       "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1200&h=800&fit=crop&q=82"
     ],
-    "description": "Statement Bahria Town Karachi villa — MongoDB seed catalog.",
+    "description": "Statement DHA Phase 8 Karachi villa — MongoDB seed catalog.",
     "features": ["Swimming pool", "Smart home", "Security patrolled"],
     "agent": {
       "id": "3",
