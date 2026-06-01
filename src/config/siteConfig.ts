@@ -81,6 +81,9 @@ export const siteConfig = {
   googleAnalyticsId:
     (import.meta.env.VITE_GA_MEASUREMENT_ID || '').trim() || 'G-RS7J0522BQ',
 
+  /** Meta (Facebook) Pixel ID (default live pixel; override with VITE_META_PIXEL_ID). */
+  metaPixelId: (import.meta.env.VITE_META_PIXEL_ID || '').trim() || '962903423250283',
+
   logoUrl: (import.meta.env.VITE_LOGO_URL || '').trim() || '/brand/logo.png',
 
   apiBaseUrl: (import.meta.env.VITE_API_BASE_URL || '').trim()
@@ -100,6 +103,10 @@ export const siteConfig = {
     (import.meta.env.VITE_API_LAUNCH_INTEREST_PATH as string | undefined) ||
     '/leads/launch-interest',
 
+  apiPasswordResetPath:
+    (import.meta.env.VITE_API_PASSWORD_RESET_PATH as string | undefined) ||
+    '/auth/password-reset-code',
+
   mapEmbedUrl:
     (import.meta.env.VITE_MAP_EMBED_URL as string | undefined) || defaultVertexMapsEmbedUrl(),
 
@@ -117,7 +124,7 @@ export const siteConfig = {
     (import.meta.env.VITE_AUTH_DEMO_MODE ?? 'false').toLowerCase() === 'true',
 
   estateOwnerEmail:
-    import.meta.env.VITE_ESTATE_OWNER_EMAIL || 'owner@vertex.estate',
+    import.meta.env.VITE_ESTATE_OWNER_EMAIL || 'vertex9313@gmail.com',
   estateOwnerPhone:
     import.meta.env.VITE_ESTATE_OWNER_PHONE || '+10000000001',
   estateOwnerName:

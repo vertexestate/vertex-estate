@@ -36,8 +36,12 @@ interface ImportMetaEnv {
   readonly VITE_API_NEWSLETTER_PATH?: string;
   /** POST path for coming-soon waitlist. Default /leads/launch-interest */
   readonly VITE_API_LAUNCH_INTEREST_PATH?: string;
+  /** POST path for password reset code emails. Default /auth/password-reset-code */
+  readonly VITE_API_PASSWORD_RESET_PATH?: string;
   /** Google Analytics 4 measurement ID (e.g. G-RS7J0522BQ). Must match index.html if changed. */
   readonly VITE_GA_MEASUREMENT_ID?: string;
+  /** Meta (Facebook) Pixel ID (numeric). Leave unset to disable pixel tracking. */
+  readonly VITE_META_PIXEL_ID?: string;
   /** Google Maps embed URL for contact page iframe */
   readonly VITE_MAP_EMBED_URL?: string;
   /** Full URL returning a JSON array of Property objects (optional CDN or API). */
@@ -88,4 +92,12 @@ interface ImportMeta {
 interface Window {
   dataLayer?: unknown[];
   gtag?: (...args: unknown[]) => void;
+  fbq?: ((...args: unknown[]) => void) & {
+    callMethod?: (...args: unknown[]) => void;
+    queue?: unknown[];
+    push?: (...args: unknown[]) => void;
+    loaded?: boolean;
+    version?: string;
+  };
+  _fbq?: Window['fbq'];
 }

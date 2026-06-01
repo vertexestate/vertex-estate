@@ -13,6 +13,7 @@ import {
   getMailStatus,
   isWaitlistEmailEnabled,
   logMailStartupStatus,
+  sendPasswordResetEmail,
   sendWaitlistEmails,
   verifySmtpConnection,
 } from './mail.js';
@@ -312,6 +313,35 @@ app.post('/leads/newsletter', async (req, res) => {
     console.error('[leads/newsletter]', e);
     return res.status(500).json({
       error: e instanceof Error ? e.message : 'Failed to save',
+    });
+  }
+});
+
+app.post('/auth/password-reset-code', async (req, res) => {
+  try {
+    const b = req.body || {};
+    const email = String(b.email || '').trim().toLowerCase();
+    const code = String(b.code || '').trim();
+
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      return res.status(400).json({ error: 'Valid email required' });
+    }
+    if (!/^\d{6}$/.test(code)) {
+      return res.status(400).json({ error: 'Valid reset code required' });
+    }
+
+    const result = await sendPasswordResetEmail({ email, code });
+    if (!result.sent) {
+      return res.status(503).json({
+        error: 'Password reset email is not configured. Check SMTP settings.',
+      });
+    }
+
+    return res.status(200).json({ ok: true });
+  } catch (e) {
+    console.error('[auth/password-reset-code]', e);
+    return res.status(500).json({
+      error: e instanceof Error ? e.message : 'Failed to send reset email',
     });
   }
 });

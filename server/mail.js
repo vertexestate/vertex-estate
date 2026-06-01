@@ -187,6 +187,74 @@ Notes: ${description || '—'}
 Time: ${new Date().toISOString()}`;
 }
 
+function buildPasswordResetHtml({ email, code }, c) {
+  const to = escapeHtml(email);
+  const resetCode = escapeHtml(code);
+  const brand = escapeHtml(c.MAIL_FROM_NAME);
+  return `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/></head>
+<body style="margin:0;padding:0;background:#030a0c;font-family:Inter,Segoe UI,system-ui,sans-serif;color:#eff5f3;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#030a0c;padding:32px 16px;">
+    <tr><td align="center">
+      <table role="presentation" width="100%" style="max-width:520px;background:#0a2a2a;border:1px solid rgba(212,255,63,0.2);border-radius:16px;overflow:hidden;">
+        <tr><td style="padding:28px 28px 8px;">
+          <p style="margin:0;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:#d4ff3f;font-weight:700;">${brand}</p>
+          <h1 style="margin:12px 0 0;font-size:22px;font-weight:700;color:#eff5f3;">Reset your password</h1>
+        </td></tr>
+        <tr><td style="padding:8px 28px 24px;">
+          <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:#c8d6d2;">Use this verification code to reset the password for ${to}:</p>
+          <p style="margin:0 0 20px;font-size:30px;letter-spacing:0.35em;font-weight:800;color:#d4ff3f;">${resetCode}</p>
+          <p style="margin:0;font-size:13px;line-height:1.5;color:#7a9490;">If you did not request a password reset, you can ignore this email.</p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
+}
+
+function buildPasswordResetText({ email, code }, c) {
+  return `${c.MAIL_FROM_NAME} password reset
+
+Use this verification code to reset the password for ${email}:
+
+${code}
+
+If you did not request a password reset, you can ignore this email.`;
+}
+
+/**
+ * @param {{ email: string; code: string }} payload
+ */
+export async function sendPasswordResetEmail(payload) {
+  if (!isMailConfigured()) {
+    console.warn('[mail] Skipped password reset email —', getMailStatus().hint);
+    return { sent: false, reason: 'disabled_or_unconfigured' };
+  }
+
+  const c = readSmtpConfig();
+  const transport = createTransporter();
+  if (!transport) return { sent: false, reason: 'no_transport' };
+
+  const to = String(payload.email).trim().toLowerCase();
+  const from = `"${c.MAIL_FROM_NAME}" <${c.MAIL_FROM}>`;
+
+  console.log(`[mail] Sending password reset code → ${to}`);
+
+  await transport.sendMail({
+    from,
+    to,
+    replyTo: c.MAIL_FROM,
+    subject: `${c.MAIL_FROM_NAME} password reset code`,
+    text: buildPasswordResetText(payload, c),
+    html: buildPasswordResetHtml(payload, c),
+  });
+
+  console.log(`[mail] Password reset code sent → ${to}`);
+  return { sent: true };
+}
+
 /**
  * @param {{ name: string; email: string; phone?: string; description?: string }} lead
  */

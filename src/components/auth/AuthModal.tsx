@@ -16,7 +16,7 @@ import { Input } from '../ui/Input';
 import { OTPInput } from './OTPInput';
 import { useAuth } from '../../context/AuthContext';
 import { siteConfig } from '../../config/siteConfig';
-type AuthMode = 'login' | 'signup';
+type AuthMode = 'login' | 'signup' | 'forgot-password';
 type AuthMethod = 'email' | 'whatsapp';
 export function AuthModal() {
   const {
@@ -29,7 +29,13 @@ export function AuthModal() {
     startWhatsAppLogin,
     verifyCode,
     resendCode,
-    cancelVerification
+    cancelVerification,
+    pendingPasswordReset,
+    startPasswordReset,
+    verifyPasswordResetCode,
+    completePasswordReset,
+    resendPasswordResetCode,
+    cancelPasswordReset
   } = useAuth();
   const [mode, setMode] = useState<AuthMode>(initialAuthMode);
   const [method, setMethod] = useState<AuthMethod>('email');
@@ -43,11 +49,19 @@ export function AuthModal() {
     phone: '',
     password: ''
   });
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [resetSuccess, setResetSuccess] = useState('');
+  const [isResetSending, setIsResetSending] = useState(false);
   useEffect(() => {
     if (isAuthModalOpen) {
       setMode(initialAuthMode);
       setError('');
       setCode('');
+      setNewPassword('');
+      setConfirmPassword('');
+      setResetSuccess('');
+      setIsResetSending(false);
     }
   }, [isAuthModalOpen, initialAuthMode]);
   useEffect(() => {
@@ -74,10 +88,15 @@ export function AuthModal() {
     setCode('');
     setError('');
     setDemoCode('');
+    setNewPassword('');
+    setConfirmPassword('');
+    setResetSuccess('');
+    setIsResetSending(false);
   };
   const handleEmailLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setResetSuccess('');
     if (!form.email || !form.password) {
       setError('Please fill in both fields.');
       return;
@@ -89,6 +108,62 @@ export function AuthModal() {
     }
     setDemoCode(result.code || '');
     setResendTimer(30);
+  };
+  const handlePasswordResetStart = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setResetSuccess('');
+    setCode('');
+    setNewPassword('');
+    setConfirmPassword('');
+    setIsResetSending(true);
+    const result = await startPasswordReset(form.email);
+    setIsResetSending(false);
+    if (!result.ok) {
+      setError(result.error || 'Password reset failed.');
+      return;
+    }
+    setDemoCode(siteConfig.authDemoMode ? result.code || '' : '');
+    setResendTimer(siteConfig.authDemoMode ? 30 : 0);
+  };
+  const handlePasswordResetVerify = (codeValue?: string) => {
+    setError('');
+    const result = verifyPasswordResetCode(codeValue ?? code);
+    if (!result.ok) {
+      setError(result.error || 'Password reset verification failed.');
+      setCode('');
+      return;
+    }
+    setCode('');
+    setDemoCode('');
+    setResendTimer(0);
+  };
+  const handlePasswordResetComplete = (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    if (!newPassword || !confirmPassword) {
+      setError('Please enter and confirm your new password.');
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setError('Passwords do not match.');
+      return;
+    }
+    const resetEmail = pendingPasswordReset?.email || form.email;
+    const result = completePasswordReset(newPassword);
+    if (!result.ok) {
+      setError(result.error || 'Password reset failed.');
+      return;
+    }
+    setForm({
+      ...form,
+      email: resetEmail,
+      password: ''
+    });
+    setNewPassword('');
+    setConfirmPassword('');
+    setResetSuccess('Password updated. Sign in with your new password.');
+    setMode('login');
   };
   const handleEmailSignup = (e: React.FormEvent) => {
     e.preventDefault();
@@ -146,11 +221,33 @@ export function AuthModal() {
     setError('');
     setResendTimer(30);
   };
+  const handlePasswordResetResend = async () => {
+    setIsResetSending(true);
+    const result = await resendPasswordResetCode();
+    setIsResetSending(false);
+    if (!result.ok) {
+      setError(result.error || 'Could not resend reset code.');
+      return;
+    }
+    setDemoCode(siteConfig.authDemoMode ? result.code || '' : '');
+    setCode('');
+    setError('');
+    setResendTimer(siteConfig.authDemoMode ? 30 : 0);
+  };
   const handleBack = () => {
     cancelVerification();
     setCode('');
     setError('');
     setDemoCode('');
+  };
+  const handlePasswordResetBack = () => {
+    cancelPasswordReset();
+    setMode('login');
+    setCode('');
+    setError('');
+    setDemoCode('');
+    setNewPassword('');
+    setConfirmPassword('');
   };
   return (
     <AnimatePresence>
@@ -354,16 +451,27 @@ export function AuthModal() {
                       <h2 className="text-3xl font-display font-bold text-navy-900 dark:text-cream mb-1">
                         {mode === 'login' ?
                     'Welcome back' :
-                    'Create your account'}
+                    mode === 'signup' ?
+                    'Create your account' :
+                    'Reset password'}
                       </h2>
                       <p className="text-sm text-navy-600 dark:text-navy-400 mb-6">
                         {mode === 'login' ?
                     'Access your saved properties and personalized recommendations' :
-                    'Join thousands finding their dream property'}
+                    mode === 'signup' ?
+                    'Join thousands finding their dream property' :
+                    'Enter your email, confirm the reset code, and choose a new password.'}
                       </p>
 
+                      {resetSuccess &&
+                  <p className="mb-5 rounded-xl border border-green-500/30 bg-green-500/10 px-4 py-3 text-sm text-green-700 dark:text-green-300">
+                          {resetSuccess}
+                        </p>
+                  }
+
                       {/* Method tabs */}
-                      <div className="flex gap-2 p-1 bg-navy-100 dark:bg-navy-900 rounded-xl mb-6">
+                      {mode !== 'forgot-password' &&
+                  <div className="flex gap-2 p-1 bg-navy-100 dark:bg-navy-900 rounded-xl mb-6">
                         <button
                       onClick={() => setMethod('email')}
                       className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-semibold transition-all ${method === 'email' ? 'bg-white dark:bg-navy-700 text-navy-900 dark:text-cream shadow-sm' : 'text-navy-600 dark:text-navy-400 hover:text-navy-900 dark:hover:text-cream'}`}>
@@ -379,9 +487,10 @@ export function AuthModal() {
                           WhatsApp
                         </button>
                       </div>
+                  }
 
                       {/* WhatsApp method */}
-                      {method === 'whatsapp' &&
+                      {method === 'whatsapp' && mode !== 'forgot-password' &&
                   <form
                     onSubmit={handleWhatsAppStart}
                     className="space-y-4">
@@ -470,6 +579,23 @@ export function AuthModal() {
                             </div>
                           </div>
 
+                          <div className="text-right">
+                            <button
+                        type="button"
+                        onClick={() => {
+                          cancelPasswordReset();
+                          setMode('forgot-password');
+                          setMethod('email');
+                          setError('');
+                          setResetSuccess('');
+                          setCode('');
+                          setDemoCode('');
+                        }}
+                        className="text-sm font-semibold text-gold-500 hover:underline">
+                              Forgot password?
+                            </button>
+                          </div>
+
                           {error &&
                     <p className="text-sm text-red-500">{error}</p>
                     }
@@ -482,6 +608,179 @@ export function AuthModal() {
                             Sign In
                           </Button>
                         </form>
+                  }
+
+                      {/* Forgot password */}
+                      {mode === 'forgot-password' &&
+                  <div className="space-y-5">
+                          <button
+                      type="button"
+                      onClick={handlePasswordResetBack}
+                      className="flex items-center gap-1 text-sm text-navy-600 dark:text-navy-400 hover:text-gold-500">
+                            <ArrowLeftIcon className="w-4 h-4" />
+                            Back to sign in
+                          </button>
+
+                          {!pendingPasswordReset &&
+                    <form
+                      onSubmit={handlePasswordResetStart}
+                      className="space-y-4">
+                            <div>
+                              <label className="block text-sm font-medium text-navy-700 dark:text-cream mb-2">
+                                Account Email
+                              </label>
+                              <div className="relative">
+                                <MailIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-navy-400" />
+                                <input
+                            type="email"
+                            placeholder="you@example.com"
+                            value={form.email}
+                            onChange={(e) =>
+                            setForm({
+                              ...form,
+                              email: e.target.value
+                            })
+                            }
+                            className="w-full pl-11 pr-4 py-3 rounded-lg border-2 border-navy-200 dark:border-navy-600 bg-white dark:bg-navy-800 text-navy-900 dark:text-cream focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 outline-none" />
+                          
+                              </div>
+                            </div>
+
+                            {error &&
+                      <p className="text-sm text-red-500">{error}</p>
+                      }
+
+                            <Button
+                        variant="primary"
+                        className="w-full"
+                        type="submit"
+                        disabled={isResetSending}>
+                              {isResetSending ? 'Sending Code...' : 'Send Reset Code'}
+                            </Button>
+                          </form>
+                    }
+
+                          {pendingPasswordReset && !pendingPasswordReset.verified &&
+                    <div className="space-y-5">
+                            <div className="text-center">
+                              <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gold-500/10 flex items-center justify-center">
+                                <MailIcon className="w-8 h-8 text-gold-500" />
+                              </div>
+                              <h3 className="text-xl font-display font-bold text-navy-900 dark:text-cream mb-2">
+                                Check Your Email
+                              </h3>
+                              <p className="text-sm text-navy-600 dark:text-navy-400">
+                                Enter the 6-digit reset code for{' '}
+                                <span className="font-semibold text-navy-900 dark:text-cream">
+                                  {pendingPasswordReset.email}
+                                </span>
+                              </p>
+                            </div>
+
+                            {siteConfig.authDemoMode && demoCode && (
+                        <motion.div
+                          initial={{
+                            opacity: 0,
+                            y: -10
+                          }}
+                          animate={{
+                            opacity: 1,
+                            y: 0
+                          }}
+                          className="p-3 rounded-xl bg-gold-500/10 border border-gold-500/30 text-center">
+                                  <div className="flex items-center justify-center gap-2 text-xs text-gold-600 dark:text-gold-400 mb-1">
+                                    <SparklesIcon className="w-3.5 h-3.5" />
+                                    <span className="uppercase tracking-wider font-semibold">
+                                      Demo Mode
+                                    </span>
+                                  </div>
+                                  <p className="text-xs text-navy-600 dark:text-navy-400 mb-1">
+                                    Your reset code:
+                                  </p>
+                                  <p className="text-2xl font-display font-bold text-gold-500 tracking-[0.3em]">
+                                    {demoCode}
+                                  </p>
+                                </motion.div>
+                      )}
+
+                            <OTPInput
+                        value={code}
+                        onChange={setCode}
+                        onComplete={handlePasswordResetVerify} />
+
+                            {error &&
+                      <p className="text-sm text-red-500 text-center">{error}</p>
+                      }
+
+                            <Button
+                        variant="primary"
+                        className="w-full"
+                        onClick={() => handlePasswordResetVerify()}
+                        disabled={code.length !== 6}>
+                              Verify Reset Code
+                            </Button>
+
+                            <div className="text-center">
+                              <button
+                          onClick={handlePasswordResetResend}
+                          disabled={resendTimer > 0 || isResetSending}
+                          className="text-sm text-navy-600 dark:text-navy-400 hover:text-gold-500 disabled:opacity-50 disabled:cursor-not-allowed">
+                                {isResetSending ?
+                          'Sending code...' :
+                          resendTimer > 0 ?
+                          `Resend code in ${resendTimer}s` :
+                          "Didn't receive code? Resend"}
+                              </button>
+                            </div>
+                          </div>
+                    }
+
+                          {pendingPasswordReset && pendingPasswordReset.verified &&
+                    <form
+                      onSubmit={handlePasswordResetComplete}
+                      className="space-y-4">
+                            <div>
+                              <label className="block text-sm font-medium text-navy-700 dark:text-cream mb-2">
+                                New Password
+                              </label>
+                              <div className="relative">
+                                <LockIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-navy-400" />
+                                <input
+                            type="password"
+                            placeholder="At least 6 characters"
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            className="w-full pl-11 pr-4 py-3 rounded-lg border-2 border-navy-200 dark:border-navy-600 bg-white dark:bg-navy-800 text-navy-900 dark:text-cream focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 outline-none" />
+                              </div>
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-navy-700 dark:text-cream mb-2">
+                                Confirm Password
+                              </label>
+                              <div className="relative">
+                                <LockIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-navy-400" />
+                                <input
+                            type="password"
+                            placeholder="Repeat your new password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            className="w-full pl-11 pr-4 py-3 rounded-lg border-2 border-navy-200 dark:border-navy-600 bg-white dark:bg-navy-800 text-navy-900 dark:text-cream focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 outline-none" />
+                              </div>
+                            </div>
+
+                            {error &&
+                      <p className="text-sm text-red-500">{error}</p>
+                      }
+
+                            <Button
+                        variant="primary"
+                        className="w-full"
+                        type="submit">
+                              Update Password
+                            </Button>
+                          </form>
+                    }
+                        </div>
                   }
 
                       {/* Email method - signup */}
@@ -581,6 +880,7 @@ export function AuthModal() {
                   }
 
                       {/* Mode toggle */}
+                      {mode !== 'forgot-password' &&
                       <div className="mt-6 pt-6 border-t border-navy-100 dark:border-navy-700 text-center">
                         <p className="text-sm text-navy-600 dark:text-navy-400">
                           {mode === 'login' ?
@@ -590,6 +890,7 @@ export function AuthModal() {
                         onClick={() => {
                           setMode(mode === 'login' ? 'signup' : 'login');
                           setError('');
+                          setResetSuccess('');
                         }}
                         className="font-semibold text-gold-500 hover:underline">
                         
@@ -597,6 +898,7 @@ export function AuthModal() {
                           </button>
                         </p>
                       </div>
+                  }
                     </motion.div>
                 }
                 </AnimatePresence>

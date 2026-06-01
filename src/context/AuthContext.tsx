@@ -1,6 +1,7 @@
 import React, { useEffect, useState, createContext, useContext } from 'react';
 import { UserRole } from '../types';
 import { siteConfig } from '../config/siteConfig';
+import { getClientApiBase, joinApiUrl } from '../lib/apiBase';
 export interface User {
   id: string;
   name: string;
@@ -26,6 +27,11 @@ interface PendingVerification {
   };
   mode: 'login' | 'signup';
 }
+interface PendingPasswordReset {
+  email: string;
+  code: string;
+  verified: boolean;
+}
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
@@ -36,6 +42,7 @@ interface AuthContextType {
   closeAuthModal: () => void;
   initialAuthMode: 'login' | 'signup';
   pendingVerification: PendingVerification | null;
+  pendingPasswordReset: PendingPasswordReset | null;
   startSignup: (data: {
     name: string;
     email: string;
@@ -57,6 +64,25 @@ interface AuthContextType {
   };
   resendCode: () => string;
   cancelVerification: () => void;
+  startPasswordReset: (email: string) => Promise<{
+    ok: boolean;
+    error?: string;
+    code?: string;
+  }>;
+  verifyPasswordResetCode: (code: string) => {
+    ok: boolean;
+    error?: string;
+  };
+  completePasswordReset: (newPassword: string) => {
+    ok: boolean;
+    error?: string;
+  };
+  resendPasswordResetCode: () => Promise<{
+    ok: boolean;
+    error?: string;
+    code?: string;
+  }>;
+  cancelPasswordReset: () => void;
   logout: () => void;
   updateProfile: (updates: Partial<User>) => void;
   toggleSavedProperty: (id: string) => void;
@@ -85,6 +111,37 @@ function saveUsersDB(users: StoredUser[]) {
 }
 function generateCode(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+async function sendPasswordResetCode(email: string, code: string) {
+  const base = getClientApiBase();
+  const url = joinApiUrl(base, siteConfig.apiPasswordResetPath);
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, code }),
+    });
+    if (!res.ok) {
+      let text = await res.text().catch(() => '');
+      try {
+        const data = JSON.parse(text) as { error?: string };
+        if (data.error) text = data.error;
+      } catch {
+        /* keep raw text */
+      }
+      return {
+        ok: false,
+        error: text || `Server returned ${res.status}`
+      };
+    }
+    return { ok: true };
+  } catch (e) {
+    return {
+      ok: false,
+      error: e instanceof Error ? e.message : 'Could not send reset email.'
+    };
+  }
 }
 
 function toPublicUser(stored: StoredUser): User {
@@ -119,11 +176,32 @@ function seedEstateOwner() {
     legacy.vertexVerified = true;
     if (legacy.name === 'Vertex Admin') legacy.name = 'Vertex Estate Owner';
   }
-  if (!db.some((u) => u.role === 'estate_owner')) {
+  const configuredEmail = siteConfig.estateOwnerEmail.trim();
+  const configuredOwner = db.find(
+    (u) => u.email.toLowerCase() === configuredEmail.toLowerCase()
+  );
+  const canonicalOwner =
+    configuredOwner ||
+    db.find((u) => u.id === 'estate-owner-vertex') ||
+    db.find((u) => u.role === 'estate_owner');
+  if (canonicalOwner) {
+    canonicalOwner.name = siteConfig.estateOwnerName;
+    canonicalOwner.email = configuredEmail;
+    canonicalOwner.phone = siteConfig.estateOwnerPhone;
+    canonicalOwner.role = 'estate_owner';
+    canonicalOwner.emailVerified = true;
+    canonicalOwner.phoneVerified = true;
+    canonicalOwner.vertexVerified = true;
+    canonicalOwner.createdAt = canonicalOwner.createdAt || Date.now();
+    canonicalOwner.savedProperties = canonicalOwner.savedProperties || [];
+    canonicalOwner.favoriteProperties = canonicalOwner.favoriteProperties || [];
+    canonicalOwner.password =
+      canonicalOwner.password || siteConfig.estateOwnerPassword;
+  } else {
     db.push({
       id: 'estate-owner-vertex',
       name: siteConfig.estateOwnerName,
-      email: siteConfig.estateOwnerEmail,
+      email: configuredEmail,
       phone: siteConfig.estateOwnerPhone,
       role: 'estate_owner',
       emailVerified: true,
@@ -145,6 +223,8 @@ export function AuthProvider({ children }: {children: React.ReactNode;}) {
   );
   const [pendingVerification, setPendingVerification] =
   useState<PendingVerification | null>(null);
+  const [pendingPasswordReset, setPendingPasswordReset] =
+  useState<PendingPasswordReset | null>(null);
   useEffect(() => {
     seedEstateOwner();
     const stored = localStorage.getItem(USER_STORAGE);
@@ -180,6 +260,7 @@ export function AuthProvider({ children }: {children: React.ReactNode;}) {
   const closeAuthModal = () => {
     setIsAuthModalOpen(false);
     setPendingVerification(null);
+    setPendingPasswordReset(null);
   };
   const startSignup = (data: {
     name: string;
@@ -227,6 +308,7 @@ export function AuthProvider({ children }: {children: React.ReactNode;}) {
     return code;
   };
   const startEmailLogin = (email: string, password: string) => {
+    seedEstateOwner();
     const db = loadUsersDB();
     const found = db.find((u) => u.email.toLowerCase() === email.toLowerCase());
     if (!found)
@@ -368,6 +450,122 @@ export function AuthProvider({ children }: {children: React.ReactNode;}) {
     return code;
   };
   const cancelVerification = () => setPendingVerification(null);
+  const startPasswordReset = async (email: string) => {
+    const normalizedEmail = email.trim().toLowerCase();
+    if (!/\S+@\S+\.\S+/.test(normalizedEmail)) {
+      return {
+        ok: false,
+        error: 'Please enter a valid email.'
+      };
+    }
+    seedEstateOwner();
+    const db = loadUsersDB();
+    const found = db.find((u) => u.email.toLowerCase() === normalizedEmail);
+    if (!found) {
+      return {
+        ok: false,
+        error: 'No account found with this email.'
+      };
+    }
+    const code = generateCode();
+    if (!siteConfig.authDemoMode) {
+      const sent = await sendPasswordResetCode(found.email, code);
+      if (!sent.ok) {
+        return {
+          ok: false,
+          error: sent.error || 'Could not send reset email.'
+        };
+      }
+    }
+    setPendingPasswordReset({
+      email: found.email,
+      code,
+      verified: false
+    });
+    return {
+      ok: true,
+      code
+    };
+  };
+  const verifyPasswordResetCode = (code: string) => {
+    if (!pendingPasswordReset) {
+      return {
+        ok: false,
+        error: 'No password reset pending.'
+      };
+    }
+    if (code !== pendingPasswordReset.code) {
+      return {
+        ok: false,
+        error: 'Invalid reset code. Try again.'
+      };
+    }
+    setPendingPasswordReset({
+      ...pendingPasswordReset,
+      verified: true
+    });
+    return {
+      ok: true
+    };
+  };
+  const completePasswordReset = (newPassword: string) => {
+    if (!pendingPasswordReset || !pendingPasswordReset.verified) {
+      return {
+        ok: false,
+        error: 'Verify your reset code first.'
+      };
+    }
+    if (newPassword.length < 6) {
+      return {
+        ok: false,
+        error: 'Password must be at least 6 characters.'
+      };
+    }
+    const db = loadUsersDB();
+    const idx = db.findIndex(
+      (u) => u.email.toLowerCase() === pendingPasswordReset.email.toLowerCase()
+    );
+    if (idx < 0) {
+      return {
+        ok: false,
+        error: 'Account not found.'
+      };
+    }
+    db[idx].password = newPassword;
+    saveUsersDB(db);
+    setPendingPasswordReset(null);
+    return {
+      ok: true
+    };
+  };
+  const resendPasswordResetCode = async () => {
+    if (!pendingPasswordReset) {
+      return {
+        ok: false,
+        error: 'No password reset pending.'
+      };
+    }
+    const code = generateCode();
+    if (!siteConfig.authDemoMode) {
+      const sent = await sendPasswordResetCode(pendingPasswordReset.email, code);
+      if (!sent.ok) {
+        return {
+          ok: false,
+          error: sent.error || 'Could not resend reset email.'
+        };
+      }
+    }
+    setPendingPasswordReset({
+      ...pendingPasswordReset,
+      code,
+      verified: false
+    });
+    return {
+      ok: true,
+      code
+    };
+  };
+  const cancelPasswordReset = () => setPendingPasswordReset(null);
   const logout = () => {
     setUser(null);
     localStorage.removeItem(USER_STORAGE);
@@ -451,12 +649,18 @@ export function AuthProvider({ children }: {children: React.ReactNode;}) {
         closeAuthModal,
         initialAuthMode,
         pendingVerification,
+        pendingPasswordReset,
         startSignup,
         startEmailLogin,
         startWhatsAppLogin,
         verifyCode,
         resendCode,
         cancelVerification,
+        startPasswordReset,
+        verifyPasswordResetCode,
+        completePasswordReset,
+        resendPasswordResetCode,
+        cancelPasswordReset,
         logout,
         updateProfile,
         toggleSavedProperty,

@@ -25,6 +25,7 @@ import { siteConfig } from './config/siteConfig';
 import { ComingSoonOverlay } from './components/layout/ComingSoonOverlay';
 import { Analytics } from '@vercel/analytics/react';
 import { GoogleAnalytics } from './components/analytics/GoogleAnalytics';
+import { MetaPixel } from './components/analytics/MetaPixel';
 import { RouteSeo } from './components/seo/RouteSeo';
 import { SiteJsonLd } from './components/seo/SiteJsonLd';
 
@@ -151,6 +152,7 @@ export function App() {
               <RouteSeo />
               <SiteJsonLd />
               <GoogleAnalytics />
+              <MetaPixel />
               {isLoading && !comingSoonActive && (
                 <LoadingScreen onComplete={() => setIsLoading(false)} />
               )}
