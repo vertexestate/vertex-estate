@@ -68,7 +68,7 @@ export function Hero() {
               {heroHeadlineAccent}
             </p>
 
-            <p className="mt-2 font-display text-2xl italic text-navy-700 dark:text-cream sm:text-4xl">
+            <p className="mt-2 font-sans text-2xl text-navy-700 dark:text-cream sm:text-4xl">
               Modern Living
             </p>
 

@@ -27,7 +27,7 @@ export function MargallaPromoShowcase({ className = '' }: Props) {
       >
         <img
           src={MARGALLA_GATE_PROMO}
-          alt="DHA Margalla Orchards main entrance on Park Road with Margalla Hills in the background"
+          alt="Margalla Orchards Walk by DHAI — main entrance gate, Invest in prestige, Live in excellence"
           className="w-full object-cover"
           loading="lazy"
         />

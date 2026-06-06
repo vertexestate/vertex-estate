@@ -4,7 +4,13 @@ import { LinkedinIcon, TwitterIcon, MailIcon } from 'lucide-react';
 import { teamMembers } from '../../data/properties';
 export function TeamGrid() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div
+      className={`grid gap-8 ${
+        teamMembers.length === 1
+          ? 'mx-auto max-w-lg grid-cols-1'
+          : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+      }`}
+    >
       {teamMembers.map((member, index) =>
       <motion.div
         key={member.id}
@@ -26,17 +32,18 @@ export function TeamGrid() {
         className="group">
         
           <div className="relative overflow-hidden rounded-2xl bg-white dark:bg-navy-800 shadow-lg hover:shadow-gold-glow transition-all duration-300">
-            <div className="relative h-80 overflow-hidden">
+            <div className="relative aspect-[3/4] w-full overflow-hidden bg-cream dark:bg-cream">
               <motion.img
               whileHover={{
-                scale: 1.1
+                scale: 1.02
               }}
               transition={{
                 duration: 0.4
               }}
               src={member.photo}
               alt={member.name}
-              className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300" />
+              loading="eager"
+              className="h-full w-full object-contain object-center transition-all duration-300" />
             
               <div className="absolute inset-0 bg-gradient-to-t from-navy-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 

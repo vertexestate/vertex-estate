@@ -1,4 +1,4 @@
-export const MARGALLA_GATE_PROMO = '/brand/margalla-orchards-gate-promo.png';
+export const MARGALLA_GATE_PROMO = '/brand/margalla-orchards-gate-walk.jpg';
 export const MARGALLA_AERIAL_PROMO = '/brand/margalla-orchards-aerial-promo.png';
 
 export const margallaPromoHighlights = [

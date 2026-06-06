@@ -371,65 +371,11 @@ export const testimonials: Testimonial[] = [
 
 export const teamMembers: TeamMember[] = [
   {
-    id: '1',
-    name: 'Alexandra Sterling',
+    id: 'umer-khan',
+    name: 'Umer Khan',
     role: 'CEO and Founder',
-    photo:
-      'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&h=600&fit=crop',
-    bio: 'Alexandra founded Vertex Estate after two decades advising HNW families across DHA, CDA, and diplomatic belts in Pakistan’s major metros.',
-    email: 'alexandra@vertexestate.com',
-    linkedin: '#',
-    twitter: '#',
-  },
-  {
-    id: '2',
-    name: 'Marcus Chen',
-    role: 'Chief Technology Officer',
-    photo:
-      'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&h=600&fit=crop',
-    bio: 'Marcus leads the platform vision. from verified listings to immersive virtual tours built for busy buyers in Lahore, Karachi, and Islamabad.',
-    email: 'marcus@vertexestate.com',
-    linkedin: '#',
-  },
-  {
-    id: '3',
-    name: 'Sophia Rodriguez',
-    role: 'Head of Luxury Division',
-    photo:
-      'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=600&h=600&fit=crop',
-    bio: 'Sophia curates trophy homes and farmhouses, with a portfolio spanning DHA, CDA sectors, and Islamabad’s F-sectors.',
-    email: 'sophia@vertexestate.com',
-    linkedin: '#',
-    twitter: '#',
-  },
-  {
-    id: '4',
-    name: 'James Mitchell',
-    role: 'Director of Operations',
-    photo:
-      'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=600&h=600&fit=crop',
-    bio: 'James orchestrates inspections, documentation, and handovers so every transaction feels calm. even at nine-figure PKR ticket sizes.',
-    email: 'james@vertexestate.com',
-    linkedin: '#',
-  },
-  {
-    id: '5',
-    name: 'Emma Williams',
-    role: 'Head of Marketing',
-    photo:
-      'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=600&h=600&fit=crop',
-    bio: 'Emma tells the stories behind each precinct. the boulevards, schools, and sunset views that make a house a home.',
-    email: 'emma@vertexestate.com',
-    twitter: '#',
-  },
-  {
-    id: '6',
-    name: 'Daniel Park',
-    role: 'Senior Investment Advisor',
-    photo:
-      'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&h=600&fit=crop',
-    bio: 'Daniel models rental yields and exit liquidity for investors rotating between Karachi towers and Lahore’s gated expansions.',
-    email: 'daniel@vertexestate.com',
-    linkedin: '#',
+    photo: '/team/umer-khan-ceo.png',
+    bio: 'Umer Khan founded Vertex Estate in 2026 to bring trusted, premium real estate advisory to Islamabad and across Pakistan.',
+    email: 'vertex9313@gmail.com',
   },
 ];

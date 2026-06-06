@@ -13,6 +13,7 @@ import { LoadingScreen } from './components/ui/LoadingScreen';
 import { ParticlesBackground } from './components/ui/ParticlesBackground';
 import { VertexAssistant } from './components/assistant/VertexAssistant';
 import { AuthModal } from './components/auth/AuthModal';
+import { AboutPopup } from './components/about/AboutPopup';
 import { Home } from './pages/Home';
 import { Listings } from './pages/Listings';
 import { PropertyDetails } from './pages/PropertyDetails';
@@ -165,6 +166,7 @@ export function App() {
                 </div>
                 {!isLoading && <VertexAssistant />}
                 <AuthModal />
+                <AboutPopup active={!isLoading && !comingSoonActive} />
                 {comingSoonActive && <ComingSoonOverlay targetMs={deadlineMs} />}
                 <Analytics />
               </div>
