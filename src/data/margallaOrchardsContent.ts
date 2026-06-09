@@ -87,8 +87,8 @@ export const margallaLocation = {
   ],
   landmarks: [
     { place: 'COMSATS University Islamabad', time: 'Opposite', notes: 'Park Road frontage' },
-    { place: 'Park Enclave', time: '~3 min', notes: 'Residential enclave' },
-    { place: 'Bahria Enclave', time: '~12 min', notes: 'Via Kuri Road' },
+    { place: 'Serena Hotel', time: '~11 min', notes: 'Opposite To Convential Center G5 Sector 1' },
+    { place: 'Islamabad Club', time: '~8 min', notes: 'Via Main Muree Road' },
     { place: 'Blue Area', time: '~10 min', notes: 'Business district' },
     { place: 'Faisal Mosque', time: '~22 min', notes: 'Kashmir Highway route' },
     { place: 'Islamabad International Airport', time: '~30 min', notes: 'Via Expressway' },
