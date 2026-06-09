@@ -68,8 +68,8 @@ function PropertyCardInner({ property, onClick }: PropertyCardProps) {
             alt={property.title}
             loading="lazy"
             decoding="async"
-            className={`h-full w-full object-cover transition-transform duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
-              reduceMotion ? '' : 'group-hover:scale-[1.08]'
+            className={`h-full w-full bg-navy-950 object-contain transition-transform duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
+              reduceMotion ? '' : 'group-hover:scale-[1.03]'
             }`}
           />
           

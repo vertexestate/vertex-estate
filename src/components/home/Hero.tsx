@@ -8,18 +8,14 @@ import {
   ChevronDownIcon,
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { MARGALLA_PROJECT_PATH } from '../../data/margallaOrchardsContent';
+import { MARGALLA_PROJECT_PATH, margallaHero } from '../../data/margallaOrchardsContent';
 import { Button } from '../ui/Button';
 import { WhatsAppContactButton } from '../ui/WhatsAppContactButton';
 import { Input } from '../ui/Input';
 import { Select } from '../ui/Select';
 import { useSiteContent } from '../../context/SiteContentContext';
 import { siteConfig } from '../../config/siteConfig';
-import {
-  MARGALLA_HERO_IMAGE,
-  MARGALLA_HERO_FALLBACK,
-  MARGALLA_GALLERY,
-} from '../../config/margallaAssets';
+import { MARGALLA_HERO_IMAGE, MARGALLA_HERO_FALLBACK } from '../../config/margallaAssets';
 
 const PLOT_SIZES = ['10 Marla', '14 Marla', '1 Kanal'] as const;
 const PARTNERS = ['DHA Islamabad', 'SCBAP', 'FGEHA'] as const;
@@ -27,14 +23,12 @@ const PARTNERS = ['DHA Islamabad', 'SCBAP', 'FGEHA'] as const;
 export function Hero() {
   const navigate = useNavigate();
   const reduceMotion = usePrefersReducedMotion();
-  const { heroHeadlineLead, heroHeadlineAccent, heroSubheading } = useSiteContent();
-
-  const thumbStrip = MARGALLA_GALLERY.slice(0, 4);
+  const { heroSubheading } = useSiteContent();
 
   return (
     <section
       id="home"
-      className="relative scroll-mt-header overflow-hidden bg-[#f4f7f5] text-navy-900 dark:bg-navy-950 dark:text-cream"
+      className="relative scroll-mt-header overflow-hidden bg-cream text-navy-900 dark:bg-navy-950 dark:text-cream"
     >
       <div className="mx-auto max-w-[90rem] px-4 pt-page sm:px-5 lg:px-8 lg:pt-28">
         <div className="grid items-stretch gap-6 lg:min-h-[calc(100dvh-7rem)] lg:grid-cols-2 lg:gap-10 xl:gap-14">
@@ -60,16 +54,12 @@ export function Hero() {
               {siteConfig.siteName} presents
             </p>
 
-            <h1 className="mt-3 font-display text-[1.75rem] font-bold leading-[1.08] tracking-tight text-navy-900 min-[400px]:text-[2rem] sm:text-5xl xl:text-[3.25rem]">
-              {heroHeadlineLead}
+            <h1 className="mt-3 font-display text-[1.75rem] font-bold leading-[1.08] tracking-tight text-navy-900 dark:text-gold-300 min-[400px]:text-[2rem] sm:text-5xl xl:text-[3.25rem]">
+              {margallaHero.title}
             </h1>
 
             <p className="mt-2 font-display text-xl font-semibold text-emerald-800 dark:text-gold-300 sm:text-3xl">
-              {heroHeadlineAccent}
-            </p>
-
-            <p className="mt-2 font-sans text-2xl text-navy-700 dark:text-cream sm:text-4xl">
-              Modern Living
+              {margallaHero.subtitle}
             </p>
 
             <p className="mt-6 max-w-lg text-base font-medium leading-relaxed text-navy-600 dark:text-cream/85 sm:text-lg">
@@ -159,7 +149,7 @@ export function Hero() {
                 alt="DHA Margalla Orchard on Park Road, Islamabad"
                 fetchPriority="high"
                 decoding="async"
-                className="h-full min-h-[280px] w-full object-cover object-center sm:min-h-[360px] lg:min-h-[420px] xl:min-h-[480px]"
+                className="h-full min-h-[280px] w-full object-contain object-center bg-navy-950 sm:min-h-[360px] lg:min-h-[420px] xl:min-h-[480px]"
                 onError={(e) => {
                   if (e.currentTarget.src !== MARGALLA_HERO_FALLBACK) {
                     e.currentTarget.src = MARGALLA_HERO_FALLBACK;
@@ -167,34 +157,6 @@ export function Hero() {
                 }}
               />
               <div className="pointer-events-none absolute inset-0 rounded-[inherit] ring-1 ring-inset ring-black/5" />
-            </div>
-
-            <div className="grid grid-cols-4 gap-2 sm:gap-3">
-              {thumbStrip.map((item, i) => (
-                <motion.button
-                  key={item.title}
-                  type="button"
-                  initial={reduceMotion ? false : { opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 + i * 0.06 }}
-                  whileHover={reduceMotion ? undefined : { scale: 1.04, y: -2 }}
-                  onClick={() =>
-                    document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' })
-                  }
-                  className="relative aspect-[4/3] overflow-hidden rounded-xl border-2 border-white shadow-md dark:border-navy-700"
-                >
-                  <img
-                    src={'fallback' in item && i === 0 ? item.src : item.src}
-                    alt={item.title}
-                    loading="lazy"
-                    className="h-full w-full object-cover"
-                    onError={(e) => {
-                      const fb = 'fallback' in item ? item.fallback : undefined;
-                      if (fb && e.currentTarget.src !== fb) e.currentTarget.src = fb;
-                    }}
-                  />
-                </motion.button>
-              ))}
             </div>
           </motion.div>
         </div>

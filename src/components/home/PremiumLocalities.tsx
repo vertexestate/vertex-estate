@@ -1,48 +1,37 @@
 import { motion } from 'framer-motion';
 import { MapPinIcon, ArrowUpRightIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { VERTEX_BRAND_PROMO } from '../../config/margallaAssets';
 
-/**
- * Representative luxury-residential photography (stock) paired with real
- * premium micro-markets Vertex Estate targets — not developer marketing assets.
- */
 const LOCALITIES = [
   {
     title: 'DHA & CDA',
     subtitle: 'Islamabad, Lahore, and Karachi',
     tag: 'Defence and capital sectors',
-    image:
-      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1400&h=900&fit=crop&q=82',
   },
   {
     title: 'DHA Defence',
     subtitle: 'Lahore, Karachi, and Islamabad-Rawalpindi',
     tag: 'Boulevards and secure phases',
-    image:
-      'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1400&h=900&fit=crop&q=82',
   },
   {
     title: 'Gulberg & Johar Town',
     subtitle: 'Lahore core',
     tag: 'High-street and corporate adjacency',
-    image:
-      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1400&h=900&fit=crop&q=82',
   },
   {
     title: 'F-6, F-7, and Diplomatic Enclave',
     subtitle: 'Islamabad',
     tag: 'Tree-lined avenues',
-    image:
-      'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=1400&h=900&fit=crop&q=82',
   },
   {
     title: 'Clifton & DHA Phase 8',
     subtitle: 'Karachi waterfront belt',
     tag: 'Sea breeze and skyline',
-    image:
-      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1400&h=900&fit=crop&q=82',
   },
-];
+] as const;
+
+const LOCALITY_IMAGE = VERTEX_BRAND_PROMO;
 
 export function PremiumLocalities() {
   const navigate = useNavigate();
@@ -59,7 +48,7 @@ export function PremiumLocalities() {
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: `url('${LOCALITIES[0].image}')`,
+            backgroundImage: `url('${LOCALITY_IMAGE}')`,
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-navy-950/95 via-navy-950/45 to-navy-900/20" />
@@ -104,7 +93,7 @@ export function PremiumLocalities() {
         >
           <div
             className="absolute inset-0 bg-cover bg-center transition duration-700 group-hover:scale-105"
-            style={{ backgroundImage: `url('${area.image}')` }}
+            style={{ backgroundImage: `url('${LOCALITY_IMAGE}')` }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-navy-950/92 via-navy-950/35 to-transparent" />
           <div className="relative z-10 flex flex-1 flex-col justify-end p-4 sm:p-5">

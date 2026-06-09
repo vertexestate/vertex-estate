@@ -4,6 +4,7 @@ import { Button } from '../ui/Button';
 import { WhatsAppContactButton } from '../ui/WhatsAppContactButton';
 import { useNavigate } from 'react-router-dom';
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
+import { VERTEX_BRAND_PROMO } from '../../config/margallaAssets';
 
 export function CTA() {
   const navigate = useNavigate();
@@ -29,9 +30,9 @@ export function CTA() {
       )}
       <div className="absolute inset-0">
         <img
-          src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1920&h=800&fit=crop&q=82"
+          src={VERTEX_BRAND_PROMO}
           alt=""
-          className="h-full min-h-[280px] w-full object-cover sm:min-h-[320px]"
+          className="h-full min-h-[280px] w-full object-contain object-center bg-navy-950 sm:min-h-[320px]"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-navy-950/95 via-navy-900/88 to-navy-900/75" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_70%_50%,rgba(212,255,63,0.12),transparent_50%)]" />

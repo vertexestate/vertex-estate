@@ -26,6 +26,7 @@ import {
 } from '../data/margallaOrchardsContent';
 import { MARGALLA_HERO_IMAGE, MARGALLA_HERO_FALLBACK } from '../config/margallaAssets';
 import { siteConfig } from '../config/siteConfig';
+import { useTheme } from '../context/ThemeContext';
 import { usePageSeo } from '../hooks/usePageSeo';
 
 function DataTable({
@@ -73,6 +74,7 @@ function DataTable({
 }
 
 export function MargallaOrchards() {
+  const { isDark } = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
   const [activeId, setActiveId] = useState<MargallaSectionId>('overview');
@@ -129,7 +131,11 @@ export function MargallaOrchards() {
               <p className="text-xs font-bold uppercase tracking-[0.32em] text-gold-600 dark:text-gold-400">
                 {siteConfig.siteName} project guide
               </p>
-              <h1 className="mt-3 font-display text-2xl font-bold leading-tight text-balance sm:text-4xl lg:text-[2.75rem]">
+              <h1
+                className={`mt-3 font-display text-2xl font-bold leading-tight text-balance sm:text-4xl lg:text-[2.75rem] ${
+                  isDark ? 'text-gold-300' : 'text-navy-900'
+                }`}
+              >
                 {margallaHero.title}
               </h1>
               <p className="mt-2 text-xl font-semibold text-emerald-800 dark:text-gold-300">
@@ -160,7 +166,7 @@ export function MargallaOrchards() {
               <img
                 src={MARGALLA_HERO_IMAGE}
                 alt={margallaHero.imageAlt}
-                className="h-full w-full object-cover"
+                className="h-full w-full object-contain bg-navy-950"
                 onError={(e) => {
                   if (e.currentTarget.src !== MARGALLA_HERO_FALLBACK) {
                     e.currentTarget.src = MARGALLA_HERO_FALLBACK;

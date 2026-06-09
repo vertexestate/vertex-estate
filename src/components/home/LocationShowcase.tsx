@@ -12,22 +12,15 @@ export function LocationShowcase() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-40px' }}
           transition={{ delay: i * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="group relative overflow-hidden rounded-2xl"
+          className="rounded-2xl border border-navy-100 bg-gradient-to-br from-white to-cream/80 p-6 dark:border-navy-600 dark:from-navy-800 dark:to-navy-900/80"
         >
-          <img
-            src={spot.image}
-            alt={spot.label}
-            loading="lazy"
-            className="aspect-[5/4] w-full object-cover transition duration-700 group-hover:scale-105 sm:aspect-[4/3]"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-navy-950/90 via-navy-950/30 to-navy-900/10" />
-          <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-cream backdrop-blur-md">
-              <MapPinIcon className="h-3 w-3 text-gold-400" aria-hidden />
-              {spot.detail}
-            </span>
-            <p className="mt-2 font-display text-xl font-bold text-white">{spot.label}</p>
-          </div>
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-gold-500/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-gold-700 dark:text-gold-300">
+            <MapPinIcon className="h-3 w-3" aria-hidden />
+            {spot.detail}
+          </span>
+          <p className="mt-3 font-display text-xl font-bold text-navy-900 dark:text-cream">
+            {spot.label}
+          </p>
         </motion.div>
       ))}
     </div>

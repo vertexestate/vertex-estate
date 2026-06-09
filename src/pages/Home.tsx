@@ -206,7 +206,7 @@ export function Home() {
             <SectionHeading
               eyebrow="Project visuals"
               title="See Margalla Orchards"
-              subtitle="Avenues, villas, and Margalla Hills views. This is the lifestyle DHA Margalla Orchard is built for."
+              subtitle="Official Vertex Estate × DHA Margalla Orchard promo — Park Road, Islamabad."
             />
             <Reveal className="mt-10 sm:mt-12">
               <ProjectGallery />

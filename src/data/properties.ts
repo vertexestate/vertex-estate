@@ -1,11 +1,12 @@
 import { Property, Agent, Testimonial, TeamMember } from '../types';
+import { VERTEX_BRAND_PROMO } from '../config/margallaAssets';
 
 export const agents: Agent[] = [
   {
     id: '1',
     name: 'Ayesha Malik',
     photo:
-      'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop',
+      VERTEX_BRAND_PROMO,
     phone: '+92 321 5550142',
     email: 'ayesha.malik@vertexestate.com',
     rating: 4.9,
@@ -15,7 +16,7 @@ export const agents: Agent[] = [
     id: '2',
     name: 'Hassan Raza',
     photo:
-      'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop',
+      VERTEX_BRAND_PROMO,
     phone: '+92 300 5550198',
     email: 'hassan.raza@vertexestate.com',
     rating: 4.8,
@@ -25,7 +26,7 @@ export const agents: Agent[] = [
     id: '3',
     name: 'Sara Khan',
     photo:
-      'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop',
+      VERTEX_BRAND_PROMO,
     phone: '+92 333 5550271',
     email: 'sara.khan@vertexestate.com',
     rating: 5.0,
@@ -36,16 +37,16 @@ export const agents: Agent[] = [
 export const properties: Property[] = [
   {
     id: '1',
-    title: 'DHA Phase 8 Karachi: iconic corner villa',
+    title: 'DHA Margalla Orchards, Islamabad',
     price: 85000000,
     priceCurrency: 'PKR',
     location: {
-      address: 'Phase 8, near Clifton belt',
-      city: 'Karachi',
-      state: 'Sindh',
+      address: 'Main Park Road, Opposite Of COMSATS University',
+      city: 'Islamabad',
+      state: 'ICT',
       country: 'Pakistan',
-      lat: 25.0077,
-      lng: 67.3081,
+      lat: 33.7108,
+      lng: 73.0644,
     },
     type: 'luxury',
     category: 'Villa',
@@ -56,10 +57,10 @@ export const properties: Property[] = [
     parking: 4,
     lotSize: 5400,
     images: [
-      'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1200&h=800&fit=crop&q=82',
-      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&h=800&fit=crop&q=82',
-      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200&h=800&fit=crop&q=82',
-      'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1200&h=800&fit=crop&q=82',
+      VERTEX_BRAND_PROMO,
+      VERTEX_BRAND_PROMO,
+      VERTEX_BRAND_PROMO,
+      VERTEX_BRAND_PROMO,
     ],
     description:
       'Statement DHA Phase 8 Karachi villa with double-height lounge, cinema, and temperature-controlled pool deck. Gated defence living with boulevard frontage. ideal for multigenerational families who want resort amenities at home.',
@@ -78,13 +79,13 @@ export const properties: Property[] = [
   },
   {
     id: '2',
-    title: 'DHA Phase 6 Lahore. Sky residence',
-    price: 120000000,
+    title: 'DHA Margalla Orchards, Islamabad',
+    price: 85000000,
     priceCurrency: 'PKR',
     location: {
-      address: 'Main Boulevard, high-rise',
-      city: 'Lahore',
-      state: 'Punjab',
+      address: 'Main Park Road, Opposite Of COMSATS University',
+      city: 'Islamabad',
+      state: 'ICT',
       country: 'Pakistan',
       lat: 31.4707,
       lng: 74.4096,
@@ -97,10 +98,10 @@ export const properties: Property[] = [
     yearBuilt: 2023,
     parking: 3,
     images: [
-      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&h=800&fit=crop&q=82',
-      'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?w=1200&h=800&fit=crop&q=82',
-      'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200&h=800&fit=crop&q=82',
-      'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&h=800&fit=crop&q=82',
+      VERTEX_BRAND_PROMO,
+      VERTEX_BRAND_PROMO,
+      VERTEX_BRAND_PROMO,
+      VERTEX_BRAND_PROMO,
     ],
     description:
       'Rare full-floor penthouse overlooking DHA Phase 6 greens. Private lift lobby, wraparound terraces, and concierge-grade finishes. the Lahore skyline as your daily backdrop.',
@@ -118,11 +119,11 @@ export const properties: Property[] = [
   },
   {
     id: '3',
-    title: 'Islamabad F-7. Diplomatic enclave estate',
-    price: 155000000,
+    title: 'DHA Margalla Orchards, Islamabad',
+    price: 85000000,
     priceCurrency: 'PKR',
     location: {
-      address: 'Near Margalla vistas',
+      address: 'Main Park Road, Opposite Of COMSATS University',
       city: 'Islamabad',
       state: 'ICT',
       country: 'Pakistan',
@@ -138,10 +139,10 @@ export const properties: Property[] = [
     parking: 6,
     lotSize: 22000,
     images: [
-      'https://images.unsplash.com/photo-1600607687644-c7171b42498f?w=1200&h=800&fit=crop&q=82',
-      'https://images.unsplash.com/photo-1600573472550-8090b5e0745e?w=1200&h=800&fit=crop&q=82',
-      'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=1200&h=800&fit=crop&q=82',
-      'https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=1200&h=800&fit=crop&q=82',
+      VERTEX_BRAND_PROMO,
+      VERTEX_BRAND_PROMO,
+      VERTEX_BRAND_PROMO,
+      VERTEX_BRAND_PROMO,
     ],
     description:
       'Sprawling Margalla-facing estate with formal gardens, guest wing, and wellness pavilion. F-7 positioning puts embassies, fine dining, and hiking trails within minutes.',
@@ -178,9 +179,9 @@ export const properties: Property[] = [
     yearBuilt: 2020,
     parking: 2,
     images: [
-      'https://images.unsplash.com/photo-1567496898669-ee935f5f647a?w=1200&h=800&fit=crop&q=82',
-      'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200&h=800&fit=crop&q=82',
-      'https://images.unsplash.com/photo-1574643156929-51fa098b0394?w=1200&h=800&fit=crop&q=82',
+      VERTEX_BRAND_PROMO,
+      VERTEX_BRAND_PROMO,
+      VERTEX_BRAND_PROMO,
     ],
     description:
       'Sun-filled DHA Phase 8 residence with Arabian Sea breezes, imported marble, and smart glass balconies. Walk to Clifton cafes while staying inside a secure defence footprint.',
@@ -210,9 +211,9 @@ export const properties: Property[] = [
     yearBuilt: 2019,
     parking: 1,
     images: [
-      'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&h=800&fit=crop&q=82',
-      'https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=1200&h=800&fit=crop&q=82',
-      'https://images.unsplash.com/photo-1536376072261-38c75010e6c9?w=1200&h=800&fit=crop&q=82',
+      VERTEX_BRAND_PROMO,
+      VERTEX_BRAND_PROMO,
+      VERTEX_BRAND_PROMO,
     ],
     description:
       'Executive loft above Gulberg’s retail pulse. floor-to-ceiling glazing, chef kitchen, and blackout bedroom suite for consultants on rotation.',
@@ -242,9 +243,9 @@ export const properties: Property[] = [
     yearBuilt: 2022,
     parking: 12,
     images: [
-      'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop&q=82',
-      'https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=1200&h=800&fit=crop&q=82',
-      'https://images.unsplash.com/photo-1497215842964-222b430dc094?w=1200&h=800&fit=crop&q=82',
+      VERTEX_BRAND_PROMO,
+      VERTEX_BRAND_PROMO,
+      VERTEX_BRAND_PROMO,
     ],
     description:
       'Blue Area tower plate with LEED-inspired HVAC, executive washrooms, and dedicated lift bank. built for banks, embassies, and tech HQs expanding in the capital.',
@@ -281,9 +282,9 @@ export const properties: Property[] = [
     parking: 2,
     lotSize: 4500,
     images: [
-      'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1200&h=800&fit=crop&q=82',
-      'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=1200&h=800&fit=crop&q=82',
-      'https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=1200&h=800&fit=crop&q=82',
+      VERTEX_BRAND_PROMO,
+      VERTEX_BRAND_PROMO,
+      VERTEX_BRAND_PROMO,
     ],
     description:
       'CDA-sector corner plot with lawn, driver quarters, and solar-ready roof. quiet cul-de-sac minutes from Margalla access.',
@@ -313,9 +314,9 @@ export const properties: Property[] = [
     yearBuilt: 2017,
     parking: 2,
     images: [
-      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&h=800&fit=crop&q=82',
-      'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200&h=800&fit=crop&q=82',
-      'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200&h=800&fit=crop&q=82',
+      VERTEX_BRAND_PROMO,
+      VERTEX_BRAND_PROMO,
+      VERTEX_BRAND_PROMO,
     ],
     description:
       'Fully furnished Clifton rental with sea-facing deck, blackout drapes, and white-glove handover. ideal for expat postings.',
@@ -332,7 +333,7 @@ export const testimonials: Testimonial[] = [
     name: 'Fatima Noor',
     role: 'Buyer. DHA Lahore',
     photo:
-      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop',
+      VERTEX_BRAND_PROMO,
     quote:
       'Vertex helped us compare DHA Phase 6 vs CDA sectors with real data. not brochure fluff. We closed on a corner villa in six weeks.',
     rating: 5,
@@ -342,7 +343,7 @@ export const testimonials: Testimonial[] = [
     name: 'Omar Siddiqui',
     role: 'Investor. Karachi',
     photo:
-      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
+      VERTEX_BRAND_PROMO,
     quote:
       'Their team understands Clifton vs DHA Phase 8 rental yields. The owner-verified listings saved me from three bad leads.',
     rating: 5,
@@ -352,7 +353,7 @@ export const testimonials: Testimonial[] = [
     name: 'Zainab Hussain',
     role: 'First-time buyer. Islamabad',
     photo:
-      'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop',
+      VERTEX_BRAND_PROMO,
     quote:
       'From F-7 walkthroughs to documentation, everything felt transparent. I finally have keys to a Margalla-facing apartment.',
     rating: 5,
@@ -362,7 +363,7 @@ export const testimonials: Testimonial[] = [
     name: 'Bilal Ahmed',
     role: 'Founder. Logistics',
     photo:
-      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop',
+      VERTEX_BRAND_PROMO,
     quote:
       'We leased Blue Area offices through Vertex. fast legal coordination and a landlord who actually maintained the building.',
     rating: 5,
@@ -373,8 +374,8 @@ export const teamMembers: TeamMember[] = [
   {
     id: 'umer-khan',
     name: 'Umer Khan',
-    role: 'CEO and Founder',
-    photo: '/team/umer-khan-ceo.png',
+    role: 'Chairman and Founder',
+    photo: '/team/umer-khan-chairman.jpg',
     bio: 'Umer Khan founded Vertex Estate in 2026 to bring trusted, premium real estate advisory to Islamabad and across Pakistan.',
     email: 'vertex9313@gmail.com',
   },

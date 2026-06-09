@@ -17,7 +17,6 @@ import {
   CheckCircle2Icon,
 } from 'lucide-react';
 import { Button } from '../ui/Button';
-import { Input } from '../ui/Input';
 import { useProperties } from '../../context/PropertiesContext';
 import { useAuth } from '../../context/AuthContext';
 import { useSiteContent } from '../../context/SiteContentContext';
@@ -138,13 +137,7 @@ export function EstateOwnerPanel() {
     setVertexVerified,
     user: currentUser,
   } = useAuth();
-  const {
-    heroHeadlineLead,
-    heroHeadlineAccent,
-    heroSubheading,
-    updateHero,
-    resetHero,
-  } = useSiteContent();
+  const { heroSubheading, updateHero, resetHero } = useSiteContent();
   const [tab, setTab] = useState<OwnerTab>('pending');
   const [launchSignupCount, setLaunchSignupCount] = useState<number | null>(null);
   const users = allUsers();
@@ -497,19 +490,10 @@ export function EstateOwnerPanel() {
       {tab === 'content' && (
         <div className="space-y-4 max-w-xl">
           <p className="text-sm text-navy-600 dark:text-navy-400">
-            These fields power the main hero on the home page. Use them to keep
-            the brand voice aligned with a professionally managed marketplace.
+            The hero title and tagline are fixed to Margalla Orchards Islamabad
+            and DHA Housing Society. Edit the subheading below for the paragraph
+            under the headline.
           </p>
-          <Input
-            label="Headline (first line)"
-            value={heroHeadlineLead}
-            onChange={(e) => updateHero({ heroHeadlineLead: e.target.value })}
-          />
-          <Input
-            label="Headline accent (gold word)"
-            value={heroHeadlineAccent}
-            onChange={(e) => updateHero({ heroHeadlineAccent: e.target.value })}
-          />
           <div>
             <label className="block text-sm font-medium text-navy-700 dark:text-cream mb-2">
               Subheading

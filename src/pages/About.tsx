@@ -4,6 +4,7 @@ import { TeamGrid } from '../components/about/TeamGrid';
 import { Stats } from '../components/home/Stats';
 import { SectionHeading } from '../components/ui/SectionHeading';
 import { TargetIcon, EyeIcon, HeartIcon, AwardIcon } from 'lucide-react';
+import { VERTEX_BRAND_PROMO } from '../config/margallaAssets';
 export function About() {
   const values = [
   {
@@ -56,9 +57,9 @@ export function About() {
       <div className="relative h-96 mb-20">
         <div className="absolute inset-0 bg-gradient-to-r from-navy-900/90 to-navy-900/70" />
         <img
-          src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&h=600&fit=crop"
+          src={VERTEX_BRAND_PROMO}
           alt="About Vertex Estate"
-          className="w-full h-full object-cover" />
+          className="w-full h-full object-contain object-center bg-navy-950" />
         
         <div className="absolute inset-0 flex items-center justify-center">
           <motion.div

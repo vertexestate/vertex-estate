@@ -1,9 +1,11 @@
-export const MARGALLA_GATE_PROMO = '/brand/margalla-orchards-gate-walk.jpg';
-export const MARGALLA_AERIAL_PROMO = '/brand/margalla-orchards-aerial-promo.png';
+import { VERTEX_BRAND_PROMO } from './margallaAssets';
+
+export const MARGALLA_GATE_PROMO = VERTEX_BRAND_PROMO;
+export const MARGALLA_AERIAL_PROMO = VERTEX_BRAND_PROMO;
 
 export const margallaPromoHighlights = [
-  { label: 'Prime location', detail: 'Park Road, Islamabad' },
-  { label: 'Gated community', detail: 'Secure, DHA supervised' },
-  { label: 'Modern roads', detail: 'Wide avenues and utilities' },
-  { label: 'Strong potential', detail: 'Growing Park Road corridor' },
+  { label: 'Prime location', detail: 'On Main Park Road, Islamabad' },
+  { label: 'Gated & secure', detail: '24/7 security' },
+  { label: 'Modern amenities', detail: 'Parks, masjid, school' },
+  { label: 'High returns', detail: 'Strong investment opportunity' },
 ] as const;

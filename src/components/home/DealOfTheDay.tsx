@@ -109,7 +109,7 @@ export function DealOfTheDay() {
               }}
               src={deal.images[0]}
               alt={deal.title}
-              className="absolute inset-0 w-full h-full object-cover" />
+              className="absolute inset-0 h-full w-full bg-navy-950 object-contain" />
             
           </AnimatePresence>
           <div className="absolute inset-0 bg-gradient-to-r from-transparent to-navy-900/40 lg:to-navy-800/60" />

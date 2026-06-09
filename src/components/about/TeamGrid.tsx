@@ -32,7 +32,7 @@ export function TeamGrid() {
         className="group">
         
           <div className="relative overflow-hidden rounded-2xl bg-white dark:bg-navy-800 shadow-lg hover:shadow-gold-glow transition-all duration-300">
-            <div className="relative aspect-[3/4] w-full overflow-hidden bg-cream dark:bg-cream">
+            <div className="relative aspect-[4/5] w-full overflow-hidden bg-white dark:bg-white">
               <motion.img
               whileHover={{
                 scale: 1.02
@@ -43,7 +43,7 @@ export function TeamGrid() {
               src={member.photo}
               alt={member.name}
               loading="eager"
-              className="h-full w-full object-contain object-center transition-all duration-300" />
+              className="h-full w-full object-cover object-[50%_20%] transition-all duration-300" />
             
               <div className="absolute inset-0 bg-gradient-to-t from-navy-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 

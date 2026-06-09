@@ -1,10 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import {
-  MARGALLA_AERIAL_PROMO,
-  MARGALLA_GATE_PROMO,
-  margallaPromoHighlights,
-} from '../../config/margallaPromos';
+import { MARGALLA_GATE_PROMO, margallaPromoHighlights } from '../../config/margallaPromos';
 import { MARGALLA_PROJECT_PATH } from '../../data/margallaOrchardsContent';
 import { Button } from '../ui/Button';
 import { WhatsAppContactButton } from '../ui/WhatsAppContactButton';
@@ -23,12 +19,12 @@ export function MargallaPromoShowcase({ className = '' }: Props) {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="overflow-hidden rounded-2xl border border-navy-100 shadow-xl dark:border-navy-700 sm:rounded-[1.5rem]"
+        className="overflow-hidden rounded-2xl border border-navy-100 bg-navy-950 shadow-xl dark:border-navy-700 sm:rounded-[1.5rem]"
       >
         <img
           src={MARGALLA_GATE_PROMO}
-          alt="Margalla Orchards Walk by DHAI — main entrance gate, Invest in prestige, Live in excellence"
-          className="w-full object-cover"
+          alt="DHA Margalla Orchard, Park Road Islamabad — Vertex Estate"
+          className="w-full object-contain"
           loading="lazy"
         />
       </motion.div>
@@ -52,20 +48,6 @@ export function MargallaPromoShowcase({ className = '' }: Props) {
           );
         })}
       </div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="overflow-hidden rounded-2xl border border-navy-100 shadow-xl dark:border-navy-700 sm:rounded-[1.5rem]"
-      >
-        <img
-          src={MARGALLA_AERIAL_PROMO}
-          alt="Aerial view of Margalla Orchards development and surrounding Islamabad neighbourhoods"
-          className="w-full object-cover"
-          loading="lazy"
-        />
-      </motion.div>
 
       <p className="text-center text-sm text-navy-600 dark:text-cream/70">
         Margalla Orchards is one of Islamabad&apos;s fastest-growing addresses on Park Road.{' '}
