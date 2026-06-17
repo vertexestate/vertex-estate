@@ -143,21 +143,13 @@ export function Hero() {
             transition={{ duration: 0.7, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
             className="relative flex flex-col gap-3 pb-8 lg:pb-12"
           >
-            <div className="relative flex-1 overflow-hidden rounded-[1.75rem] border border-white/80 bg-white shadow-[0_32px_80px_-24px_rgba(2,22,22,0.35)] dark:border-navy-700 dark:bg-navy-900 sm:rounded-[2rem]">
-              <img
-                src={MARGALLA_HERO_IMAGE}
-                alt="DHA Margalla Orchard on Park Road, Islamabad"
-                fetchPriority="high"
-                decoding="async"
-                className="h-full min-h-[280px] w-full object-contain object-center bg-navy-950 sm:min-h-[360px] lg:min-h-[420px] xl:min-h-[480px]"
-                onError={(e) => {
-                  if (e.currentTarget.src !== MARGALLA_HERO_FALLBACK) {
-                    e.currentTarget.src = MARGALLA_HERO_FALLBACK;
-                  }
-                }}
-              />
-              <div className="pointer-events-none absolute inset-0 rounded-[inherit] ring-1 ring-inset ring-black/5" />
-            </div>
+         <div className=" mt-40 relative overflow-hidden rounded-[1.75rem] border border-white/80 bg-white shadow-[0_32px_80px_-24px_rgba(2,22,22,0.35)] dark:border-navy-700 dark:bg-navy-900 sm:rounded-[2rem]">
+  <img
+    src={MARGALLA_HERO_IMAGE}
+    alt="DHA Margalla Orchard"
+    className="block w-full h-auto"
+  />
+</div>
           </motion.div>
         </div>
       </div>
